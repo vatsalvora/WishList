@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WishList</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+	<string name="login">Login</string>
+	<string name="list">List</string>
+	<string name="undo">Undo</string>
+	<string name="redo">Redo</string>
+	<string name="name">Name</string>
+	<string name="price">Price</string>
+	<string name="notes">Notes</string>
+	<string name="mylist">My Wishlist</string>
+	<string name="friendlist">Friend Wishlist</string>
+	<string name="logout">Log Out</string>
+	<string name="options">Options</string>
+	<string name="item">Item</string>
+</resources>

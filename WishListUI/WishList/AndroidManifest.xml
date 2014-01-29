@@ -22,6 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.wishlist.ui._wishlist_view"
+            android:label="@string/title_activity__wishlist_view" >
+        </activity>
     </application>
 
 </manifest>

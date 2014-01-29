@@ -9,8 +9,49 @@
     tools:context=".Login" >
 
     <TextView
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Welcome to WishList. Please log in with your Facebook e-mail and password" />
+
+    <EditText
+        android:id="@+id/emailInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/emailInput"
+        android:layout_alignBottom="@+id/emailInput"
+        android:layout_alignParentLeft="true"
+        android:text="@string/email" />
+
+    <TextView
+        android:id="@+id/passwordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/passwordInput"
+        android:layout_alignBottom="@+id/passwordInput"
+        android:layout_alignParentLeft="true"
+        android:text="@string/password" />
+
+    <EditText
+        android:id="@+id/passwordInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/emailInput"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:inputType="textPassword" />
 
 </RelativeLayout>

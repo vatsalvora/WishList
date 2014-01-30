@@ -25,7 +25,7 @@
         android:text="@string/people" />
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/wishlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listOfPeople"

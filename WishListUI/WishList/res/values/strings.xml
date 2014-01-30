@@ -21,5 +21,6 @@
     <string name="title_activity__wishlist_view">_wishlist_view</string>
     <string name="people">People</string>
     <string name="title_activity_people_list">PeopleList</string>
+    <string name="title_activity_login">Login</string>
 
 </resources>

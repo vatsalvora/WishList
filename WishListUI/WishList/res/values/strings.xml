@@ -22,5 +22,6 @@
     <string name="people">People</string>
     <string name="title_activity_people_list">PeopleList</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_activity_item_view">ItemView</string>
 
 </resources>

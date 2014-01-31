@@ -3,12 +3,12 @@
 Each subsection should contain a quick description of the functionality of each file and relevant notes.  
 
 
-ItemView: 
+ItemView: Display the name, description, picture, and maybe price on the screen of the device. It will also show rating and comments from other users.
 
-Login: 
+Login: An Android activity to log in into Facebook. This requires Facebook SDK.
 
-WishItem: 
+WishItem: An object to hold data for an item, such as name, description, picture, etc.
 
-WishListView: 
+WishListView: Main Android activity to view your list and your friends who also have WishList.
 
     

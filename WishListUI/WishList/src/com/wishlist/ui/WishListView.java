@@ -20,7 +20,7 @@ public class WishListView extends Activity {
 	private String currentOwner;
 	
 	//list to hold WishItems
-	private ArrayList<WishItem> wList;
+	private ArrayList<WishItem> wList = new ArrayList<WishItem>();
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,6 @@ public class WishListView extends Activity {
         lv = (ListView) findViewById(R.id.wishlist);
         b = (Button) findViewById(R.id.listOfPeople);
         
-        tv.setText(currentOwner);
     }
 
 

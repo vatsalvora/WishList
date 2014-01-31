@@ -8,14 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".WishListView" >
 
-   	    <TextView
-        android:id="@+id/name_of_owner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="" />
-
     <Button
         android:id="@+id/listOfPeople"
         android:layout_width="wrap_content"
@@ -32,5 +24,14 @@
         android:layout_centerHorizontal="true" >
 
     </ListView>
+
+    <TextView
+        android:id="@+id/name_of_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/listOfPeople"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="place owner name here" />
 
 </RelativeLayout>

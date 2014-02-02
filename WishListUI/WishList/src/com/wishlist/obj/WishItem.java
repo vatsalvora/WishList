@@ -1,4 +1,4 @@
-package com.wishlist.ui;
+package com.wishlist.obj;
 
 public class WishItem {
 	protected String name = null;

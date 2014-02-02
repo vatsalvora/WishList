@@ -2,6 +2,8 @@ package com.wishlist.ui;
 
 import java.util.ArrayList;
 
+import com.wishlist.obj.WishItem;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;

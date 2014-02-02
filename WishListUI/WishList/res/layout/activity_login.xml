@@ -16,4 +16,14 @@
         android:layout_centerVertical="true"
         android:text="LoginButton" />
 
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/loginFacebook"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Welcome to WishList. Please click the button below to proceed with the Facebook login." />
+
 </RelativeLayout>

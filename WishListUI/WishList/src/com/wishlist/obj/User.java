@@ -1,14 +1,15 @@
 package com.wishlist.obj;
 
 import java.io.InputStream;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class User {
-	private String FBID;
-	private String name;
-	private TreeMap<String, WishItem> wList;
-	private final boolean isUser;
+	private String FBID; //facebook ID
+	private String name; //name of facebook user
+	private ArrayList<WishItem> wList; //wishlist for user
+	private final boolean isAppUser; //flag for current app user
 	
 	public User(){
 		throw new RuntimeException("Not valid user.");
@@ -17,7 +18,7 @@ public class User {
 	public User(String FBID, String name, boolean isUser){
 		this.FBID = FBID;
 		this.name = name;
-		this.isUser = isUser;
+		this.isAppUser = isUser;
 	}
 	
 	public String getFBID(){
@@ -28,19 +29,19 @@ public class User {
 		return name;
 	}
 	
-	public TreeMap<String, WishItem> getList(){
+	public ArrayList<WishItem> getList(){
 		return wList;
 	}
 	
-	public WishItem getItem(String name){
-		return wList.get(name);
-	}
-	
 	public boolean getIsUser(){
-		return isUser;
+		return isAppUser;
 	}
 	
 	public static void parseXML(InputStream in){
 		
+	}
+	
+	private void sort(){
+		Collections.sort(wList);
 	}
 }

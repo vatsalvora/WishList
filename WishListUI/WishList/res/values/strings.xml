@@ -23,5 +23,6 @@
     <string name="title_activity_people_list">PeopleList</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_item_view">ItemView</string>
+    <string name="app_id">1459203584303232</string>
 
 </resources>

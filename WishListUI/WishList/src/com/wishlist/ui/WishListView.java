@@ -2,9 +2,12 @@ package com.wishlist.ui;
 
 import java.util.ArrayList;
 
+import com.wishlist.obj.WishItem;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,6 +18,7 @@ public class WishListView extends Activity {
 	private TextView tv;
 	private ListView lv;
 	private Button b;
+	private ArrayAdapter<WishItem> adapter;
 	
 	//name of owner of list
 	private String currentOwner;
@@ -30,8 +34,9 @@ public class WishListView extends Activity {
         tv = (TextView) findViewById(R.id.name_of_owner);
         lv = (ListView) findViewById(R.id.wishlist);
         b = (Button) findViewById(R.id.listOfPeople);
-        
-        tv.setText(currentOwner);
+        wList = new ArrayList<WishItem>();
+        adapter = new ArrayAdapter<WishItem>(this, android.R.layout.simple_list_item_1, wList);
+        lv.setAdapter(adapter);
     }
 
 

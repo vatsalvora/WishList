@@ -34,8 +34,9 @@ public class WishListView extends Activity {
         tv = (TextView) findViewById(R.id.name_of_owner);
         lv = (ListView) findViewById(R.id.wishlist);
         b = (Button) findViewById(R.id.listOfPeople);
+        
         wList = new ArrayList<WishItem>();
-        adapter = new ArrayAdapter<WishItem>(this, android.R.layout.simple_list_item_1, wList);
+        adapter = new ArrayAdapter<WishItem>(this, R.layout.rowlayout, wList);
         lv.setAdapter(adapter);
     }
 

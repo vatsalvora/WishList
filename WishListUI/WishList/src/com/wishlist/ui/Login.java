@@ -2,7 +2,6 @@ package com.wishlist.ui;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
 import com.facebook.*;
 import com.facebook.model.*;
 import android.widget.TextView;
@@ -18,7 +17,8 @@ public class Login extends Activity {
 	    Session.openActiveSession(this, true, new Session.StatusCallback() {
 
 	      // callback when session changes state
-	      @Override
+	      @SuppressWarnings("deprecation")
+		@Override
 	      public void call(Session session, SessionState state, Exception exception) {
 	        if (session.isOpened()) {
 

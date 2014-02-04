@@ -8,7 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Login" >
 
-<<<<<<< HEAD
     <EditText
         android:id="@+id/welcome"
         android:layout_width="wrap_content"
@@ -20,7 +19,6 @@
 
         <requestFocus />
     </EditText>
-=======
     <com.facebook.widget.LoginButton
         android:id="@+id/loginFacebook"
         android:layout_width="wrap_content"
@@ -38,6 +36,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="Welcome to WishList. Please click the button below to proceed with the Facebook login." />
->>>>>>> 0a18487f0f164cdc1f3eff8993e60ad4891d84cf
 
 </RelativeLayout>

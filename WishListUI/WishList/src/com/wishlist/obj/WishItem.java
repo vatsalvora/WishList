@@ -9,7 +9,7 @@ import android.widget.ImageView;
 public class WishItem implements Comparable<WishItem>{
 	protected String name = null; //name of item
 	protected String description = null; //description of item
-	protected Double price = 0.0; //price of item
+	protected Double price = null; //price of item
 	protected Date dateAdded = null; //date of the item added to user
 	protected TreeMap<String, String> comments; //Map FBID with comment 
 	protected byte[] picture; //byte array for picture of item

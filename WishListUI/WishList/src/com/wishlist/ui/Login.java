@@ -4,13 +4,18 @@ import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
+import com.wishlist.obj.FBUser;
+import com.wishlist.obj.User;
 
 import android.util.Log;
 import android.content.Intent;
 
 public class Login extends Activity {
+	
+	User currentAppUser; //user object for the Facebook user actually using the app.
+	
 	@Override
-	  public void onCreate(Bundle savedInstanceState) {
+	 public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 //	    setContentView(R.layout.activity_login);
 	    /* We don't need an actual layout here; if the user is not logged in the
@@ -37,6 +42,7 @@ public class Login extends Activity {
 	                	TextView welcome = (TextView) findViewById(R.id.welcome);
 	                	welcome.setText("Hello " + user.getName() + "!");
 	              } */
+	            	currentAppUser = new FBUser(user.getId(), user.getName(), true);
 	            }
 	          });
 	        }

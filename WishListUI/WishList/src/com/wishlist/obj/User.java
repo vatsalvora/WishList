@@ -1,41 +1,39 @@
 package com.wishlist.obj;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
-public class User {
-	private String FBID; //facebook ID
-	private String name; //name of facebook user
-	private ArrayList<WishItem> wList; //wishlist for user
-	private static final int MAXITEMS = 10;
-	private final boolean isAppUser; //flag for current app user
+public abstract class User {
+	protected final boolean isAppUser; //flag for current app user
+	protected String ID; //ID of user
+	protected String name; //name of user
+	protected ArrayList<WishItem> wList; //wishlist for user
+	protected static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
 	
-	public User(){
-		throw new RuntimeException("Not valid user.");
-	}
-	
-	public User(String FBID, String name, boolean isUser){
-		this.FBID = FBID;
-		this.name = name;
-		this.isAppUser = isUser;
-	}
-	
-	public String getFBID(){
-		return FBID;
+	public User(String ID, String name, boolean isAppUser){
+		setName(name);
+		setId(ID);
+		this.isAppUser = true;
 	}
 	
 	public String getName(){
 		return name;
 	}
 	
-	public ArrayList<WishItem> getList(){
-		return wList;
+	protected void setName(String name){
+		this.name = new String(name);
 	}
 	
-	public boolean getIsUser(){
-		return isAppUser;
+	public String getId(){
+		return ID;
+	}
+	
+	protected void setId(String ID){
+		this.ID = new String(ID);
+	}
+	
+	public ArrayList<WishItem> getList(){
+		return wList;
 	}
 	
 	public boolean addItem(WishItem w){
@@ -62,5 +60,9 @@ public class User {
 			default:
 				throw new RuntimeException("code not found.");
 		}
+	}
+	
+	public boolean getIsUser(){
+		return isAppUser;
 	}
 }

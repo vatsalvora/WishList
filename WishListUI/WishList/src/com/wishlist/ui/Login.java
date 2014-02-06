@@ -6,7 +6,6 @@ import com.facebook.*;
 import com.facebook.model.*;
 
 import android.util.Log;
-import android.widget.TextView;
 import android.content.Intent;
 
 public class Login extends Activity {

@@ -1,5 +1,6 @@
 package com.wishlist.obj;
 
+//Pair class to link two objects together
 public class Pair<A, B> {
 	private A first;
 	private B second;

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.TreeMap;
 
-import android.widget.ImageView;
+import android.graphics.Bitmap;
 
 public class WishItem implements Comparable<WishItem>{
 	protected String name = null; //name of item
@@ -12,7 +12,7 @@ public class WishItem implements Comparable<WishItem>{
 	protected Double price = null; //price of item
 	protected Date dateAdded = null; //date of the item added to user
 	protected TreeMap<String, String> comments; //Map FBID with comment 
-	protected byte[] picture; //byte array for picture of item
+	protected AndroidPicture picture; //byte array for picture of item
 	protected boolean updateRequest = false;
 	
 	public WishItem(){
@@ -64,17 +64,16 @@ public class WishItem implements Comparable<WishItem>{
 		update();
 	}
 	
-	public byte[] getPicture(){
+	public Picture getPicture(){
 		return picture;
 	}
 	
-	public ImageView getPictureAndroid(){
-		return null;
+	public Bitmap getBitmap(){
+		return picture.getBitmap();
 	}
 	
-	public void setPicture(byte[] picture){
-		this.picture = new byte[picture.length];
-		for(int i=0; i<picture.length; ++i) this.picture[i] = picture[i];
+	public void setPicture(File f){
+		picture.setPicture(f);
 		update();
 	}
 	

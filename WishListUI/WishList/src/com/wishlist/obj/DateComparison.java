@@ -2,6 +2,7 @@ package com.wishlist.obj;
 
 import java.util.Comparator;
 
+//compares WishItems by date
 public class DateComparison implements Comparator<WishItem>{
 
 	@Override

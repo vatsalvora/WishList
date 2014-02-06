@@ -1,7 +1,5 @@
 package com.wishlist.ui;
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
@@ -14,7 +12,6 @@ import android.content.Intent;
 public class Login extends Activity {
 	
 	User currentAppUser; //user object for the Facebook user actually using the app.
-	ArrayList<String> userFriends; //friends of the user using IDs
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {

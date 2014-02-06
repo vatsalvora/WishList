@@ -1,11 +1,12 @@
 package com.wishlist.ui;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
-import com.wishlist.obj.FBUser;
-import com.wishlist.obj.User;
+import com.wishlist.obj.*;
 
 import android.util.Log;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.content.Intent;
 public class Login extends Activity {
 	
 	User currentAppUser; //user object for the Facebook user actually using the app.
+	ArrayList<String> userFriends; //friends of the user using IDs
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
@@ -58,5 +60,8 @@ public class Login extends Activity {
 	      Intent intent = new Intent(Login.this, MainActivity.class);
     	  startActivity(intent);
 	  }
-
+	  
+	  public User getCurrentAppUser(){ //pass the current user object
+		  return currentAppUser;
+	  }
 	}

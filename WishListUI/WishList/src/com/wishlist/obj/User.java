@@ -21,7 +21,7 @@ public abstract class User {
 	}
 	
 	protected void setName(String name){
-		this.name = new String(name);
+		this.name = name;
 	}
 	
 	public String getId(){
@@ -29,7 +29,7 @@ public abstract class User {
 	}
 	
 	protected void setId(String ID){
-		this.ID = new String(ID);
+		this.ID = ID;
 	}
 	
 	public ArrayList<WishItem> getList(){

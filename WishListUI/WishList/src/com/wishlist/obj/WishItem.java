@@ -20,21 +20,21 @@ public class WishItem implements Comparable<WishItem>{
 	}
 	
 	public WishItem(String name){
-		this.name= new String(name);
+		setName(name);
 	}
 	
 	public WishItem(String name, String description){
-		this.name= new String(name);
-		this.description= new String(description);
+		setName(name);
+		setDescription(description);
 	}
 	
 	public WishItem(String name, String description, Double price){
-		this.name=new String(name);
-		this.description=new String(description);
-		this.price= Double.valueOf(price);
+		setName(name);
+		setDescription(description);
+		setPrice(price);
 	}
 	
-	public WishItem(String name, String description, String price, File pic){
+	public WishItem(String name, String description, Double price, File pic){
 		
 	}
 	
@@ -52,7 +52,7 @@ public class WishItem implements Comparable<WishItem>{
 	}
 	
 	public void setDescription(String description){
-		this.description= new String(description);
+		this.description= description;
 	}
 	
 	public double getPrice(){
@@ -60,7 +60,7 @@ public class WishItem implements Comparable<WishItem>{
 	}
 	
 	public void setPrice(Double price){
-		this.price = Double.valueOf(price);
+		this.price = price;
 		update();
 	}
 	
@@ -95,6 +95,10 @@ public class WishItem implements Comparable<WishItem>{
 	//native comparison is by name of item.
 	public int compareTo(WishItem arg0) {
 		return this.name.compareTo(arg0.name);
+	}
+	
+	public boolean getUpdate(){
+		return updateRequest;
 	}
 	
 	private void update(){

@@ -34,12 +34,14 @@ public class MainActivity extends FragmentActivity implements
 	 * intensive, it may be best to switch to a
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
-	SectionsPagerAdapter mSectionsPagerAdapter; //returns the appropriate fragment for each tab. Defined below.
+	private SectionsPagerAdapter mSectionsPagerAdapter; //returns the appropriate fragment for each tab. Defined below.
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
-	ViewPager mViewPager;
+	private ViewPager mViewPager;
+	
+	public static final int COUNT = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,12 @@ public class MainActivity extends FragmentActivity implements
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
-		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-					@Override
-					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-					}
-				});
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				actionBar.setSelectedNavigationItem(position);
+			}
+		});
 
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
@@ -137,19 +138,20 @@ public class MainActivity extends FragmentActivity implements
 		@Override
 		public int getCount() {
 			// Show 2 total pages.
-			return 2;
+			return COUNT;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
 			Locale l = Locale.getDefault();
 			switch (position) {
-			case 0:
-				return getString(R.string.title_section1).toUpperCase(l);
-			case 1:
-				return getString(R.string.title_section2).toUpperCase(l);
+				case 0:
+					return getString(R.string.title_section1).toUpperCase(l);
+				case 1:
+					return getString(R.string.title_section2).toUpperCase(l);
+				default:
+					return null;
 			}
-			return null;
 		}
 	}
 

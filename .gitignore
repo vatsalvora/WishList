@@ -24,3 +24,6 @@ tmp/
 
 # Android specific
 gen/
+
+## Allow DB Library to be included
+!postgresql-9.1-903.jdbc4.jar

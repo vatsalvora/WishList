@@ -35,7 +35,10 @@ public class WishItem implements Comparable<WishItem>{
 	}
 	
 	public WishItem(String name, String description, Double price, File pic){
-		
+		setName(name);
+		setDescription(description);
+		setPrice(price);
+		setPicture(pic);
 	}
 	
 	public String getName(){

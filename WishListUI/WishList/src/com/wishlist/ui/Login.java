@@ -11,7 +11,7 @@ import android.content.Intent;
 
 public class Login extends Activity {
 	
-	User currentAppUser; //user object for the Facebook user actually using the app.
+	public static User currentAppUser; //user object for the Facebook user actually using the app.
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
@@ -54,11 +54,8 @@ public class Login extends Activity {
 	      super.onActivityResult(requestCode, resultCode, data);
 	      Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	      //Start the main activity
-	      Intent intent = new Intent(Login.this, MainActivity.class);
+	      Intent intent = new Intent(this, MainActivity.class);
     	  startActivity(intent);
 	  }
 	  
-	  public User getCurrentAppUser(){ //pass the current user object
-		  return currentAppUser;
-	  }
 	}

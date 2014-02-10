@@ -34,6 +34,29 @@ public class DBCom {
 		
 		return output;
 
-	}	
+	}
+	
+	//This method is simply sends a SQL Command to the database without expecting any return values.\
+	//Not sure if this is the way we want to keep this.
+	public void sendSQLnoReturn(String command){
+		
+		try{
+		
+		Class.forName("org.postgresql.Driver");
+		DriverManager.setLoginTimeout(5);
+		Connection connect = DriverManager.getConnection(dburl,username,password);
+		Statement st = connect.createStatement();
+		
+		st.executeQuery(command);
+		
+		st.close();
+        connect.close();
+        
+		} catch(Exception e){
+			
+		}
+		
+	}
+	
 
 }

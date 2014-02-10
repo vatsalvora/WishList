@@ -1,6 +1,8 @@
-package com.wishlist.obj;
+package com.wishlist.obj.android;
 
 import java.io.*;
+
+import com.wishlist.obj.Picture;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

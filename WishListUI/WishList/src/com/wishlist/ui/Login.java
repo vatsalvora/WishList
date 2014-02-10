@@ -1,5 +1,7 @@
 package com.wishlist.ui;
 
+import java.util.*;
+
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
@@ -12,6 +14,7 @@ import android.content.Intent;
 public class Login extends Activity {
 	
 	public static User currentAppUser; //user object for the Facebook user actually using the app.
+	ArrayList<GraphUser> friends;
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
@@ -26,23 +29,27 @@ public class Login extends Activity {
 	    Session.openActiveSession(this, true, new Session.StatusCallback() {
 
 	      // callback when session changes state
-	      @SuppressWarnings("deprecation")
 		@Override
 	      public void call(Session session, SessionState state, Exception exception) {
 	        if (session.isOpened()) {
 	        	Log.i("MyActivity", "MyClass.getView() — get item number ");
 	          // make request to the /me API
-	          Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+	          Request.newMeRequest(session, new Request.GraphUserCallback() {
 	        	
 	            // callback after Graph API response with user object
 	            @Override
 	            public void onCompleted(GraphUser user, Response response) {
-	             /* if (user != null) {
-	                	TextView welcome = (TextView) findViewById(R.id.welcome);
-	                	welcome.setText("Hello " + user.getName() + "!");
-	              } */
 	            	currentAppUser = new FBUser(user.getId(), user.getName(), true);
 	            }
+	          });
+	          
+	          //make request to the /friends-list API
+	          Request.newMyFriendsRequest(session, new Request.GraphUserListCallback() {
+				
+				@Override
+				public void onCompleted(List<GraphUser> users, Response response) {
+					friends = new ArrayList<GraphUser>(users);
+				}
 	          });
 	        }
 	      }

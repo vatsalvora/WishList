@@ -118,21 +118,25 @@ public class MainActivity extends FragmentActivity implements
 		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
 			// Return the appropriate fragment
-			Fragment fragment = new Fragment();
-			if (position==0){ 
-				fragment = new WishDisplayFragment();				
-			}
-			if(position==1){
-				fragment = new FriendsListDisplayFragment();
-			}
 			Bundle args = new Bundle();
-			fragment.setArguments(args);
-			return fragment;
+			Fragment fragment;
+			switch(position){
+				case 0: 
+					fragment = new WishDisplayFragment();
+					fragment.setArguments(args);
+					return fragment;
+				case 1:
+					fragment = new FriendsListDisplayFragment();
+					fragment.setArguments(args);
+					return fragment;
+				default:
+					throw new RuntimeException("Invalid position");
+			}
 		}
 
 		@Override
 		public int getCount() {
-			// Show 2 total pages.
+			// Show COUNT. COUNT may be modified in the future (even though it won't) so let's use a pointer.
 			return COUNT;
 		}
 

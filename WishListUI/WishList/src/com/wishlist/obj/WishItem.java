@@ -1,3 +1,10 @@
+/* Author: Joon Kim
+ * 
+ * class for item in the wishlist
+ * The item must have a name for creation. It also has description, price, dateAdded, image, and comments.
+ * Whenever the item is modified, the updateRequest flag becomes true and the item is updated in the database.
+ */
+
 package com.wishlist.obj;
 
 import java.io.File;

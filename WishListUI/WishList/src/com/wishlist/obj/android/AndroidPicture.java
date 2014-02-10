@@ -1,3 +1,9 @@
+/* Author: Joon Kim
+ * 
+ * Subclass of Picture for Android
+ * An AndroidPicture object can return a BitMap that is to be used with ImageView in an Android activity.
+ */
+
 package com.wishlist.obj.android;
 
 import java.io.*;

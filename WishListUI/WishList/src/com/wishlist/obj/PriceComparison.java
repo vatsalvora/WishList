@@ -1,3 +1,8 @@
+/* Author: Joon Kim
+ * 
+ * compares WishItems by price
+ */
+
 package com.wishlist.obj;
 
 import java.util.Comparator;

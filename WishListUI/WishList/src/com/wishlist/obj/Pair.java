@@ -1,32 +1,21 @@
+/*Author: Joon Kim
+ * 
+ * Pair class to link two objects together
+ */
+
 package com.wishlist.obj;
 
-//Pair class to link two objects together
 public class Pair<A, B> {
-	private A first;
-	private B second;
+	public A first;
+	public B second;
 	
 	Pair(){
 		throw new RuntimeException("Invalid constructor!");
 	}
 	
 	Pair(A a, B b){
-		setFirst(a);
-		setSecond(b);
-	}
-	
-	public A getFirst(){
-		return first;
-	}
-	
-	public void setFirst(A a){
 		first = a;
-	}
-	
-	public B getSecond(){
-		return second;
-	}
-	
-	public void setSecond(B b){
 		second = b;
 	}
+
 }

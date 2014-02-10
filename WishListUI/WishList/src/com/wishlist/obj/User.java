@@ -1,3 +1,10 @@
+/* Author: Joon Kim
+ * 
+ * Class for users of this app.
+ * The user has a unique ID, a name, a flag for app user, and a list of items in the database.
+ * The app user can add and remove items from his/her own list and sort the list by name, date, or price.
+ */
+
 package com.wishlist.obj;
 
 import java.util.ArrayList;

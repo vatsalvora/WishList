@@ -1,3 +1,9 @@
+/* Author: Joon Kim
+ * 
+ * Implementation for Parcelable in order to transport data.
+ * This variant deals with list of String objects.
+ */
+
 package com.wishlist.obj.android;
 
 import java.util.ArrayList;

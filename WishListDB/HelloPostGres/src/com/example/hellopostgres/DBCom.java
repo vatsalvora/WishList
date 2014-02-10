@@ -3,6 +3,7 @@
 
 package com.example.hellopostgres; //This line is for android functionality only. This is a test address. Change required based on final path.
 import java.sql.*;
+import android.util.Log; //This needs to be imported to implement printing to logcat with thrown exceptions.
 
 public class DBCom {
 	
@@ -11,14 +12,27 @@ public class DBCom {
 	String password = "wl_app";
 	String output = "";
 	
+	Connection connect;
+	Statement st;
+	ResultSet resultSet;
+	
+	public DBCom(){
+		
+		try {
+			Class.forName("org.postgresql.Driver");
+		} 
+		catch (ClassNotFoundException e) {
+			Log.e("Database",e.toString());
+		}
+		DriverManager.setLoginTimeout(5);
+		
+	}
+	
 	public String test() throws Exception{
 		
-		Class.forName("org.postgresql.Driver");
-		
-		DriverManager.setLoginTimeout(5);
-		Connection connect = DriverManager.getConnection(dburl,username,password);
-		Statement st = connect.createStatement();
-		ResultSet resultSet = st.executeQuery("SELECT * FROM users");
+		connect = DriverManager.getConnection(dburl,username,password);
+		st = connect.createStatement();
+		resultSet = st.executeQuery("SELECT * FROM users");
 
 		
 		while (resultSet.next()){

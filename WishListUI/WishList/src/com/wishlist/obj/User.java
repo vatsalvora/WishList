@@ -17,6 +17,10 @@ public abstract class User {
 	protected ArrayList<WishItem> wList; //wishlist for user
 	public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
 	
+	public User(){
+		isAppUser=false;
+	}
+	
 	public User(String ID, String name, boolean isAppUser){
 		setName(name);
 		setId(ID);

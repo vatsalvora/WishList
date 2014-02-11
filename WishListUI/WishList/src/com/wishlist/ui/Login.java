@@ -8,6 +8,7 @@ import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
 import com.wishlist.obj.*;
+import com.wishlist.obj.android.FBUser;
 import com.wishlist.obj.android.ListParcelable;
 
 import android.util.Log;

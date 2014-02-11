@@ -3,10 +3,12 @@ package com.wishlist.ui;
 import java.util.*;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
 import com.wishlist.obj.*;
+import com.wishlist.obj.android.ListParcelable;
 
 import android.util.Log;
 import android.content.Intent;
@@ -14,7 +16,9 @@ import android.content.Intent;
 public class Login extends Activity {
 	
 	public static User currentAppUser; //user object for the Facebook user actually using the app.
-	ArrayList<GraphUser> friends;
+	private ArrayList<String> friends; //ID of friends
+	private ListParcelable data;
+	private Parcel parcel;
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,9 @@ public class Login extends Activity {
 				
 				@Override
 				public void onCompleted(List<GraphUser> users, Response response) {
-					friends = new ArrayList<GraphUser>(users);
+					friends = new ArrayList<String>();
+					for(GraphUser i : users) friends.add(i.getId());
+					data.writeToParcel(parcel, 1);
 				}
 	          });
 	        }
@@ -62,6 +68,7 @@ public class Login extends Activity {
 	      Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	      //Start the main activity
 	      Intent intent = new Intent(this, MainActivity.class);
+	      intent.putExtra("friend_data", data);
     	  startActivity(intent);
 	  }
 	  

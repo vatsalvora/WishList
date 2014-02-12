@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         resultArea = new TextView(this);
         resultArea.setText("Please wait.");
         setContentView(resultArea);
-        //Will was here.
+        //Will wasnt here.
         new FetchSQL().execute();
     }
     

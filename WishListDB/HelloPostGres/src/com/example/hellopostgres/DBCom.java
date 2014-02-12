@@ -91,7 +91,7 @@ public class DBCom {
 		} 
 		catch(Exception e){
 			Log.e("Database",e.toString());
-			isOK = false;
+			//This will throw an exception every time.
 		}
 		
 		try {

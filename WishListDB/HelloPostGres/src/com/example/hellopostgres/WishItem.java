@@ -7,18 +7,23 @@
  * Edited by: Alex Bryan
  */
 
+/*
+ * TODO:
+ *
+ * Sync object with database
+ */
 package com.example.hellopostgres;
 
 //import java.io.File;
 import java.util.Date;
-import java.util.TreeMap;
+import java.util.TreeMap; // Needed for comments. Comments in Sprint 2
 
 public class WishItem implements Comparable<WishItem>{
 	protected String name = null; //name of item
 	protected String description = null; //description of item
 	protected Double price = null; //price of item
 	protected Date dateAdded = null; //date of the item added to user
-	protected TreeMap<String, String> comments; //Map FBID with comment 
+	protected TreeMap<String, String> comments; //Map FBID with comment. Sprint 2
 	protected boolean updateRequest = false;
         protected int status = 0; //Current status of item (registered, bought)
         protected int wid; //wish id

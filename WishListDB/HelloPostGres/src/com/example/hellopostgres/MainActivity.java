@@ -1,6 +1,13 @@
 //This file is used only for DATABASE TESTING PURPOSES. This file will not be intgrated
 //into the WishList final product.
 
+/*
+ * Author: No one wants to take credit for this.
+ *
+ * The indentation, layout, and flow of this file makes me want to become a 
+ * business major
+ */
+
 package com.example.hellopostgres;
 
 import java.sql.ResultSet;
@@ -57,9 +64,16 @@ public class MainActivity extends Activity {
 	//		}
         //
 
+                /* If test is successful, will return a list of
+                 * names of Schwartz's wishes.
+                 *
+                 * FWI, WishItem.toString() returns only name,
+                 * no other attributes
+                 */
                 ArrayList<WishItem> wl = mydb.listWishes(37);
                 for(int i = 0; i < wl.size(); i++){
                     resStr += wl.get(i).toString();
+                    resStr += "\n";
                 }
                 return resStr;
             }

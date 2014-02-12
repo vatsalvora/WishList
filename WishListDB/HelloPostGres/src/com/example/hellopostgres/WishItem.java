@@ -9,7 +9,7 @@
 
 package com.example.hellopostgres;
 
-import java.io.File;
+//import java.io.File;
 import java.util.Date;
 import java.util.TreeMap;
 
@@ -19,7 +19,6 @@ public class WishItem implements Comparable<WishItem>{
 	protected Double price = null; //price of item
 	protected Date dateAdded = null; //date of the item added to user
 	protected TreeMap<String, String> comments; //Map FBID with comment 
-//	protected Picture picture; //Picture object for image of item
 	protected boolean updateRequest = false;
         protected int status = 0; //Current status of item (registered, bought)
         protected int wid; //wish id
@@ -30,6 +29,7 @@ public class WishItem implements Comparable<WishItem>{
 		throw new RuntimeException("Name not specified!");
 	}
 	
+        /* Will we ever use all of these constructors? */
 	public WishItem(String name){
 		setName(name);
 	}
@@ -118,16 +118,6 @@ public class WishItem implements Comparable<WishItem>{
 		update();
 	}
 	
-        /*
-	*public Picture getPicture(){
-	*	return picture;
-	*}
-	*
-	*public void setPicture(File f){
-	*	picture.setPicture(f);
-	*	update();
-	*}
-        */
 	
 	public String getComment(String ID){
 		return comments.get(ID);
@@ -139,6 +129,7 @@ public class WishItem implements Comparable<WishItem>{
 	}
 	
 	public String toString(){
+            /* Is name all we want to return? */
 		return name;
 	}
 

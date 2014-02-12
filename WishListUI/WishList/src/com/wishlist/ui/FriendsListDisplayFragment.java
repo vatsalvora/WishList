@@ -12,10 +12,8 @@ public class FriendsListDisplayFragment extends Fragment {
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
-	
 		
 		private View rootView;
-		private TextView dummyTextView;
 	
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -25,11 +23,10 @@ public class FriendsListDisplayFragment extends Fragment {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			rootView = inflater.inflate(R.layout.fragment_main_dummy,
+
+			View rootView = inflater.inflate(R.layout.fragment_friends_list_display,
 					container, false);
-			dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText("this will eventually display the friends list");
+
 			return rootView;
 		}
 	}

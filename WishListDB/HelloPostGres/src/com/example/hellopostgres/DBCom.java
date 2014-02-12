@@ -7,19 +7,18 @@ import java.util.ArrayList;
 
 import android.util.Log; //This needs to be imported to implement printing to logcat with thrown exceptions.
 
+/* DB Schema for reference
+ * Users(int uid, string name)
+ * wishes(int uid, int bid, String name, String descr, double price,
+ *        int status, int wid)
+ */
+
 /* TODO: 
  * 
- * send SQL
- * 
- * 
- *  Get list of user wishes 
- *  Check if user is user (query by UID)
- * 	Add user
+ *  Sync wish object with database
+ *
  *  remove user *later*
- *  Add wish
  *  remove wish
- *  set wish discription -- edit wish
- *  change wish status
  *  
  *  remove wid from methods - generate
  *  
@@ -29,6 +28,7 @@ import android.util.Log; //This needs to be imported to implement printing to lo
 
 public class DBCom {
 	
+        /* Alex's ip. Please don't DDOS */
 	String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
 	String username = "wishlist_app";
 	String password = "wl_app";
@@ -99,10 +99,10 @@ public class DBCom {
 		
 		try{
 		
-		connect = DriverManager.getConnection(dburl,username,password);
-		st = connect.createStatement();
-		
-		st.executeQuery(command); //Throws no return exception
+		    connect = DriverManager.getConnection(dburl,username,password);
+		    st = connect.createStatement();
+		    
+		    st.executeQuery(command); //Throws no return exception
         
 		} 
 		catch(Exception e){
@@ -167,31 +167,36 @@ public class DBCom {
 	}
 	
 	public boolean isUser(int uid) {
+
 		String command = String.format("SELECT * FROM Users WHERE uid = %d", uid);
 		ResultSet resultSet = sendSQLwithReturn(command);
 
 		boolean isU = false;
 
 		try {
-			if (resultSet.next()) {
-				isU = true;
-			}
+		    if (resultSet.next()) {
+			isU = true;
+		    }
 		} 
 		catch (SQLException e) {
-			Log.e("Database", e.toString());
+		    Log.e("Database", e.toString());
 		}
 
 		try {
-			resultSet.close(); //be sure that this isnt causing a mem leak because of statment not closing. Statement is however
-			//dereferenced.
+		    resultSet.close(); //be sure that this isnt causing a mem leak because of statment not closing. Statement is however
+		    //dereferenced.
 		} 
 		catch (SQLException e) {
-			Log.e("Database", e.toString());
+		    Log.e("Database", e.toString());
 		}
 
 		return isU;
 	}
 	
+        /* Instead of this method, couldn't we just create a wish object and
+         * then do wish.commit() or wish.sync() or wish.sendToServer() or
+         * whatever we call it instead?
+         */
 	public boolean addWish(int wid, int uid, String name, String descr, double price)
 	{	
 		if(price<0){
@@ -206,83 +211,41 @@ public class DBCom {
 		}
 	}
 	
-	public ArrayList<String> listWishes(int uid){
-		ArrayList<String> myList = new ArrayList<String>();
-		
-		String command = String.format("SELECT name FROM wishes WHERE uid=%d", uid); 
-		ResultSet resultSet = sendSQLwithReturn(command);
-		
-		try {
-			while(resultSet.next()){
-				myList.add(resultSet.getString(1));
-			}
-		} 
-		catch (SQLException e) {
-			
-		}
-		
-		try {
-			resultSet.close();
-		} 
-		catch (SQLException e) {
+        public ArrayList<WishItem> listWishes(int uid){
 
-		}
-		
-		return myList;
-	}
-	
-	public ArrayList<String> listWishesP(int uid){
-		
-		ArrayList<String> myList = new ArrayList<String>();
-		
-		String command = String.format("SELECT wid,name FROM wishes WHERE uid=%d", uid); 
-		ResultSet resultSet = sendSQLwithReturn(command);
-		
-		try {
-			while(resultSet.next()){
-				myList.add(resultSet.getString(1)); //Do we want this to be a string? Do we want this to be an int? IDK?
-				myList.add(resultSet.getString(2));
-			}
-		} 
-		catch (SQLException e) {
-			
-		}
-		
-		try {
-			resultSet.close();
-		} 
-		catch (SQLException e) {
+            /** Returns an array of wish objects where the wishes belong
+             * to the given user
+             */
 
-		}
-		
-		return myList;
-	}
+            ArrayList<WishItem> wishList = new ArrayList<WishItem>();
+            String command = String.format("SELECT * FROM wishes WHERE uid=%d", uid); 
+            ResultSet resultSet = sendSQLwithReturn(command);
 
-	public ArrayList<String> getWish(int wid){
-		ArrayList<String> myList = new ArrayList<String>();
-		
-		String command = String.format("SELECT uid,name,descr,price,status,bid FROM wishes WHERE wid=%d", wid); 
-		ResultSet resultSet = sendSQLwithReturn(command);
-		
-		try {
-			while(resultSet.next()){
-				for(int i=1;i<7;i++){
-					myList.add(resultSet.getString(i));
-				}
-			}
-		} 
-		catch (SQLException e) {
-			Log.e("Database", e.toString());
-		}
-		
-		try {
-			resultSet.close();
-		} 
-		catch (SQLException e) {
-			Log.e("Database", e.toString());
-		}
-		
-		return myList;
-	}
-	
+            int bid, status, wid;
+            String name, descr;
+            double price;
+
+            try {
+                while(resultSet.next()) {
+                    //uid is in col 1, but we already have that since it was passed
+                    bid = resultSet.getInt(2);
+                    name = resultSet.getString(3);
+                    descr = resultSet.getString(4);
+                    price = resultSet.getDouble(5);
+                    status = resultSet.getInt(6);
+                    wid = resultSet.getInt(7);
+
+                    WishItem WI = new WishItem(uid, bid, name, descr, price,
+                                                status, wid);
+                    wishList.add(WI);
+
+                }
+            }
+            catch (SQLException e) {
+                Log.e("Database", e.toString());
+            }
+            
+            return wishList;
+        }
+
 }

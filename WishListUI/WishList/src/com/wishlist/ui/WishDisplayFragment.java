@@ -14,7 +14,6 @@ import android.widget.TextView;
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 		private View rootView;
-		private TextView dummyTextView;
 		
 		public WishDisplayFragment() {
 		}
@@ -22,11 +21,10 @@ import android.widget.TextView;
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			rootView = inflater.inflate(R.layout.fragment_main_dummy,
+			
+			View rootView = inflater.inflate(R.layout.fragment_wish_display,
 					container, false);
-			dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText("This will be the wish display fragment");
+		
 			return rootView;
 		}
 	}

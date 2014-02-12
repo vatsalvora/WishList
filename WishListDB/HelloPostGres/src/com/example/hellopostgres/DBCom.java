@@ -206,30 +206,67 @@ public class DBCom {
 		}
 	}
 	
-	public ArrayList<String> listWishes(int uid){
-		ArrayList<String> myList = new ArrayList<String>();
-		
-		String command = String.format("SELECT name FROM wishes WHERE uid=%d", uid); 
-		ResultSet resultSet = sendSQLwithReturn(command);
-		
-		try {
-			while(resultSet.next()){
-				myList.add(resultSet.getString(1));
-			}
-		} 
-		catch (SQLException e) {
-			
-		}
-		
-		try {
-			resultSet.close();
-		} 
-		catch (SQLException e) {
+    /*
+     *   public ArrayList<String> listWishes(int uid){
+     *   	ArrayList<String> myList = new ArrayList<String>();
+     *   	
+     *   	String command = String.format("SELECT name FROM wishes WHERE uid=%d", uid); 
+     *   	ResultSet resultSet = sendSQLwithReturn(command);
+     *   	
+     *   	try {
+     *   		while(resultSet.next()){
+     *   			myList.add(resultSet.getString(1));
+     *   		}
+     *   	} 
+     *   	catch (SQLException e) {
+     *   		
+     *   	}
+     *   	
+     *   	try {
+     *   		resultSet.close();
+     *   	} 
+     *   	catch (SQLException e) {
 
-		}
-		
-		return myList;
-	}
+     *   	}
+     *   	
+     *   	return myList;
+     *   }
+     */
+
+        public ArrayList<WishItem> listWishes(int uid){
+            /** Returns an array of wish objects where the wishes belong
+             * to the given user
+             */
+            ArrayList<WishItem> wishList = new ArrayList<WishItem>();
+            String command = String.format("SELECT * FROM wishes WHERE uid=%d", uid); 
+            ResultSet resultSet = sendSQLwithReturn(command);
+
+            int bid, status, wid;
+            String name, descr;
+            double price;
+            try {
+                while(resultSet.next()) {
+                    //uid is in col 1, but we already have that since it was passed
+                    bid = resultSet.getInt(2);
+                    name = resultSet.getString(3);
+                    descr = resultSet.getString(4);
+                    price = resultSet.getDouble(5);
+                    status = resultSet.getInt(6);
+                    wid = resultSet.getInt(7);
+
+                    WishItem WI = new WishItem(uid, bid, name, descr, price,
+                                                status, wid);
+                    wishList.add(WI);
+
+                }
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            return wishList;
+        }
+
 	
 	public ArrayList<String> listWishesP(int uid){
 		

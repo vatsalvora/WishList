@@ -3,6 +3,8 @@
  * class for item in the wishlist
  * The item must have a name for creation. It also has description, price, dateAdded, image, and comments.
  * Whenever the item is modified, the updateRequest flag becomes true and the item is updated in the database.
+ *
+ * Edited by: Alex Bryan
  */
 
 package com.example.hellopostgres;
@@ -19,6 +21,9 @@ public class WishItem implements Comparable<WishItem>{
 	protected TreeMap<String, String> comments; //Map FBID with comment 
 //	protected Picture picture; //Picture object for image of item
 	protected boolean updateRequest = false;
+        protected int status = 0; //Current status of item (registered, bought)
+        protected int wid; //wish id
+        protected int bid; //user id of buyer of item
 	
 	public WishItem(){
 		throw new RuntimeException("Name not specified!");
@@ -38,14 +43,19 @@ public class WishItem implements Comparable<WishItem>{
 		setDescription(description);
 		setPrice(price);
 	}
+
+        public WishItem(int uid, int bid, String name, String description,
+                        double price, int status, int wid) {
+            setUID(uid);
+            setBID(bid);
+            setName(name);
+            setDescription(description);
+            setPrice(price);
+            setStatus(status);
+            setWID(wid);
+        }
 	
-	public WishItem(String name, String description, Double price, File pic){
-		setName(name);
-		setDescription(description);
-		setPrice(price);
-//		setPicture(pic);
-	}
-	
+   	
 	public String getName(){
 		return name;
 	}

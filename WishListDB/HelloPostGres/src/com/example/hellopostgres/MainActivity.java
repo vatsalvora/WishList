@@ -44,11 +44,11 @@ public class MainActivity extends Activity {
 //            	else {
 //            		Log.e("Database","Swartz is NOT a user" );            		
 //            	}
-            	mydb.addWish(73, 37, "Funkies", "Arduinos", -6);
-            	mydb.addWish(74, 37, "Deoderant", "", -6);
-            	ArrayList<String> fun = mydb.listWishes(37);
+            	//mydb.addWish(73, 37, "Funkies", "Arduinos", -6);
+            	//mydb.addWish(74, 37, "Deoderant", "", -6);
+            	ArrayList<String> fun = mydb.listWishesP(37);
             	for(int i=0;i<fun.size();i++){
-            		Log.i("Database",fun.get(i));
+            		Log.i("Database",""+fun.get(i));
             	}
 				return mydb.test();
 			} catch (Exception e) {

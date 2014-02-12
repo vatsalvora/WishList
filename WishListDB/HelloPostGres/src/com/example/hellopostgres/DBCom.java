@@ -37,6 +37,8 @@ public class DBCom {
 	Connection connect;
 	
 	public DBCom(){
+		//This is the constructor for the Database Communication Object. An instance of this object is required to
+		//use any coomunication methods. It provides the setup, linking the app with the postgres driver.
 		
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -73,7 +75,6 @@ public class DBCom {
 
 	}
 	
-
 	public boolean sendSQLnoReturn(String command){ 
 		//set to private after testing
 		//This method is simply sends a SQL Command to the database without expecting any return values.\
@@ -201,6 +202,32 @@ public class DBCom {
 		try {
 			while(resultSet.next()){
 				myList.add(resultSet.getString(1));
+			}
+		} 
+		catch (SQLException e) {
+			
+		}
+		
+		try {
+			resultSet.close();
+		} 
+		catch (SQLException e) {
+
+		}
+		
+		return myList;
+	}
+	
+	public ArrayList<String> listWishesP(int uid){
+		ArrayList<String> myList = new ArrayList<String>();
+		
+		String command = String.format("SELECT wid,name FROM wishes WHERE uid=%d", uid); 
+		ResultSet resultSet = sendSQLwithReturn(command);
+		
+		try {
+			while(resultSet.next()){
+				myList.add(resultSet.getString(1)); //Do we want this to be a string? Do we want this to be an int? IDK?
+				myList.add(resultSet.getString(2));
 			}
 		} 
 		catch (SQLException e) {

@@ -24,6 +24,7 @@ public class WishItem implements Comparable<WishItem>{
         protected int status = 0; //Current status of item (registered, bought)
         protected int wid; //wish id
         protected int bid; //user id of buyer of item
+        protected int uid; //user id of person with wish
 	
 	public WishItem(){
 		throw new RuntimeException("Name not specified!");
@@ -54,7 +55,42 @@ public class WishItem implements Comparable<WishItem>{
             setStatus(status);
             setWID(wid);
         }
+
+        public int getUID(){
+            return uid;
+        }
+
+        private void setUID(int uid){
+            //private because UID should never change and thus should never be
+            //called publicly. It should only be called by constructors
+
+            this.uid = uid;
+        }
 	
+
+        public int getBID(){
+            return bid;
+        }
+
+        public void setBID(int bid){
+            this.bid = bid;
+        }
+
+        public int getStatus(){
+            return status;
+        }
+
+        public void setStatus(int status){
+            this.status = status;
+        }
+
+        public int getWID(){
+            return wid;
+        }
+        public void setWID(int wid) {
+            this.wid = wid;
+        }
+
    	
 	public String getName(){
 		return name;

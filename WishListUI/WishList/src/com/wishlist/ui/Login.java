@@ -1,17 +1,28 @@
 package com.wishlist.ui;
 
+import java.util.*;
+
 import android.os.Bundle;
+import android.os.Parcel;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
+import com.wishlist.obj.*;
+import com.wishlist.obj.android.FBUser;
+import com.wishlist.obj.android.ListParcelable;
 
 import android.util.Log;
-import android.widget.TextView;
 import android.content.Intent;
 
 public class Login extends Activity {
+	
+	public static User currentAppUser; //user object for the Facebook user actually using the app.
+	private ArrayList<String> friends; //ID of friends
+	private ListParcelable data;
+	private Parcel parcel;
+	
 	@Override
-	  public void onCreate(Bundle savedInstanceState) {
+	 public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 //	    setContentView(R.layout.activity_login);
 	    /* We don't need an actual layout here; if the user is not logged in the
@@ -23,22 +34,29 @@ public class Login extends Activity {
 	    Session.openActiveSession(this, true, new Session.StatusCallback() {
 
 	      // callback when session changes state
-	      @SuppressWarnings("deprecation")
 		@Override
 	      public void call(Session session, SessionState state, Exception exception) {
 	        if (session.isOpened()) {
 	        	Log.i("MyActivity", "MyClass.getView() — get item number ");
 	          // make request to the /me API
-	          Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+	          Request.newMeRequest(session, new Request.GraphUserCallback() {
 	        	
 	            // callback after Graph API response with user object
 	            @Override
 	            public void onCompleted(GraphUser user, Response response) {
-	             /* if (user != null) {
-	                	TextView welcome = (TextView) findViewById(R.id.welcome);
-	                	welcome.setText("Hello " + user.getName() + "!");
-	              } */
+	            	currentAppUser = new FBUser(user.getId(), user.getName(), true);
 	            }
+	          });
+	          
+	          //make request to the /friends-list API
+	          Request.newMyFriendsRequest(session, new Request.GraphUserListCallback() {
+				
+				@Override
+				public void onCompleted(List<GraphUser> users, Response response) {
+					friends = new ArrayList<String>();
+					for(GraphUser i : users) friends.add(i.getId());
+					data.writeToParcel(parcel, 1);
+				}
 	          });
 	        }
 	      }
@@ -50,8 +68,9 @@ public class Login extends Activity {
 	      super.onActivityResult(requestCode, resultCode, data);
 	      Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	      //Start the main activity
-	      Intent intent = new Intent(Login.this, MainActivity.class);
+	      Intent intent = new Intent(this, MainActivity.class);
+	      intent.putExtra("friend_data", data);
     	  startActivity(intent);
 	  }
-
+	  
 	}

@@ -8,15 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
+//import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.*;
+//import android.widget.TextView;
 
 /*
  * This class displays two fragments, one for the user's actual wish list and another for their friends list.  
@@ -34,12 +29,14 @@ public class MainActivity extends FragmentActivity implements
 	 * intensive, it may be best to switch to a
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
-	SectionsPagerAdapter mSectionsPagerAdapter; //returns the appropriate fragment for each tab. Defined below.
+	private SectionsPagerAdapter mSectionsPagerAdapter; //returns the appropriate fragment for each tab. Defined below.
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
-	ViewPager mViewPager;
+	private ViewPager mViewPager;
+	
+	public static final int COUNT = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +60,12 @@ public class MainActivity extends FragmentActivity implements
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
-		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-					@Override
-					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-					}
-				});
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				actionBar.setSelectedNavigationItem(position);
+			}
+		});
 
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
@@ -122,34 +118,39 @@ public class MainActivity extends FragmentActivity implements
 		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
 			// Return the appropriate fragment
-			Fragment fragment = new Fragment();
-			if (position==0){ 
-				fragment = new WishDisplayFragment();				
-			}
-			if(position==1){
-				fragment = new FriendsListDisplayFragment();
-			}
 			Bundle args = new Bundle();
-			fragment.setArguments(args);
-			return fragment;
+			Fragment fragment;
+			switch(position){
+				case 0: 
+					fragment = new WishDisplayFragment();
+					fragment.setArguments(args);
+					return fragment;
+				case 1:
+					fragment = new FriendsListDisplayFragment();
+					fragment.setArguments(args);
+					return fragment;
+				default:
+					throw new RuntimeException("Invalid position");
+			}
 		}
 
 		@Override
 		public int getCount() {
-			// Show 2 total pages.
-			return 2;
+			// Show COUNT. COUNT may be modified in the future (even though it won't) so let's use a pointer.
+			return COUNT;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
 			Locale l = Locale.getDefault();
 			switch (position) {
-			case 0:
-				return getString(R.string.title_section1).toUpperCase(l);
-			case 1:
-				return getString(R.string.title_section2).toUpperCase(l);
+				case 0:
+					return getString(R.string.title_section1).toUpperCase(l);
+				case 1:
+					return getString(R.string.title_section2).toUpperCase(l);
+				default:
+					return null;
 			}
-			return null;
 		}
 	}
 

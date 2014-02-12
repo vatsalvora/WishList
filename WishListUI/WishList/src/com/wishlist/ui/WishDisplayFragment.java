@@ -20,11 +20,9 @@ import android.widget.TextView;
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_dummy,
+			View rootView = inflater.inflate(R.layout.fragment_wish_display,
 					container, false);
-			TextView dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText("This will be the wish display fragment");
+		
 			return rootView;
 		}
 	}

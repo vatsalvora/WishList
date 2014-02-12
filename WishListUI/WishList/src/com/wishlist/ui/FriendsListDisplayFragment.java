@@ -20,11 +20,11 @@ public class FriendsListDisplayFragment extends Fragment {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_dummy,
+			View rootView = inflater.inflate(R.layout.fragment_friends_list_display,
 					container, false);
-			TextView dummyTextView = (TextView) rootView
+	/*		TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
-			dummyTextView.setText("this will eventually display the friends list");
+			dummyTextView.setText("this will eventually display the friends list"); */
 			return rootView;
 		}
 	}

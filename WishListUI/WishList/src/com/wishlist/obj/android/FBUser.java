@@ -9,6 +9,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.wishlist.obj.User;
+import com.wishlist.obj.WishItem;
+
 
 public class FBUser extends User implements Parcelable{
 	
@@ -18,7 +20,6 @@ public class FBUser extends User implements Parcelable{
 
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -35,10 +36,19 @@ public class FBUser extends User implements Parcelable{
 
 	@Override
 	public void writeToParcel(Parcel out, int flags) {
-		//out.writeList(data);
+		if(isAppUser) out.writeInt(1);
+		else out.writeInt(0);
+		out.writeString(ID);
+		out.writeString(name);
+		out.writeTypedList(wList);
 	}
 
 	private FBUser(Parcel in) {
 		super();
+		in.readTypedList(wList, WishItem.CREATOR);
+		setName(in.readString());
+		setId(in.readString());
+		if(in.readInt() == 1) isAppUser = true;
+		else isAppUser=false;
 	}
 }

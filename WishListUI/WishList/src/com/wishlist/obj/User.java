@@ -46,6 +46,10 @@ public abstract class User {
 		return wList;
 	}
 	
+	public void setList(ArrayList<WishItem> in){
+		wList = in;
+	}
+	
 	public boolean addItem(WishItem w){
 		if(wList.size() == MAXITEMS) return false;
 		wList.add(w);
@@ -56,7 +60,7 @@ public abstract class User {
 		return wList.remove(w);
 	}
 	
-	public void sortList(char code){
+	public static void sortList(char code, ArrayList<WishItem> wList){
 		switch(code){
 			case 'n':
 				Collections.sort(wList);

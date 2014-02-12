@@ -10,7 +10,7 @@
 
 package com.example.hellopostgres;
 
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import android.app.Activity;

@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
     private class FetchSQL extends AsyncTask<Void,Void,String> {
         @Override
         protected String doInBackground(Void... params) {
+                String resStr = "";
         	
         	DBCom mydb = new DBCom();
             try {
@@ -46,14 +47,25 @@ public class MainActivity extends Activity {
 //            	}
             	//mydb.addWish(73, 37, "Funkies", "Arduinos", -6);
             	//mydb.addWish(74, 37, "Deoderant", "", -6);
-            	ArrayList<String> fun = mydb.getWish(73);
-            	for(int i=0;i<fun.size();i++){
-            		Log.i("Database",""+fun.get(i));
-            	}
-				return mydb.test();
-			} catch (Exception e) {
-				return e.toString();
-			}
+
+        //    	for(int i=0;i<fun.size();i++){
+        //    		Log.i("Database",""+fun.get(i));
+        //    	}
+	//			return mydb.test();
+	//		} catch (Exception e) {
+	//			return e.toString();
+	//		}
+        //
+
+                ArrayList<WishItem> wl = mydb.listWishes(37);
+                for(int i = 0; i < wl.size(); i++){
+                    resStr += wl.get(i).toString();
+                }
+                return resStr;
+            }
+            catch (Exception e) {
+                return e.toString();
+            }
         }
         
         @Override

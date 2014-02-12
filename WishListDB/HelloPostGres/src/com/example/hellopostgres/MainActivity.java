@@ -4,6 +4,7 @@
 package com.example.hellopostgres;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -37,11 +38,17 @@ public class MainActivity extends Activity {
 //            		Log.e("Database", "The NULL query DID NOT return NULL");
 //            	}
             	//mydb.addUser(37, "Schwartz");
-            	if(mydb.isUser(37)){
-            		Log.e("Database","Schwartz IS a USER! WOOP!");
-            	}
-            	else {
-            		Log.e("Database","Swartz is NOT a user" );            		
+//            	if(mydb.isUser(0)){
+//            		Log.e("Database","Schwartz IS a USER! WOOP!");
+//            	}
+//            	else {
+//            		Log.e("Database","Swartz is NOT a user" );            		
+//            	}
+            	mydb.addWish(73, 37, "Funkies", "Arduinos", -6);
+            	mydb.addWish(74, 37, "Deoderant", "", -6);
+            	ArrayList<String> fun = mydb.listWishes(37);
+            	for(int i=0;i<fun.size();i++){
+            		Log.i("Database",fun.get(i));
             	}
 				return mydb.test();
 			} catch (Exception e) {

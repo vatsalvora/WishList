@@ -3,6 +3,7 @@
 
 package com.example.hellopostgres; //This line is for android functionality only. This is a test address. Change required based on final path.
 import java.sql.*;
+import java.util.ArrayList;
 
 import android.util.Log; //This needs to be imported to implement printing to logcat with thrown exceptions.
 
@@ -19,6 +20,8 @@ import android.util.Log; //This needs to be imported to implement printing to lo
  *  remove wish
  *  set wish discription -- edit wish
  *  change wish status
+ *  
+ *  remove wid from methods - generate
  *  
  *  Do we want to return anything other than strings?
  *  Do we want to have ints as inputs to the methods? What does facebook return??!
@@ -136,7 +139,6 @@ public class DBCom {
 		catch (SQLException e) {
 			Log.e("Database", e.toString());
 		}
-		
 		return resultSet;
 
 	}
@@ -174,4 +176,42 @@ public class DBCom {
 		return isU;
 	}
 	
+	public boolean addWish(int wid, int uid, String name, String descr, double price)
+	{	
+		if(price<0){
+			String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', NULL)",
+					wid, uid, name, descr, price);
+			return sendSQLnoReturn(command);
+		}
+		else{
+			String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', %f)",
+											wid, uid, name, descr, price);
+			return sendSQLnoReturn(command);
+		}
+	}
+	
+	public ArrayList<String> listWishes(int uid){
+		ArrayList<String> myList = new ArrayList<String>();
+		
+		String command = String.format("SELECT name FROM wishes WHERE uid=%d", uid); 
+		ResultSet resultSet = sendSQLwithReturn(command);
+		
+		try {
+			while(resultSet.next()){
+				myList.add(resultSet.getString(1));
+			}
+		} 
+		catch (SQLException e) {
+			
+		}
+		
+		try {
+			resultSet.close();
+		} 
+		catch (SQLException e) {
+
+		}
+		
+		return myList;
+	}
 }

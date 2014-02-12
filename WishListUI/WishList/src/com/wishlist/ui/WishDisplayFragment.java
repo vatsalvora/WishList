@@ -14,7 +14,6 @@ import android.widget.TextView;
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 		private View rootView;
-		private TextView dummyTextView;
 		
 		public WishDisplayFragment() {
 		}

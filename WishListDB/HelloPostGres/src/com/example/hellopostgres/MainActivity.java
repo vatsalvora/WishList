@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
         	
         	DBCom mydb = new DBCom();
             try {
+            	//mydb.sendSQLnoReturn("INSERT INTO fuck VALUES (234,'testworks')");
 				return mydb.test();
 			} catch (Exception e) {
 				return e.toString();

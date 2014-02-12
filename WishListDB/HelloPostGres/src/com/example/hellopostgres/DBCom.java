@@ -34,6 +34,19 @@ public class DBCom {
 	String password = "wl_app";
 	String output = "";
 	
+	public static final String SELECT = "SELECT";
+	public static final String UPDATE = "UPDATE";
+	public static final String DELETE = "DELETE";
+	public static final String INSERT = "INSERT";
+	public static final String INTO = "INTO";
+	public static final String CREATE = "CREATE";
+	public static final String ALTER = "ALTER";
+	public static final String DATABASE = "DATABASE";
+	public static final String DROP = "DROP";
+	public static final String TABLE = "TABLE";
+	public static final String INDEX = "INDEX";
+	public static final String FROM = "FROM";
+	public static final String WHERE = "WHERE";
 	Connection connect;
 	
 	public DBCom(){

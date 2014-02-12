@@ -5,8 +5,6 @@
 
 package com.wishlist.obj.android;
 
-import java.util.ArrayList;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -18,29 +16,29 @@ public class FBUser extends User implements Parcelable{
 		super(ID, name, isAppUser);
 	}
 
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 	public static final Parcelable.Creator<FBUser> CREATOR
 	= new Parcelable.Creator<FBUser>() {
-	public FBUser createFromParcel(Parcel in) {
-		return new FBUser(in);
-	}	
-	public FBUser[] newArray(int size) {
-		throw new UnsupportedOperationException();
-	}
-};
+		public FBUser createFromParcel(Parcel in) {
+			return new FBUser(in);
+		}	
+		public FBUser[] newArray(int size) {
+			throw new UnsupportedOperationException();
+		}
+	};
 
-@Override
-public void writeToParcel(Parcel out, int flags) {
-	//out.writeList(data);
-}
-
-private FBUser(Parcel in) {
-	super();
-}
-
-@Override
-	public int describeContents() {
-	// TODO Auto-generated method stub
-	return 0;
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		//out.writeList(data);
 	}
 
+	private FBUser(Parcel in) {
+		super();
+	}
 }

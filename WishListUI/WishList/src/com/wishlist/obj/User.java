@@ -11,20 +11,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public abstract class User {
-	protected final boolean isAppUser; //flag for current app user
+	protected boolean isAppUser; //flag for current app user
 	protected String ID; //ID of user
 	protected String name; //name of user
 	protected ArrayList<WishItem> wList; //wishlist for user
 	public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
 	
 	public User(){
-		isAppUser=false;
 	}
 	
 	public User(String ID, String name, boolean isAppUser){
 		setName(name);
 		setId(ID);
-		this.isAppUser = true;
+		setIsAppUser(isAppUser);
 	}
 	
 	public String getName(){
@@ -73,7 +72,12 @@ public abstract class User {
 		}
 	}
 	
-	public boolean getIsUser(){
+	public boolean getIsAppUser(){
 		return isAppUser;
 	}
+	
+	protected void setIsAppUser(boolean flag){
+		isAppUser = flag;
+	}
+	
 }

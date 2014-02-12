@@ -219,6 +219,7 @@ public class DBCom {
 	}
 	
 	public ArrayList<String> listWishesP(int uid){
+		
 		ArrayList<String> myList = new ArrayList<String>();
 		
 		String command = String.format("SELECT wid,name FROM wishes WHERE uid=%d", uid); 
@@ -243,4 +244,32 @@ public class DBCom {
 		
 		return myList;
 	}
+
+	public ArrayList<String> getWish(int wid){
+		ArrayList<String> myList = new ArrayList<String>();
+		
+		String command = String.format("SELECT uid,name,descr,price,status,bid FROM wishes WHERE wid=%d", wid); 
+		ResultSet resultSet = sendSQLwithReturn(command);
+		
+		try {
+			while(resultSet.next()){
+				for(int i=1;i<7;i++){
+					myList.add(resultSet.getString(i));
+				}
+			}
+		} 
+		catch (SQLException e) {
+			Log.e("Database", e.toString());
+		}
+		
+		try {
+			resultSet.close();
+		} 
+		catch (SQLException e) {
+			Log.e("Database", e.toString());
+		}
+		
+		return myList;
+	}
+	
 }

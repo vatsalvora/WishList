@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 //            	}
             	//mydb.addWish(73, 37, "Funkies", "Arduinos", -6);
             	//mydb.addWish(74, 37, "Deoderant", "", -6);
-            	ArrayList<String> fun = mydb.listWishesP(37);
+            	ArrayList<String> fun = mydb.getWish(73);
             	for(int i=0;i<fun.size();i++){
             		Log.i("Database",""+fun.get(i));
             	}

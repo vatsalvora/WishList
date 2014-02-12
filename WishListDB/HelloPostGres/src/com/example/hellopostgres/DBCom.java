@@ -73,9 +73,11 @@ public class DBCom {
 
 	}
 	
-	//This method is simply sends a SQL Command to the database without expecting any return values.\
-	//Not sure if this is the way we want to keep this.
-	public boolean sendSQLnoReturn(String command){ //set to private after testing
+
+	public boolean sendSQLnoReturn(String command){ 
+		//set to private after testing
+		//This method is simply sends a SQL Command to the database without expecting any return values.\
+		//Not sure if this is the way we want to keep this.
 		
 		Statement st = null;
 		
@@ -107,15 +109,15 @@ public class DBCom {
 		
 	}
 	
-	//This method sends SQL and expects a resultset that it returns.
-	//Make sure to CLOSE RESULTSET after using this method.
-	//Maybe check if return value is NULL to avoid calling methods on nulls.
-	
-	//Result set will only return NULL when a problem occurs. If a query returns an empty set
-	//the result set will be valid, just empty.
-	//HOWEVER, If a command that inherently has no result set, such as INSERT, the method
-	//WILL return null.
 	public ResultSet sendSQLwithReturn(String command) {
+		//This method sends SQL and expects a resultset that it returns.
+		//Make sure to CLOSE RESULTSET after using this method.
+		//Maybe check if return value is NULL to avoid calling methods on nulls.
+		
+		//Result set will only return NULL when a problem occurs. If a query returns an empty set
+		//the result set will be valid, just empty.
+		//HOWEVER, If a command that inherently has no result set, such as INSERT, the method
+		//WILL return null.
 		
 		Statement st = null;
 		ResultSet resultSet = null;

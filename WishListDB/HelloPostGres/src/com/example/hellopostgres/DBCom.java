@@ -20,7 +20,8 @@ import android.util.Log; //This needs to be imported to implement printing to lo
  *  set wish discription -- edit wish
  *  change wish status
  *  
- *  
+ *  Do we want to return anything other than strings?
+ *  Do we want to have ints as inputs to the methods? What does facebook return??!
  */
 
 public class DBCom {
@@ -103,6 +104,14 @@ public class DBCom {
 		
 	}
 	
+	//This method sends SQL and expects a resultset that it returns.
+	//Make sure to CLOSE RESULTSET after using this method.
+	//Maybe check if return value is NULL to avoid calling methods on nulls.
+	
+	//Result set will only return NULL when a problem occurs. If a query returns an empty set
+	//the result set will be valid, just empty.
+	//HOWEVER, If a command that inherently has no result set, such as INSERT, the method
+	//WILL return null.
 	public ResultSet sendSQLwithReturn(String command) {
 		
 		Statement st = null;
@@ -121,7 +130,7 @@ public class DBCom {
 		}
 
 		try {
-			st.close();
+			//st.close();
 			connect.close();
 		} 
 		catch (SQLException e) {
@@ -132,5 +141,37 @@ public class DBCom {
 
 	}
 	
+	public boolean addUser(int uid, String name){
+		
+		String command = String.format("INSERT INTO users VALUES (%d, '%s')", uid, name); //Bad warning?
+		return sendSQLnoReturn(command);
+		
+	}
+	
+	public boolean isUser(int uid) {
+		String command = String.format("SELECT * FROM Users WHERE uid = %d", uid);
+		ResultSet resultSet = sendSQLwithReturn(command);
 
+		boolean isU = false;
+
+		try {
+			if (resultSet.next()) {
+				isU = true;
+			}
+		} 
+		catch (SQLException e) {
+			Log.e("Database", e.toString());
+		}
+
+		try {
+			resultSet.close(); //be sure that this isnt causing a mem leak because of statment not closing. Statement is however
+			//dereferenced.
+		} 
+		catch (SQLException e) {
+			Log.e("Database", e.toString());
+		}
+
+		return isU;
+	}
+	
 }

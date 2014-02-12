@@ -3,9 +3,12 @@
 
 package com.example.hellopostgres;
 
+import java.sql.ResultSet;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -26,7 +29,20 @@ public class MainActivity extends Activity {
         	
         	DBCom mydb = new DBCom();
             try {
-            	//mydb.sendSQLnoReturn("INSERT INTO fuck VALUES (234,'testworks')");
+//            	ResultSet fun = mydb.sendSQLwithReturn("INSERT INTO users VALUEs (12,'test2')");
+//            	if(fun==null){
+//            		Log.e("Database", "The NULL query returned NULL");
+//            	} 
+//            	else{
+//            		Log.e("Database", "The NULL query DID NOT return NULL");
+//            	}
+            	//mydb.addUser(37, "Schwartz");
+            	if(mydb.isUser(37)){
+            		Log.e("Database","Schwartz IS a USER! WOOP!");
+            	}
+            	else {
+            		Log.e("Database","Swartz is NOT a user" );            		
+            	}
 				return mydb.test();
 			} catch (Exception e) {
 				return e.toString();

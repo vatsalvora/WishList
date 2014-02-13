@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
-import com.wishlist.obj.android.FBUser;
+import com.wishlist.obj.FBUser;
 
 import android.util.Log;
 import android.content.Intent;

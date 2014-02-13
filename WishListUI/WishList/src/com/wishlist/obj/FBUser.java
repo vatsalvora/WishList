@@ -3,13 +3,11 @@
  * subclass of User in our system who uses Facebook
  */
 
-package com.wishlist.obj.android;
+package com.wishlist.obj;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.wishlist.obj.User;
-import com.wishlist.obj.WishItem;
 
 
 public class FBUser extends User implements Parcelable{

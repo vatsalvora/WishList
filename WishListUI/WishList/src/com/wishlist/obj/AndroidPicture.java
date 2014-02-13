@@ -4,11 +4,10 @@
  * An AndroidPicture object can return a BitMap that is to be used with ImageView in an Android activity.
  */
 
-package com.wishlist.obj.android;
+package com.wishlist.obj;
 
 import java.io.*;
 
-import com.wishlist.obj.Picture;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

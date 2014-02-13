@@ -14,38 +14,36 @@ import android.os.Parcelable;
 
 public class WishItem implements Comparable<WishItem>, Parcelable{
 	protected String name; //name of item
+	protected String ID; //ID of the item
 	protected String description; //description of item
-	protected Double price; //price of item
+	protected Pair<String, String> owner; //ID and name of the owner of the item (ID, name)
+	protected Pair<String, String> buyer; //ID and name of the user that took the item (ID,name)
 	protected Date dateAdded; //date of the item added to user
-	protected String takenBy; //ID of the user that took the item
+	protected Double price; //price of item
 	protected Picture picture; //Picture object for image of item
 	protected TreeMap<String, String> comments; //Map ID with comment 
 	protected boolean updateRequest = false; //update changes
 	
 	public WishItem(){
-		throw new RuntimeException("Name not specified!");
+		throw new RuntimeException("Name and ID not specified!");
 	}
 	
-	public WishItem(String name){
+	public WishItem(String ID, String name){
+		setId(ID);
 		setName(name);
 	}
 	
-	public WishItem(String name, String description){
-		setName(name);
-		setDescription(description);
-	}
-	
-	public WishItem(String name, String description, Double price){
+	public WishItem(String ID, String name, String description){
+		setId(ID);
 		setName(name);
 		setDescription(description);
-		setPrice(price);
 	}
 	
-	public WishItem(String name, String description, Double price, File pic){
+	public WishItem(String ID, String name, String description, Double price){
+		setId(ID);
 		setName(name);
 		setDescription(description);
 		setPrice(price);
-		setPicture(pic);
 	}
 	
 	public String getName(){
@@ -55,6 +53,16 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 	public void setName(String name){
 		this.name=name;
 		requestUpdate();
+	}
+	
+	
+	public String getId(){
+		return ID;
+	}
+	
+	//note this is private
+	private void setId(String in){
+		ID = in;
 	}
 	
 	public String getDescription(){
@@ -87,12 +95,20 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 		dateAdded = new Date(in);
 	}
 	
-	public String getTakenBy(){
-		return takenBy;
+	public Pair<String, String> getOwner(){
+		return owner;
 	}
 	
-	public void setTakenBy(String in){
-		takenBy = in;
+	public void setOwner(Pair<String, String> in){
+		owner = in;
+	}
+	
+	public Pair<String, String> getBuyer(){
+		return buyer;
+	}
+	
+	public void setBuyer(Pair<String, String> in){
+		buyer = in;
 	}
 	
 	public Picture getPicture(){
@@ -113,6 +129,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 		requestUpdate();
 	}
 	
+	//this should be enough?
 	public String toString(){
 		return getName();
 	}
@@ -158,7 +175,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 		dest.writeDouble(price);
 		dest.writeString(dateAdded.toString());
 		//dest.writeString(picture.toString());
-		dest.writeString(takenBy);
+		//dest.writeString(buyer);
 		if(updateRequest == false) dest.writeInt(0);
 		else dest.writeInt(1);
 	}
@@ -168,8 +185,8 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 		else updateRequest=true;
 		String temp;
 		Double temp2;
-		temp = in.readString();
-		if(temp != null) setTakenBy(temp);
+		//temp = in.readString();
+		//if(temp != null) setTakenBy(temp);
 		temp = in.readString();
 		if(temp != null) setDate(temp);
 		temp2 = in.readDouble();

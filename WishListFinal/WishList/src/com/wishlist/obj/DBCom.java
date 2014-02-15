@@ -29,190 +29,211 @@ import android.util.Log; //This needs to be imported to implement printing to lo
  */
 
 public class DBCom {
-	
-        /* Alex's ip. Please don't DDOS */
-	String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
-	String username = "wishlist_app";
-	String password = "wl_app";
-	String output = "";
-	
-	public static final String SELECT = "SELECT";
-	public static final String UPDATE = "UPDATE";
-	public static final String DELETE = "DELETE";
-	public static final String INSERT = "INSERT";
-	public static final String INTO = "INTO";
-	public static final String CREATE = "CREATE";
-	public static final String ALTER = "ALTER";
-	public static final String DATABASE = "DATABASE";
-	public static final String DROP = "DROP";
-	public static final String TABLE = "TABLE";
-	public static final String INDEX = "INDEX";
-	public static final String FROM = "FROM";
-	public static final String WHERE = "WHERE";
-	Connection connect;
-	
-	public DBCom(){
-		//This is the constructor for the Database Communication Object. An instance of this object is required to
-		//use any coomunication methods. It provides the setup, linking the app with the postgres driver.
-		
-		try {
-			Class.forName("org.postgresql.Driver");
-		} 
-		catch (ClassNotFoundException e) {
-			Log.e("Database",e.toString());
-		}
-		DriverManager.setLoginTimeout(5);
-		
-	}
-	
-	String test() throws Exception{
-		
-		Statement st;
-		ResultSet resultSet;
-		
-		connect = DriverManager.getConnection(dburl,username,password);
-		st = connect.createStatement();
-		resultSet = st.executeQuery("SELECT * FROM users");
-
-		
-		while (resultSet.next()){
-			for(int i = 1;i<3;i++){
-				output = output + (resultSet.getString(i) + " ");
-			}
-			output = output + "\n";
-		}
-		
-		resultSet.close();
-        st.close();
-        connect.close();
-		
-		return output;
-
-	}
-	
-	public boolean sendSQLnoReturn(String command){ 
-		//set to private after testing
-		//This method is simply sends a SQL Command to the database without expecting any return values.\
-		//Not sure if this is the way we want to keep this.
-		
-		Statement st = null;
-		
-		boolean isOK = true;
-		
-		try{
-		
-		    connect = DriverManager.getConnection(dburl,username,password);
-		    st = connect.createStatement();
-		    
-		    st.executeQuery(command); //Throws no return exception
         
-		} 
-		catch(Exception e){
-			Log.e("Database",e.toString());
-			//This will throw an exception every time.
-		}
-		
-		try {
-			st.close();
-			connect.close();
-		} 
-		catch (SQLException e) {
-			Log.e("Database",e.toString());
-			isOK = false;
-		}
-		
-		return isOK;
-		
-	}
-	
-	public ResultSet sendSQLwithReturn(String command) {
-		//This method sends SQL and expects a resultset that it returns.
-		//Make sure to CLOSE RESULTSET after using this method.
-		//Maybe check if return value is NULL to avoid calling methods on nulls.
-		
-		//Result set will only return NULL when a problem occurs. If a query returns an empty set
-		//the result set will be valid, just empty.
-		//HOWEVER, If a command that inherently has no result set, such as INSERT, the method
-		//WILL return null.
-		
-		Statement st = null;
-		ResultSet resultSet = null;
+        /* Alex's ip. Please don't DDOS */
+        String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
+        String username = "wishlist_app";
+        String password = "wl_app";
+        String output = "";
+        
+        public static final String SELECT = "SELECT";
+        public static final String UPDATE = "UPDATE";
+        public static final String DELETE = "DELETE";
+        public static final String INSERT = "INSERT";
+        public static final String INTO = "INTO";
+        public static final String CREATE = "CREATE";
+        public static final String ALTER = "ALTER";
+        public static final String DATABASE = "DATABASE";
+        public static final String DROP = "DROP";
+        public static final String TABLE = "TABLE";
+        public static final String INDEX = "INDEX";
+        public static final String FROM = "FROM";
+        public static final String WHERE = "WHERE";
+        Connection connect;
+        
+        public DBCom(){
+                //This is the constructor for the Database Communication Object. An instance of this object is required to
+                //use any coomunication methods. It provides the setup, linking the app with the postgres driver.
+                
+                try {
+                        Class.forName("org.postgresql.Driver");
+                } 
+                catch (ClassNotFoundException e) {
+                        Log.e("Database",e.toString());
+                }
+                DriverManager.setLoginTimeout(5);
+                
+        }
+        
+        String test() throws Exception{
+                
+            Statement st;
+            ResultSet resultSet;
+            
+            connect = DriverManager.getConnection(dburl,username,password);
+            st = connect.createStatement();
+            resultSet = st.executeQuery("SELECT * FROM users");
 
-		try {
+            
+            while (resultSet.next()){
+                 for(int i = 1;i<3;i++){
+                      output = output + (resultSet.getString(i) + " ");
+                 }
+                 output = output + "\n";
+            }
+                
+            resultSet.close();
+            st.close();
+            connect.close();
+                    
+            return output;
 
-			connect = DriverManager.getConnection(dburl, username, password);
-			st = connect.createStatement();
+        }
+        
+        public boolean sendSQLnoReturn(String command){ 
+                /** This method is simply sends a SQL Command to the database 
+                 * without expecting any return values
+                 *
+                 * Returns true if SQL
+                 * executed without any errors.
+                 */
+                //set to private after testing
+                //Not sure if this is the way we want to keep this.
+                
+                Statement st = null;
+                
+                boolean isOK = true;
+                
+                try{
+                
+                    connect = DriverManager.getConnection(dburl,username,password);
+                    st = connect.createStatement();
+                    
+                    st.executeQuery(command); //Throws no return exception
+        
+                } 
+                catch(Exception e){
+                        Log.e("Database",e.toString());
+                        //This will throw an exception every time.
+                }
+                
+                try {
+                        st.close();
+                        connect.close();
+                } 
+                catch (SQLException e) {
+                        Log.e("Database",e.toString());
+                        isOK = false;
+                }
+                
+                return isOK;
+                
+        }
+        
+        public ResultSet sendSQLwithReturn(String command) {
+                /** This method sends SQL and expects a resultset that it returns. */
 
-			resultSet = st.executeQuery(command); // Throws no return exception
+                //Make sure to CLOSE RESULTSET after using this method.
+                //Maybe check if return value is NULL to avoid calling methods on nulls.
+                
+                //Result set will only return NULL when a problem occurs. If a query returns an empty set
+                //the result set will be valid, just empty.
+                //HOWEVER, If a command that inherently has no result set, such as INSERT, the method
+                //WILL return null.
+                
+                Statement st = null;
+                ResultSet resultSet = null;
 
-		} 
-		catch (Exception e) {
-			Log.e("Database", e.toString());
-		}
+                try {
 
-		try {
-			//st.close();
-			connect.close();
-		} 
-		catch (SQLException e) {
-			Log.e("Database", e.toString());
-		}
-		return resultSet;
+                        connect = DriverManager.getConnection(dburl, username, password);
+                        st = connect.createStatement();
 
-	}
-	
-	public boolean addUser(int uid, String name){
-		
-		String command = String.format("INSERT INTO users VALUES (%d, '%s')", uid, name); //Bad warning?
-		return sendSQLnoReturn(command);
-		
-	}
-	
-	public boolean isUser(int uid) {
+                        resultSet = st.executeQuery(command); // Throws no return exception
 
-		String command = String.format("SELECT * FROM Users WHERE uid = %d", uid);
-		ResultSet resultSet = sendSQLwithReturn(command);
+                } 
+                catch (Exception e) {
+                        Log.e("Database", e.toString());
+                }
 
-		boolean isU = false;
+                try {
+                        //st.close();
+                        connect.close();
+                } 
+                catch (SQLException e) {
+                        Log.e("Database", e.toString());
+                }
+                return resultSet;
 
-		try {
-		    if (resultSet.next()) {
-			isU = true;
-		    }
-		} 
-		catch (SQLException e) {
-		    Log.e("Database", e.toString());
-		}
+        }
+        
+        public boolean addUser(int uid, String name){
+               /* Do we need to keep this method around ? */ 
+                String command = String.format("INSERT INTO users VALUES (%d, '%s')", uid, name); //Bad warning?
+                return sendSQLnoReturn(command);
+                
+        }
 
-		try {
-		    resultSet.close(); //be sure that this isnt causing a mem leak because of statment not closing. Statement is however
-		    //dereferenced.
-		} 
-		catch (SQLException e) {
-		    Log.e("Database", e.toString());
-		}
+        public boolean addUser(User u) {
 
-		return isU;
-	}
-	
+            /** Adds user to database */
+
+            int uid = u.getUID();
+            String name = u.getName();
+
+            String command = String.format("INSERT INTO users VALUES (%d, '%s')",
+                                            uid, name);
+            return sendSQLnoReturn(command);
+        }
+        
+        public boolean isUser(int uid) {
+
+                /** Returns true if given uid is in database */
+
+                String command = String.format("SELECT * FROM Users WHERE uid = %d", uid);
+                ResultSet resultSet = sendSQLwithReturn(command);
+
+                boolean isU = false;
+
+                try {
+                    if (resultSet.next()) {
+                        isU = true;
+                    }
+                } 
+                catch (SQLException e) {
+                    Log.e("Database", e.toString());
+                }
+
+                try {
+                    resultSet.close(); //be sure that this isnt causing a mem leak because of statment not closing. Statement is however
+                    //dereferenced.
+                } 
+                catch (SQLException e) {
+                    Log.e("Database", e.toString());
+                }
+
+                return isU;
+        }
+        
         /* Instead of this method, couldn't we just create a wish object and
          * then do wish.commit() or wish.sync() or wish.sendToServer() or
          * whatever we call it instead?
          */
-	public boolean addWish(int wid, int uid, String name, String descr, double price)
-	{	
-		if(price<0){
-			String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', NULL)",
-					wid, uid, name, descr, price);
-			return sendSQLnoReturn(command);
-		}
-		else{
-			String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', %f)",
-											wid, uid, name, descr, price);
-			return sendSQLnoReturn(command);
-		}
-	}
-	
+        public boolean addWish(int wid, int uid, String name, String descr, double price)
+        {       
+                if(price<0){
+                        String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', NULL)",
+                                        wid, uid, name, descr, price);
+                        return sendSQLnoReturn(command);
+                }
+                else{
+                        String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', %f)",
+                                                                                        wid, uid, name, descr, price);
+                        return sendSQLnoReturn(command);
+                }
+        }
+
+        
         public ArrayList<WishItem> listWishes(int uid){
 
             /** Returns an array of wish objects where the wishes belong
@@ -251,5 +272,7 @@ public class DBCom {
             
             return wishList;
         }
+
+        
 
 }

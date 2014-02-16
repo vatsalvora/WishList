@@ -46,7 +46,7 @@ public class Login extends Activity
                         @Override
                         public void onCompleted(GraphUser user, Response response)
                         {
-                            currentAppUser = new FBUser(Integer.parseInt(user.getId()), user.getName(), true);
+                            currentAppUser = new FBUser(user.getId(), user.getName(), true);
                         }
                     });
 
@@ -58,7 +58,7 @@ public class Login extends Activity
                         public void onCompleted(List<GraphUser> users, Response response)
                         {
                             friends = new ArrayList<FBUser>();
-                            for(GraphUser i : users) friends.add(new FBUser(Integer.parseInt(i.getId()), i.getName(), false));
+                            for(GraphUser i : users) friends.add(new FBUser(i.getId(), i.getName(), false));
                         }
                     });
                 }

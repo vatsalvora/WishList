@@ -247,12 +247,50 @@ public class DBCom {
              * the postgres timestamp type
              */
 
+            int uid = wi.getUID();
+            int wid = wi.getWID();
+            String name = wi.getName();
+
+            String descr = wi.getDescription();
+            int bid = wi.getBID();
+            double price = wi.getPrice();
+            int status = wi.getStatus();
+
+            /* Special handling incase bid or priceStr is NULL. 
+             * Since the SQL commands are all strings anyway, we can convert
+             * our ints and doubles to strings. This gives us the added
+             * benefit of specifiying a value is NULL by giving it NULL.
+             *
+             * As long as we don't wrap our strong in single quotes(' '),
+             * SQL will convert it to the proper data types
+             */
+
+            String bidStr;
+            String priceStr;
+
+            if(descr == "") {
+                descr = "NULL";
+            }
+
+            if (bid == 0) {
+                bidStr = "NULL";
+            }
+            else {
+                bidStr = Integer.toString(bid);
+            }
+
+            if (price == 0) {
+                priceStr = "NULL";
+            }
+            else {
+                priceStr = Double.toString(price);
+            }
+
             String insertSQL = "INSERT INTO wishes ";
-            String cols = "(uid, bid, name, descr, price, status, wid, added) ";
-            String VALUES = String.format("(%d, %d, '%s','%s', %f, %d, %d)", 
-                    wi.getUID(), wi.getBID(), wi.getName(), wi.getDescription(),
-                    wi.getPrice(), wi.getStatus(), wi.getWID()
-                    );
+            String cols = "(uid, bid, name, descr, price, status, wid) ";
+            String VALUES = String.format("(%d, %s, '%s','%s', %s, %d, %d)", 
+                    uid, bidStr, name, descr, priceStr, status, wid);
+
             String command = insertSQL + cols + "VALUES " + VALUES;
 
             return sendSQLnoReturn(command);

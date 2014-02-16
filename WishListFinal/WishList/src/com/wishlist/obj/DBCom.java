@@ -233,6 +233,35 @@ public class DBCom {
                 }
         }
 
+        public boolean addWish(WishItem wi) {
+
+            /** Adds a wish to the DB given a WishItem object */
+
+            /* WARNING:
+             *
+             * This doesn't not check to see if any of the values are NULL
+             *
+             * This method doesn't yet support the dateAdded timestamp.
+             * You can only pass strings to the database and I don't know
+             * if Date.toString() produces a string that is compatible with
+             * the postgres timestamp type
+             */
+
+            String insertSQL = "INSERT INTO wishes ";
+            String cols = "(uid, bid, name, descr, price, status, wid, added) ";
+            String VALUES = String.format("(%d, %d, '%s','%s', %f, %d, %d)", 
+                    wi.getUID(), wi.getBID(), wi.getName(), wi.getDescription(),
+                    wi.getPrice(), wi.getStatus(), wi.getWID()
+                    );
+            String command = insertSQL + cols + "VALUES " + VALUES;
+
+            return sendSQLnoReturn(command);
+
+
+        }
+            
+
+
         
         public ArrayList<WishItem> listWishes(int uid){
 
@@ -273,6 +302,35 @@ public class DBCom {
             return wishList;
         }
 
-        
+        public boolean deleteWish(int wid) {
+            /** Deletes a wish from the database given the wid */
+
+            /* This only deletes the DB entry for this wish.  This does not
+             * delete a local copy of the wish and does not remove the wish
+             * from the wList object in the User class
+             */
+
+            String command = String.format("DELETE FROM wishes WHERE wid=%d",
+                                            wid);
+            return sendSQLnoReturn(command);
+        }
+
+        public boolean updateWish(WishItem wi) {
+            /** Updates the database entry for the given Wish 
+             * Returns true if operation was successful, false if not
+             */
+
+            /* This method assumes that an update needs to happen and thus
+             * does not check to see if values provided by WishItem object
+             * already match DB entry
+             */
+
+            if(deleteWish(wi.getWID())) {
+                return addWish(wi);
+            }
+            else {
+                return false;
+            }        
+        }
 
 }

@@ -32,14 +32,14 @@ public class Login extends Activity {
 		@Override
 	      public void call(Session session, SessionState state, Exception exception) {
 	        if (session.isOpened()) {
-	        	Log.i("MyActivity", "MyClass.getView() — get item number ");
+	        	Log.i("MyActivity", "MyClass.getView() ï¿½ get item number ");
 	          // make request to the /me API
 	          Request.newMeRequest(session, new Request.GraphUserCallback() {
 	        	
 	            // callback after Graph API response with user object
 	            @Override
 	            public void onCompleted(GraphUser user, Response response) {
-	            	currentAppUser = new FBUser(user.getId(), user.getName(), true);
+	            	currentAppUser = new FBUser(Integer.parseInt(user.getId()), user.getName(), true);
 	            }
 	          });
 	          
@@ -49,7 +49,7 @@ public class Login extends Activity {
 				@Override
 				public void onCompleted(List<GraphUser> users, Response response) {
 					friends = new ArrayList<FBUser>();
-					for(GraphUser i : users) friends.add(new FBUser(i.getId(), i.getName(), false));
+					for(GraphUser i : users) friends.add(new FBUser(Integer.parseInt(i.getId()), i.getName(), false));
 				}
 	          });
 	        }

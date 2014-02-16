@@ -15,7 +15,7 @@ import android.os.Parcelable;
 public class FBUser extends User implements Parcelable
 {
 
-    public FBUser(int uid, String name, boolean isAppUser)
+    public FBUser(String uid, String name, boolean isAppUser)
     {
         super(uid, name, isAppUser);
     }
@@ -49,7 +49,7 @@ public class FBUser extends User implements Parcelable
         else
             out.writeInt(0);
 
-        out.writeInt(uid); // I assume we can write ints like this
+        out.writeString(uid); // I assume we can write ints like this
         out.writeString(name);
         out.writeTypedList(wList);
     }
@@ -59,7 +59,7 @@ public class FBUser extends User implements Parcelable
         super();
         in.readTypedList(wList, WishItem.CREATOR);
         setName(in.readString());
-        setUID(in.readInt());
+        setUID(in.readString());
         if(in.readInt() == 1) isAppUser = true;
         else isAppUser=false;
     }

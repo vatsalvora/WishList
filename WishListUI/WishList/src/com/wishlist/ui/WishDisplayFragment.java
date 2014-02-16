@@ -7,24 +7,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-	public class WishDisplayFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
-		private View rootView;
-		
-		public WishDisplayFragment() {
-		}
+public class WishDisplayFragment extends Fragment
+{
+    /**
+     * The fragment argument representing the section number for this
+     * fragment.
+     */
+    public static final String ARG_SECTION_NUMBER = "section_number";
+    private View rootView;
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			
-			View rootView = inflater.inflate(R.layout.fragment_wish_display,
-					container, false);
-		
-			return rootView;
-		}
-	}
+    public WishDisplayFragment()
+    {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+
+        View rootView = inflater.inflate(R.layout.fragment_wish_display,
+                                         container, false);
+
+        return rootView;
+    }
+}

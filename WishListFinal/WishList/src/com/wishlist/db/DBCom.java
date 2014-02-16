@@ -1,11 +1,14 @@
 //This file provides the libraries for using the WishList database. It will abstract the SQL, by creating simple java
 //methods that will integrate with the final product.
 
-package com.wishlist.obj; //This line is for android functionality only. This is a test address. Change required based on final path.
+package com.wishlist.db; //This line is for android functionality only. This is a test address. Change required based on final path.
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.DateFormat;
+
+import com.wishlist.obj.User;
+import com.wishlist.obj.WishItem;
 
 import android.util.Log; //This needs to be imported to implement printing to logcat with thrown exceptions.
 
@@ -49,6 +52,8 @@ public class DBCom {
         public static final String INDEX = "INDEX";
         public static final String FROM = "FROM";
         public static final String WHERE = "WHERE";
+        public static final String ALL = "*";
+        
         Connection connect;
         
         public DBCom(){
@@ -165,6 +170,15 @@ public class DBCom {
                 }
                 return resultSet;
 
+        }
+        
+        //please use this method to build queries (Joon)
+        public static String queryBuilder(String... in){
+        	String query = "";
+        	for(String i : in){
+        		query += i + " ";
+        	}
+        	return query; 
         }
         
         public boolean addUser(int uid, String name){

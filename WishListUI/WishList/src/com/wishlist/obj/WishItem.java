@@ -14,7 +14,7 @@ import android.os.Parcelable;
 
 public class WishItem implements Comparable<WishItem>, Parcelable{
 	protected String name; //name of item
-	protected String ID; //ID of the item
+	protected String ID; //ID of the item, only to be used by database and never shown to user
 	protected String description; //description of item
 	protected Pair<String, String> owner; //ID and name of the owner of the item (ID, name)
 	protected Pair<String, String> buyer; //ID and name of the user that took the item (ID,name)
@@ -71,6 +71,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 	
 	public void setDescription(String description){
 		this.description= description;
+		requestUpdate();
 	}
 	
 	public double getPrice(){
@@ -88,11 +89,13 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 	
 	public void setDate(Date d){
 		dateAdded = d;
+		requestUpdate();
 	}
 	
 	@SuppressWarnings("deprecation")
 	public void setDate(String in){
 		dateAdded = new Date(in);
+		requestUpdate();
 	}
 	
 	public Pair<String, String> getOwner(){
@@ -101,6 +104,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 	
 	public void setOwner(Pair<String, String> in){
 		owner = in;
+		requestUpdate();
 	}
 	
 	public Pair<String, String> getBuyer(){
@@ -109,6 +113,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable{
 	
 	public void setBuyer(Pair<String, String> in){
 		buyer = in;
+		requestUpdate();
 	}
 	
 	public Picture getPicture(){

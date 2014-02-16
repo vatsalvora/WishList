@@ -1,6 +1,6 @@
 /*Author: Joon Kim
  * 
- * Pair class to link two objects together
+ * Pair class to encapsulate two objects together
  */
 
 package com.wishlist.obj;

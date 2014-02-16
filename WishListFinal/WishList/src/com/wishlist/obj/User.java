@@ -13,7 +13,7 @@ import java.util.Collections;
 public abstract class User
 {
     protected boolean isAppUser; //flag for current app user
-    protected int uid; //ID of user
+    protected String uid; //ID of user
     protected String name; //name of user
     protected ArrayList<WishItem> wList; //wishlist for user
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
@@ -22,7 +22,7 @@ public abstract class User
     {
     }
 
-    public User(int uid, String name, boolean isAppUser)
+    public User(String uid, String name, boolean isAppUser)
     {
         setName(name);
         setUID(uid);
@@ -39,12 +39,12 @@ public abstract class User
         this.name = name;
     }
 
-    public int getUID()
+    public String getUID()
     {
         return uid;
     }
 
-    protected void setUID(int uid)
+    protected void setUID(String uid)
     {
         this.uid = uid;
     }

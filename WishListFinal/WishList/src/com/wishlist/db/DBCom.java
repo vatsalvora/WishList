@@ -5,7 +5,6 @@ package com.wishlist.db; //This line is for android functionality only. This is 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.text.DateFormat;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
@@ -14,20 +13,19 @@ import android.util.Log; //This needs to be imported to implement printing to lo
 
 /* DB Schema for reference
  * Users(int uid, string name)
- * wishes(int uid, int bid, String name, String descr, double price,
- *        int status, int wid)
+ * wishes(int uid, String bid, String name, String descr, double price,
+ *        int status, String wid, timestamp dateAdded)
  */
 
 /* TODO:
+ *  Change id methods to use strings instead of ints
+ *  ^^ Done but not tested
  *
  *  Sync wish object with database
  *
- *  remove user *later*
- *  remove wish
  *
  *  remove wid from methods - generate
  *
- *  Do we want to return anything other than strings?
  *  Do we want to have ints as inputs to the methods? What does facebook return??!
  */
 
@@ -200,10 +198,10 @@ public class DBCom
         return query;
     }
 
-    public boolean addUser(int uid, String name)
+    public boolean addUser(String uid, String name)
     {
         /* Do we need to keep this method around ? */
-        String command = String.format("INSERT INTO users VALUES (%d, '%s')", uid, name); //Bad warning?
+        String command = String.format("INSERT INTO users VALUES ('%s';, '%s')", uid, name); //Bad warning?
         return sendSQLnoReturn(command);
 
     }
@@ -213,20 +211,20 @@ public class DBCom
 
         /** Adds user to database */
 
-        int uid = u.getUID();
+        String uid = u.getUID();
         String name = u.getName();
 
-        String command = String.format("INSERT INTO users VALUES (%d, '%s')",
+        String command = String.format("INSERT INTO users VALUES ('%s', '%s')",
                                        uid, name);
         return sendSQLnoReturn(command);
     }
 
-    public boolean isUser(int uid)
+    public boolean isUser(String uid)
     {
 
         /** Returns true if given uid is in database */
 
-        String command = String.format("SELECT * FROM Users WHERE uid = %d", uid);
+        String command = String.format("SELECT * FROM Users WHERE uid = '%s'", uid);
         ResultSet resultSet = sendSQLwithReturn(command);
 
         boolean isU = false;
@@ -260,17 +258,17 @@ public class DBCom
      * then do wish.commit() or wish.sync() or wish.sendToServer() or
      * whatever we call it instead?
      */
-    public boolean addWish(int wid, int uid, String name, String descr, double price)
+    public boolean addWish(String wid, String uid, String name, String descr, double price)
     {
         if(price<0)
         {
-            String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', NULL)",
+            String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES ('%s', '%s', '%s', '%s', NULL)",
                                            wid, uid, name, descr, price);
             return sendSQLnoReturn(command);
         }
         else
         {
-            String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES (%d, %d, '%s', '%s', %f)",
+            String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES ('%s', '%s', '%s', '%s', %f)",
                                            wid, uid, name, descr, price);
             return sendSQLnoReturn(command);
         }
@@ -291,12 +289,12 @@ public class DBCom
          * the postgres timestamp type
          */
 
-        int uid = wi.getUID();
-        int wid = wi.getWID();
+        String uid = wi.getUID();
+        String wid = wi.getWID();
         String name = wi.getName();
 
         String descr = wi.getDescription();
-        int bid = wi.getBID();
+        String bid = wi.getBID();
         double price = wi.getPrice();
         int status = wi.getStatus();
 
@@ -309,7 +307,6 @@ public class DBCom
          * SQL will convert it to the proper data types
          */
 
-        String bidStr;
         String priceStr;
 
         if(descr == "")
@@ -317,14 +314,11 @@ public class DBCom
             descr = "NULL";
         }
 
-        if (bid == 0)
+        if (bid == null)
         {
-            bidStr = "NULL";
+            bid = "NULL";
         }
-        else
-        {
-            bidStr = Integer.toString(bid);
-        }
+        
 
         if (price == 0)
         {
@@ -337,8 +331,8 @@ public class DBCom
 
         String insertSQL = "INSERT INTO wishes ";
         String cols = "(uid, bid, name, descr, price, status, wid) ";
-        String VALUES = String.format("(%d, %s, '%s','%s', %s, %d, %d)",
-                                      uid, bidStr, name, descr, priceStr, status, wid);
+        String VALUES = String.format("('%s', '%s', '%s','%s', %s, %d, '%s')",
+                                      uid, bid, name, descr, priceStr, status, wid);
 
         String command = insertSQL + cols + "VALUES " + VALUES;
 
@@ -350,7 +344,7 @@ public class DBCom
 
 
 
-    public ArrayList<WishItem> listWishes(int uid)
+    public ArrayList<WishItem> listWishes(String uid)
     {
 
         /** Returns an array of wish objects where the wishes belong
@@ -358,11 +352,12 @@ public class DBCom
          */
 
         ArrayList<WishItem> wishList = new ArrayList<WishItem>();
-        String command = String.format("SELECT * FROM wishes WHERE uid=%d", uid);
+        String command = String.format("SELECT * FROM wishes WHERE uid='%s'", uid);
         ResultSet resultSet = sendSQLwithReturn(command);
 
-        int bid, status, wid;
+        String bid, wid;
         String name, descr;
+        int status;
         double price;
         Date dateAdded;
 
@@ -370,14 +365,18 @@ public class DBCom
         {
             while(resultSet.next())
             {
-                //uid is in col 1, but we already have that since it was passed
-                bid = resultSet.getInt(2);
-                name = resultSet.getString(3);
-                descr = resultSet.getString(4);
-                price = resultSet.getDouble(5);
-                status = resultSet.getInt(6);
-                wid = resultSet.getInt(7);
+                //uid is in col 2, but we already have that since it was passed
+                
+                /* What happens when value in DB is NULL ? */
+                wid = resultSet.getString(1);
+                bid = resultSet.getString(3);
+                name = resultSet.getString(4);
+                descr = resultSet.getString(5);
+                price = resultSet.getDouble(6);
+                status = resultSet.getInt(7);
                 dateAdded = resultSet.getDate(8);
+                
+
 
                 WishItem WI = new WishItem(uid, bid, name, descr, price,
                                            status, wid, dateAdded);
@@ -393,7 +392,7 @@ public class DBCom
         return wishList;
     }
 
-    public boolean deleteWish(int wid)
+    public boolean deleteWish(String wid)
     {
         /** Deletes a wish from the database given the wid */
 
@@ -402,7 +401,7 @@ public class DBCom
          * from the wList object in the User class
          */
 
-        String command = String.format("DELETE FROM wishes WHERE wid=%d",
+        String command = String.format("DELETE FROM wishes WHERE wid='%s'",
                                        wid);
         return sendSQLnoReturn(command);
     }

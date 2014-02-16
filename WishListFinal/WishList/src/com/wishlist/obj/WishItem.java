@@ -18,11 +18,11 @@ import android.os.Parcelable;
 public class WishItem implements Comparable<WishItem>, Parcelable
 {
     protected String name; //name of item
-    protected int wid; //ID of the wish
+    protected String wid; //ID of the wish
     protected String description = ""; //description of item
-    protected int bid; //ID of buyer
+    protected String bid; //ID of buyer
     protected String bName = "";  //Name of buyer
-    protected int uid;  //User ID of user who has this wish
+    protected String uid;  //User ID of user who has this wish
     protected String uName; //Name of user who has this wish
     protected Date dateAdded; //date of the item added to user
     protected Double price; //price of item
@@ -41,20 +41,20 @@ public class WishItem implements Comparable<WishItem>, Parcelable
      * NOT NULL in database. Status need not be specified as the status
      * field in the DB hasa default value
      */
-    public WishItem(int wid, String name, int uid)
+    public WishItem(String wid, String name, String uid)
     {
         setWID(wid);
         setName(name);
         setUID(uid);
     }
-    public WishItem(int wid, String name, int uid, String description)
+    public WishItem(String wid, String name, String uid, String description)
     {
         setWID(wid);
         setName(name);
         setUID(uid);
         setDescription(description);
     }
-    public WishItem(int wid, String name, int uid, String description,
+    public WishItem(String wid, String name, String uid, String description,
                     double price)
     {
         setWID(wid);
@@ -64,7 +64,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         setPrice(price);
     }
 
-    public WishItem(int wid, String name, int uid, double price)
+    public WishItem(String wid, String name, String uid, double price)
     {
         setWID(wid);
         setName(name);
@@ -77,8 +77,8 @@ public class WishItem implements Comparable<WishItem>, Parcelable
      * a new wish object based off of data in database. This is why bid,
      * dateAdded, and status are included
      */
-    public WishItem(int uid, int bid, String name, String descr,
-                    double price, int status, int wid, Date dateAdded)
+    public WishItem(String uid, String bid, String name, String descr,
+                    double price, int status, String wid, Date dateAdded)
     {
         setUID(uid);
         setBID(bid);
@@ -112,13 +112,13 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     }
 
 
-    public int getWID()
+    public String getWID()
     {
         return wid;
     }
 
     //note this is private
-    private void setWID(int in)
+    private void setWID(String in)
     {
         wid = in;
     }
@@ -160,22 +160,22 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         dateAdded = new Date(in);
     }
 
-    public int getUID()
+    public String getUID()
     {
         return uid;
     }
 
-    private void setUID(int uid)
+    private void setUID(String uid)
     {
         this.uid = uid;
     }
 
-    public int getBID()
+    public String getBID()
     {
         return bid;
     }
 
-    public void setBID(int bid)
+    public void setBID(String bid)
     {
         this.bid = bid;
     }

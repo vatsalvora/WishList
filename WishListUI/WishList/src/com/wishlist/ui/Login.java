@@ -58,7 +58,11 @@ public class Login extends Activity
                         public void onCompleted(List<GraphUser> users, Response response)
                         {
                             friends = new ArrayList<FBUser>();
-                            for(GraphUser i : users) friends.add(new FBUser(i.getId(), i.getName(), false));
+                            for(GraphUser i : users) {
+                            	friends.add(new FBUser(i.getId(), i.getName(), false));
+                            	//display user information                    
+                            }
+                            
                         }
                     });
                 }

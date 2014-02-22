@@ -25,7 +25,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     protected String uid;  //User ID of user who has this wish
     protected String uName; //Name of user who has this wish
     protected Date dateAdded; //date of the item added to user
-    protected Double price; //price of item
+    protected String price; //price of item
     protected int status;  //status of item. Open, registered, bought, etc
     protected Picture picture; //Picture object for image of item. Implement in sprint 2
     protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
@@ -55,7 +55,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         setDescription(description);
     }
     public WishItem(String wid, String name, String uid, String description,
-                    double price)
+                    String price)
     {
         setWID(wid);
         setName(name);
@@ -64,21 +64,12 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         setPrice(price);
     }
 
-    public WishItem(String wid, String name, String uid, double price)
-    {
-        setWID(wid);
-        setName(name);
-        setUID(uid);
-        setPrice(price);
-    }
-
-
     /* This constructor will not be used to create a new wish, but rather
      * a new wish object based off of data in database. This is why bid,
      * dateAdded, and status are included
      */
     public WishItem(String uid, String bid, String name, String descr,
-                    double price, int status, String wid, Date dateAdded)
+                    String price, int status, String wid, Date dateAdded)
     {
         setUID(uid);
         setBID(bid);
@@ -133,12 +124,12 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         this.description= description;
     }
 
-    public double getPrice()
+    public String getPrice()
     {
         return price;
     }
 
-    public void setPrice(Double price)
+    public void setPrice(String price)
     {
         this.price = price;
         requestUpdate();
@@ -255,7 +246,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     {
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeDouble(price);
+        dest.writeString(price);
         dest.writeString(dateAdded.toString());
         //dest.writeString(picture.toString());
         //dest.writeString(buyer);
@@ -268,13 +259,12 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         if(in.readInt() == 0) updateRequest=false;
         else updateRequest=true;
         String temp;
-        Double temp2;
         //temp = in.readString();
         //if(temp != null) setTakenBy(temp);
         temp = in.readString();
         if(temp != null) setDate(temp);
-        temp2 = in.readDouble();
-        if(temp2 != null) setPrice(temp2);
+        temp = in.readString();
+        if(temp != null) setPrice(temp);
         temp = in.readString();
         if(temp != null) setDescription(temp);
         temp = in.readString();

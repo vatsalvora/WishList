@@ -1,5 +1,9 @@
-//This file provides the libraries for using the WishList database. It will abstract the SQL, by creating simple java
-//methods that will integrate with the final product.
+/*This file provides the libraries for using the WishList database. 
+ * It will abstract the SQL, by creating simple java methods that will integrate with the final product.
+* 
+* Change: Implemented the Singleton design pattern by Joon Kim
+* Reason: We will only have one DBCom object in the app at a time, so the design pattern here is appropriate.
+*/
 
 package com.wishlist.db; //This line is for android functionality only. This is a test address. Change required based on final path.
 import java.sql.*;
@@ -9,6 +13,7 @@ import java.util.Date;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
+import android.annotation.SuppressLint;
 import android.util.Log; //This needs to be imported to implement printing to logcat with thrown exceptions.
 
 /* DB Schema for reference
@@ -32,11 +37,14 @@ import android.util.Log; //This needs to be imported to implement printing to lo
 public class DBCom
 {
 
+	private static DBCom _instance = null;
+	
     /* Alex's ip. Please don't DDOS */
-    String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
-    String username = "wishlist_app";
-    String password = "wl_app";
-    String output = "";
+	private String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
+    private String username = "wishlist_app";
+    private String password = "wl_app";
+    private String command;
+    private String output = "";
 
     public static final String SELECT = "SELECT";
     public static final String UPDATE = "UPDATE";
@@ -50,12 +58,20 @@ public class DBCom
     public static final String TABLE = "TABLE";
     public static final String INDEX = "INDEX";
     public static final String FROM = "FROM";
+    public static final String VALUES = "VALUES";
     public static final String WHERE = "WHERE";
     public static final String ALL = "*";
 
-    Connection connect;
-
-    public DBCom()
+    private Connection connect;
+    
+    public static DBCom instance(){
+    	if(_instance == null){
+    		_instance = new DBCom();
+    	}
+    	return _instance;
+    }
+    
+    private DBCom()
     {
         //This is the constructor for the Database Communication Object. An instance of this object is required to
         //use any coomunication methods. It provides the setup, linking the app with the postgres driver.
@@ -87,9 +103,9 @@ public class DBCom
         {
             for(int i = 1; i<3; i++)
             {
-                output = output + (resultSet.getString(i) + " ");
+                output += (resultSet.getString(i) + " ");
             }
-            output = output + "\n";
+            output += "\n";
         }
 
         resultSet.close();
@@ -188,7 +204,7 @@ public class DBCom
     }
 
     //please use this method to build queries (Joon)
-    public static String queryBuilder(String... in)
+    private static String queryBuilder(String... in)
     {
         String query = "";
         for(String i : in)
@@ -201,7 +217,7 @@ public class DBCom
     public boolean addUser(String uid, String name)
     {
         /* Do we need to keep this method around ? */
-        String command = String.format("INSERT INTO users VALUES ('%s';, '%s')", uid, name); //Bad warning?
+    	command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
         return sendSQLnoReturn(command);
 
     }
@@ -211,11 +227,8 @@ public class DBCom
 
         /** Adds user to database */
 
-        String uid = u.getUID();
-        String name = u.getName();
-
-        String command = String.format("INSERT INTO users VALUES ('%s', '%s')",
-                                       uid, name);
+        command = queryBuilder(INSERT, INTO, "users", VALUES, u.getUID(), u.getName());
+        
         return sendSQLnoReturn(command);
     }
 
@@ -223,8 +236,8 @@ public class DBCom
     {
 
         /** Returns true if given uid is in database */
-
-        String command = String.format("SELECT * FROM Users WHERE uid = '%s'", uid);
+    	
+    	command = queryBuilder(SELECT, ALL, FROM, "users", WHERE, "uid =", uid);
         ResultSet resultSet = sendSQLwithReturn(command);
 
         boolean isU = false;
@@ -258,23 +271,15 @@ public class DBCom
      * then do wish.commit() or wish.sync() or wish.sendToServer() or
      * whatever we call it instead?
      */
-    public boolean addWish(String wid, String uid, String name, String descr, double price)
+    public boolean addWish(String wid, String uid, String name, String descr, String price)
     {
-        if(price<0)
-        {
-            String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES ('%s', '%s', '%s', '%s', NULL)",
-                                           wid, uid, name, descr, price);
-            return sendSQLnoReturn(command);
-        }
-        else
-        {
-            String command = String.format("INSERT INTO wishes (wid, uid, name, descr, price) VALUES ('%s', '%s', '%s', '%s', %f)",
-                                           wid, uid, name, descr, price);
-            return sendSQLnoReturn(command);
-        }
+       String tuple = "("+wid+", "+uid+", "+name+", "+descr+", "+price+")";
+       command = queryBuilder(INSERT, INTO, "wishes", "(wid, uid, name, descr, price)", VALUES, tuple);
+       return sendSQLnoReturn(command);
     }
 
-    public boolean addWish(WishItem wi)
+    @SuppressLint("DefaultLocale")
+	public boolean addWish(WishItem wi)
     {
 
         /** Adds a wish to the DB given a WishItem object */
@@ -295,7 +300,7 @@ public class DBCom
 
         String descr = wi.getDescription();
         String bid = wi.getBID();
-        double price = wi.getPrice();
+        String price = wi.getPrice();
         int status = wi.getStatus();
 
         /* Special handling incase bid or priceStr is NULL.
@@ -320,21 +325,19 @@ public class DBCom
         }
         
 
-        if (price == 0)
+        if (price == "0.00")
         {
             priceStr = "NULL";
         }
         else
         {
-            priceStr = Double.toString(price);
+            priceStr = price;
         }
-
-        String insertSQL = "INSERT INTO wishes ";
-        String cols = "(uid, bid, name, descr, price, status, wid) ";
-        String VALUES = String.format("('%s', '%s', '%s','%s', %s, %d, '%s')",
+        
+        String tuple = String.format("('%s', '%s', '%s','%s', %s, %d, '%s')",
                                       uid, bid, name, descr, priceStr, status, wid);
 
-        String command = insertSQL + cols + "VALUES " + VALUES;
+        command = queryBuilder(INSERT, INTO, "wishes", "(uid, bid, name, descr, price, status, wid)", "VALUES", tuple);
 
         return sendSQLnoReturn(command);
 
@@ -358,7 +361,7 @@ public class DBCom
         String bid, wid;
         String name, descr;
         int status;
-        double price;
+        String price;
         Date dateAdded;
 
         try
@@ -372,7 +375,7 @@ public class DBCom
                 bid = resultSet.getString(3);
                 name = resultSet.getString(4);
                 descr = resultSet.getString(5);
-                price = resultSet.getDouble(6);
+                price = resultSet.getString(6);
                 status = resultSet.getInt(7);
                 dateAdded = resultSet.getDate(8);
                 

@@ -10,7 +10,9 @@ package com.wishlist.obj;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class User
+import android.os.Parcelable;
+
+public abstract class User implements Parcelable
 {
     protected boolean isAppUser; //flag for current app user
     protected String uid; //ID of user

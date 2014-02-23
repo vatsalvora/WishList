@@ -78,6 +78,7 @@ public class Login extends Activity
         //Start the main activity
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("friend_data", data);
+        intent.putExtra("current_user", currentAppUser); 
         startActivity(intent);
     }
 

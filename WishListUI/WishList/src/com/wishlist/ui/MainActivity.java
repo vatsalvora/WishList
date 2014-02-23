@@ -1,6 +1,9 @@
 package com.wishlist.ui;
 
 import java.util.Locale;
+
+import com.wishlist.obj.FBUser;
+
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -8,9 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.*;
+//import android.support.v4.app.NavUtils;
 //import android.widget.TextView;
 
 /*
@@ -38,12 +40,18 @@ public class MainActivity extends FragmentActivity implements
     private ViewPager mViewPager;
 
     public static final int COUNT = 2;
+    
+    public FBUser currentUser; 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        //Get data from the passed bundle
+     //   currentUser = (FBUser) savedInstanceState.get("current_user");
+        
 
         // Set up the action bar. (It contains the tabs)
         final ActionBar actionBar = getActionBar();
@@ -84,14 +92,6 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
- /*   @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-*/
     @Override
     public void onTabSelected(ActionBar.Tab tab,
                               FragmentTransaction fragmentTransaction)

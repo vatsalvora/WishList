@@ -297,9 +297,9 @@ public class DBCom
         String uid = wi.getUID();
         String wid = wi.getWID();
         String name = wi.getName();
-
-        String descr = wi.getDescription();
         String bid = wi.getBID();
+        
+        String descr = wi.getDescription();
         String price = wi.getPrice();
         int status = wi.getStatus();
 

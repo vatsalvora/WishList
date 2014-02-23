@@ -3,6 +3,7 @@
  * subclass of User in our system who uses Facebook
  *
  * Edited by: Alex Bryan
+ * EDIT: implements Parcelable here, instead of User superclass
  */
 
 package com.wishlist.obj;
@@ -19,7 +20,7 @@ public class FBUser extends User
     {
         super(uid, name, isAppUser);
     }
-
+    
     @Override
     public int describeContents()
     {
@@ -62,5 +63,5 @@ public class FBUser extends User
         setUID(in.readString());
         if(in.readInt() == 1) isAppUser = true;
         else isAppUser=false;
-    }
+    }  
 }

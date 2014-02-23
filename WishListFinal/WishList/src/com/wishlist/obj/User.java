@@ -99,6 +99,5 @@ public abstract class User implements Parcelable
     protected void setIsAppUser(boolean flag)
     {
         isAppUser = flag;
-    }
-
+    }    
 }

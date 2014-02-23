@@ -4,12 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class WishDisplayFragment extends Fragment
 {/*
@@ -32,25 +33,40 @@ So the UI elements for certain actions are hidden based on user.
 	
     private View rootView;
 
-    public WishDisplayFragment()
-    {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-
+    	setHasOptionsMenu(true);
         View listView = inflater.inflate(R.layout.fragment_wish_display,
                                          container, false);
 
         //put add wish in the action bar; delete wishes in the contextual action bar
         //display wishes in a listview
         
-        
+        rootView = listView;
         return listView;
     }
-    
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		//This displays the right action bar for the fragment
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.wish_list_view, menu);
+		//TODO: display a different action bar (without the ability to add items) if the user doesn't own the list
+		
+	} 
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_add:
+	            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT);
+	            toast.show();
+	            addWishItem();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}   
     public void addWishItem(){ //called when the Add action is activated in the action bar
     	
     	

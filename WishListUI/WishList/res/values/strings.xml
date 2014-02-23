@@ -9,6 +9,7 @@
     <string name="undo">Undo</string>
     <string name="redo">Redo</string>
     <string name="name">Name</string>
+    <string name="new_wish">New Wish</string>    
     <string name="price">Price</string>
     <string name="notes">Notes</string>
     <string name="mylist">My Wishlist</string>

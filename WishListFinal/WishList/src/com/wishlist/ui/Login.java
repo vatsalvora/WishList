@@ -16,6 +16,7 @@ public class Login extends Activity
 
     public static FBUser currentAppUser; //user object for the Facebook user actually using the app.
     private ArrayList<FBUser> friends; //ID of friends
+    private Bundle b;
 
     @Override
     public void onCreate(Bundle savedInstanceState)

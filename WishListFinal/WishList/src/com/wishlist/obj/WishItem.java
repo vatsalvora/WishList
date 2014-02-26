@@ -24,10 +24,21 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     protected Date dateAdded; //date of the item added to user
     protected String price; //price of item
     protected Picture picture; //Picture object for image of item. Implement in sprint 2
-    protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
     protected int status;  //status of item. Open, registered, bought, etc
-    protected boolean updateRequest = false; //update changes
-
+    protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
+    protected int update = NONE; //update changes
+    
+    //update codes
+    public static final int NONE = 0;
+    public static final int WISH = 1;
+    public static final int USER = 2;
+    public static final int BUYER = 3;
+    public static final int DESC = 4;
+    public static final int DATE = 5;
+    public static final int PRICE = 6;
+    public static final int PICTURE = 7;
+    public static final int STATUS = 8;
+    
     public WishItem()
     {
         throw new RuntimeException("Name and ID not specified!");
@@ -132,7 +143,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     public void setStatus(int status)
     {
         this.status = status;
-        requestUpdate();
+        update(STATUS);
     }
 
     public String getDescription()
@@ -143,7 +154,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     public void setDescription(String description)
     {
         this.description= description;
-        requestUpdate();
+        update(DESC);
     }
 
     public String getPrice()
@@ -154,7 +165,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     public void setPrice(String price)
     {
         this.price = price;
-        requestUpdate();
+        update(PRICE);
     }
 
     public Date getDate()
@@ -165,7 +176,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     public void setDate(Date d)
     {
         dateAdded = d;
-        requestUpdate();
+        update(DATE);
     }
 
     @SuppressWarnings("deprecation")
@@ -182,7 +193,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     public void setPicture(File f)
     {
         picture.setPicture(f);
-        requestUpdate();
+        update(PICTURE);
     }
 
     public String getComment(String ID)
@@ -193,7 +204,6 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     public void setComment(String ID, String comment)
     {
         comments.put(ID, comment);
-        requestUpdate();
     }
 
     public int compareTo(WishItem arg0)
@@ -201,21 +211,20 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         return this.wish.second.compareTo(arg0.wish.second);
     }
 
-    public boolean getUpdate()
+    public int getUpdate()
     {
-        return updateRequest;
+        return update;
     }
 
-    private void requestUpdate()
+    private void update(int code)
     {
-        updateRequest=true;
+        update=code;
     }
-
-    public void finishUpdate()
-    {
-        updateRequest=false;
+    
+    public void doneUpdate(){
+    	update = NONE;
     }
-
+    
     @Override
     public int describeContents()
     {
@@ -246,16 +255,13 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         dest.writeString(price);
         //dest.writeString(dateAdded.toString());
         //dest.writeString(picture.toString());
-        if(updateRequest == false) dest.writeInt(0);
-        else dest.writeInt(1);
+        dest.writeInt(update);
     }
 
     @SuppressWarnings("unchecked")
 	private WishItem(Parcel in)
     {
-        if(in.readInt() == 0) updateRequest=false;
-        else updateRequest=true;
-        //setDate(temp);
+        update = in.readInt();
         setPrice(in.readString());
         setDescription(in.readString());
 		Pair<String, String> p = (Pair<String, String>) in.readParcelable(Pair.class.getClassLoader());

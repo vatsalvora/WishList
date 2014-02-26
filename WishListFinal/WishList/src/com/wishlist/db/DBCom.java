@@ -403,9 +403,8 @@ public class DBCom
          * delete a local copy of the wish and does not remove the wish
          * from the wList object in the User class
          */
-
-        String command = String.format("DELETE FROM wishes WHERE wid='%s'",
-                                       wid);
+    	
+    	command = queryBuilder(DELETE, FROM, "wishes", WHERE, "wid=", wid);
         return sendSQLnoReturn(command);
     }
 
@@ -417,17 +416,11 @@ public class DBCom
 
         /* This method assumes that an update needs to happen and thus
          * does not check to see if values provided by WishItem object
-         * already match DB entry
+         * already match DB entry (Wait, why not?, says Joon)
          */
-
-        if(deleteWish(wi.getWID()))
-        {
-            return addWish(wi);
-        }
-        else
-        {
-            return false;
-        }
+    	
+        if(deleteWish(wi.getWID())) return addWish(wi);
+        return false;
     }
 
 }

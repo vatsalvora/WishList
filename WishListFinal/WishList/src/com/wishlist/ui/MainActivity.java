@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 //import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.*;
+import com.wishlist.db.*;
 //import android.widget.TextView;
 
 /*
@@ -36,7 +37,7 @@ public class MainActivity extends FragmentActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
+    private DBCom db;
     public static final int COUNT = 2;
 
     @Override
@@ -45,6 +46,9 @@ public class MainActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //set up DB communication
+        db = DBCom.instance();
+        
         // Set up the action bar. (It contains the tabs)
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

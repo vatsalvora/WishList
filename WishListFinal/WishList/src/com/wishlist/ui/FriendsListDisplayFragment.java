@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class FriendsListDisplayFragment extends Fragment
@@ -15,6 +16,7 @@ public class FriendsListDisplayFragment extends Fragment
      */
 
     private View rootView;
+    private ListView list;
 
     public static final String ARG_SECTION_NUMBER = "section_number";
 

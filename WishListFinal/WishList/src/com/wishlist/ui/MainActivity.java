@@ -1,5 +1,6 @@
 package com.wishlist.ui;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -12,7 +13,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.*;
 import com.wishlist.db.*;
+import com.wishlist.obj.User;
 //import android.widget.TextView;
+import com.wishlist.obj.WishItem;
 
 /*
  * This class displays two fragments, one for the user's actual wish list and another for their friends list.
@@ -38,6 +41,11 @@ public class MainActivity extends FragmentActivity implements
      */
     private ViewPager mViewPager;
     private DBCom db;
+    private Bundle FBData;
+    private WishItem wish;
+    private User appUser;
+    private User currentUser;
+    private ArrayList<User> friends;
     public static final int COUNT = 2;
 
     @Override
@@ -48,6 +56,14 @@ public class MainActivity extends FragmentActivity implements
 
         //set up DB communication
         db = DBCom.instance();
+        
+        //retrieve data from intent
+        FBData = this.getIntent().getExtras();
+        appUser = FBData.getParcelable(Login.USER);
+        friends = FBData.getParcelableArrayList(Login.FRIENDS);
+        
+        //get wishes for user
+        appUser.setList(db.listWishes(appUser.getUID()));
         
         // Set up the action bar. (It contains the tabs)
         final ActionBar actionBar = getActionBar();
@@ -88,6 +104,35 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
+    protected void onStart(){
+    	super.onStart();
+    }
+    
+    protected void onRestart()
+    {
+    	super.onRestart();
+    }
+    
+    protected void onPause()
+    {
+    	super.onPause();
+    }
+    
+    protected void onResume()
+    {
+    	super.onResume();
+    }
+    
+    protected void onStop()
+    {
+    	super.onStop();
+    }
+   
+    protected void onDestroy()
+    {
+    	super.onDestroy();
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -138,16 +183,16 @@ public class MainActivity extends FragmentActivity implements
             Fragment fragment;
             switch(position)
             {
-            case 0:
-                fragment = new WishDisplayFragment();
-                fragment.setArguments(args);
-                return fragment;
-            case 1:
-                fragment = new FriendsListDisplayFragment();
-                fragment.setArguments(args);
-                return fragment;
-            default:
-                throw new RuntimeException("Invalid position");
+	            case 0:
+	                fragment = new WishDisplayFragment();
+	                fragment.setArguments(args);
+	                return fragment;
+	            case 1:
+	                fragment = new FriendsListDisplayFragment();
+	                fragment.setArguments(args);
+	                return fragment;
+	            default:
+	                throw new RuntimeException("Invalid position");
             }
         }
 

@@ -21,6 +21,11 @@ public class Login extends Activity
     private Bundle FBSession = null;
     private Session s = null;
 
+    //hashcodes passing data around
+    public static final String FBDATA = "FBData";
+    public static final String USER = "User";
+    public static final String FRIENDS = "Friends";
+    
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -74,19 +79,19 @@ public class Login extends Activity
         super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         //Start the main activity
-        packIntoBundle(FBData, currentAppUser, "user");
-        packIntoBundle(FBData, friends, "friends");
+        packIntoBundle(FBData, USER, currentAppUser);
+        packIntoBundle(FBData, FRIENDS, friends);
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("FBdata", FBData);
+        intent.putExtra(FBDATA, FBData);
         startActivity(intent);
     }
     
-    private void packIntoBundle(Bundle b, Parcelable p, String key)
+    private void packIntoBundle(Bundle b, String key, Parcelable p)
     {
     	b.putParcelable(key, p);
     }
     
-    private void packIntoBundle(Bundle b, ArrayList<? extends Parcelable> p, String key){
+    private void packIntoBundle(Bundle b, String key, ArrayList<? extends Parcelable> p){
     	b.putParcelableArrayList(key,p);
     }
     

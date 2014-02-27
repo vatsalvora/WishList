@@ -24,6 +24,7 @@ public class Login extends Activity {
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    Log.i("Sup","Came Here!");
 //	    setContentView(R.layout.activity_login);
 	    /* We don't need an actual layout here; if the user is not logged in the
 	    *  code below automatically brings up the facebook login anyway. If the user is
@@ -36,28 +37,38 @@ public class Login extends Activity {
 	      // callback when session changes state
 		@Override
 	      public void call(Session session, SessionState state, Exception exception) {
-	        if (session.isOpened()) {
+			Log.i("Sup","Came Here!");
+			Log.i("State",state.toString()+"");
+			if (session.isOpened()) {
 	        	Log.i("MyActivity", "MyClass.getView() — get item number ");
 	          // make request to the /me API
-	          Request.newMeRequest(session, new Request.GraphUserCallback() {
+	          Request req = Request.newMeRequest(session, new Request.GraphUserCallback() {
 	        	
 	            // callback after Graph API response with user object
 	            @Override
 	            public void onCompleted(GraphUser user, Response response) {
+	            	Log.i("Facebook",user.getId());
 	            	currentAppUser = new FBUser(user.getId(), user.getName(), true);
 	            }
 	          });
-	          
+	          Request.executeBatchAsync(req);
 	          //make request to the /friends-list API
-	          Request.newMyFriendsRequest(session, new Request.GraphUserListCallback() {
+	          Request req2 = Request.newMyFriendsRequest(session, new Request.GraphUserListCallback() {
 				
 				@Override
 				public void onCompleted(List<GraphUser> users, Response response) {
 					friends = new ArrayList<String>();
-					for(GraphUser i : users) friends.add(i.getId());
-					data.writeToParcel(parcel, 1);
+					for(GraphUser i : users)
+					{
+						friends.add(i.getId());
+						Log.i("Friends!!!", i.getId()+"");
+						Log.w("Friends!!!", i.getId()+"");
+						Log.e("Friends!!!", i.getId()+"");
+					}
+					//data.writeToParcel(parcel, 1);
 				}
 	          });
+				Request.executeBatchAsync(req2);
 	        }
 	      }
 	    });

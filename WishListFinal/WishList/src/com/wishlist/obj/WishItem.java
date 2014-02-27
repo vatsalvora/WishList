@@ -114,7 +114,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     	return buyer.second;
     }
     
-    private void setWish(String ID, String name)
+    private final void setWish(String ID, String name)
     {
     	if(wish == null) wish = new StringPair(ID, name);
     	else{
@@ -128,7 +128,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     	wish.second = name;
     }
     
-    private void setUser(String ID, String name)
+    private final void setUser(String ID, String name)
     {
     	if(user == null) user = new StringPair(ID, name);
     	else
@@ -138,7 +138,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     	}
     }
     
-    public void setBuyer(String ID, String name)
+    public final void setBuyer(String ID, String name)
     {
     	if(buyer == null) buyer = new StringPair(ID, name);
     	else
@@ -153,7 +153,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         return status;
     }
 
-    public void setStatus(int status)
+    public final void setStatus(int status)
     {
         this.status = status;
         update(STATUS);

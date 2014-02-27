@@ -3,7 +3,6 @@ package com.wishlist.ui;
 import java.util.*;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
@@ -21,11 +20,6 @@ public class Login extends Activity
     private Bundle FBSession = null;
     private Session s = null;
 
-    //hashcodes passing data around
-    public static final String FBDATA = "FBData";
-    public static final String USER = "User";
-    public static final String FRIENDS = "Friends";
-    
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -79,20 +73,11 @@ public class Login extends Activity
         super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         //Start the main activity
-        packIntoBundle(FBData, USER, currentAppUser);
-        packIntoBundle(FBData, FRIENDS, friends);
+        Transporter.packIntoBundle(FBData, Transporter.USER, currentAppUser);
+        Transporter.packIntoBundle(FBData, Transporter.FRIENDS, friends);
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(FBDATA, FBData);
+        intent.putExtra(Transporter.FBDATA, FBData);
         startActivity(intent);
-    }
-    
-    private void packIntoBundle(Bundle b, String key, Parcelable p)
-    {
-    	b.putParcelable(key, p);
-    }
-    
-    private void packIntoBundle(Bundle b, String key, ArrayList<? extends Parcelable> p){
-    	b.putParcelableArrayList(key,p);
     }
     
     private void startFBSession(){

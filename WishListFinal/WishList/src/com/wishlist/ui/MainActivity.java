@@ -15,7 +15,6 @@ import android.view.*;
 import com.wishlist.db.*;
 import com.wishlist.obj.User;
 //import android.widget.TextView;
-import com.wishlist.obj.WishItem;
 
 /*
  * This class displays two fragments, one for the user's actual wish list and another for their friends list.
@@ -42,7 +41,6 @@ public class MainActivity extends FragmentActivity implements
     private ViewPager mViewPager;
     private DBCom db;
     private Bundle FBData;
-    private WishItem wish;
     private User appUser;
     private User currentUser;
     private ArrayList<User> friends;
@@ -59,11 +57,14 @@ public class MainActivity extends FragmentActivity implements
         
         //retrieve data from intent
         FBData = this.getIntent().getExtras();
-        appUser = FBData.getParcelable(Login.USER);
-        friends = FBData.getParcelableArrayList(Login.FRIENDS);
+        appUser = FBData.getParcelable(Transporter.USER);
+        friends = FBData.getParcelableArrayList(Transporter.FRIENDS);
         
         //get wishes for user
         appUser.setList(db.listWishes(appUser.getUID()));
+        
+        //set current user as app user
+        currentUser = appUser;
         
         // Set up the action bar. (It contains the tabs)
         final ActionBar actionBar = getActionBar();
@@ -184,10 +185,12 @@ public class MainActivity extends FragmentActivity implements
             switch(position)
             {
 	            case 0:
-	                fragment = new WishDisplayFragment();
+	            	Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
+	            	fragment = new WishDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;
 	            case 1:
+	            	Transporter.packIntoBundle(args, Transporter.FRIENDS, friends);
 	                fragment = new FriendsListDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;

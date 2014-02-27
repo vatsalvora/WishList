@@ -36,7 +36,7 @@ public abstract class User implements Parcelable
         return name;
     }
 
-    protected void setName(String name)
+    protected final void setName(String name)
     {
         this.name = name;
     }
@@ -46,7 +46,7 @@ public abstract class User implements Parcelable
         return uid;
     }
 
-    protected void setUID(String uid)
+    protected final void setUID(String uid)
     {
         this.uid = uid;
     }
@@ -96,7 +96,7 @@ public abstract class User implements Parcelable
         return isAppUser;
     }
 
-    protected void setIsAppUser(boolean flag)
+    protected final void setIsAppUser(boolean flag)
     {
         isAppUser = flag;
     }    

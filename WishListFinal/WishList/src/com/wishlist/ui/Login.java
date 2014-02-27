@@ -8,7 +8,6 @@ import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
 import com.wishlist.obj.FBUser;
-import com.wishlist.obj.Pair;
 
 import android.util.Log;
 import android.content.Intent;
@@ -16,10 +15,11 @@ import android.content.Intent;
 public class Login extends Activity
 {
 
-    public static FBUser currentAppUser; //user object for the Facebook user actually using the app.
+    public FBUser currentAppUser; //user object for the Facebook user actually using the app.
     private ArrayList<FBUser> friends; //ID of friends
     private Bundle FBData = null;
-    private Pair<Session, Bundle> FBSession;
+    private Bundle FBSession = null;
+    private Session s = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -77,7 +77,7 @@ public class Login extends Activity
         packIntoBundle(FBData, currentAppUser, "user");
         packIntoBundle(FBData, friends, "friends");
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("all_data", FBData);
+        intent.putExtra("FBdata", FBData);
         startActivity(intent);
     }
     
@@ -92,7 +92,7 @@ public class Login extends Activity
     
     private void startFBSession(){
     	 // start Facebook Login
-        Session s = Session.openActiveSession(this, true, new Session.StatusCallback()
+        s = Session.openActiveSession(this, true, new Session.StatusCallback()
         {
 
             // callback when session changes state
@@ -128,11 +128,12 @@ public class Login extends Activity
                 }
             }
         });
-        FBSession = new Pair<Session, Bundle>(s, new Bundle());
-        Session.saveSession(FBSession.first, FBSession.second);
+        
+        //save the session in pair
+        Session.saveSession(s, FBSession);
     }
     
     private void stopFBSession(){
-    	FBSession.first.close();
+    	s.close();
     }
 }

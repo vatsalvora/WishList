@@ -8,7 +8,6 @@
 package com.wishlist.db; //This line is for android functionality only. This is a test address. Change required based on final path.
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
@@ -18,8 +17,8 @@ import android.util.Log; //This needs to be imported to implement printing to lo
 
 /* DB Schema for reference
  * Users(int uid, string name)
- * wishes(int uid, String bid, String name, String descr, double price,
- *        int status, String wid, timestamp dateAdded)
+ * wishes(String wid, String name, String uid, String uname, String bid, String bname, String descr, String price,
+ *        int status, timestamp dateAdded)
  */
 
 /* TODO:
@@ -61,6 +60,7 @@ public class DBCom
     public static final String VALUES = "VALUES";
     public static final String WHERE = "WHERE";
     public static final String ALL = "*";
+    public static final String SET = "SET";
 
     private Connection connect;
     
@@ -214,6 +214,15 @@ public class DBCom
         return query;
     }
 
+    private static void queryAppend(String toAppend, String... in)
+    {
+    	for(String i : in)
+    	{
+    		toAppend += i + " ";
+    	}
+    	toAppend += "\n";
+    }
+    
     public boolean addUser(String uid, String name)
     {
         /* Do we need to keep this method around ? */
@@ -355,7 +364,7 @@ public class DBCom
          */
 
         ArrayList<WishItem> wishList = new ArrayList<WishItem>();
-        String command = String.format("SELECT * FROM wishes WHERE uid='%s'", uid);
+        command = queryBuilder(SELECT, ALL, FROM, "wishes", WHERE, "uid=", uid);
         ResultSet resultSet = sendSQLwithReturn(command);
 
         String bid, wid;
@@ -371,8 +380,10 @@ public class DBCom
                 //uid is in col 2, but we already have that since it was passed
                 
                 /* What happens when value in DB is NULL ? */
-                wid = resultSet.getString(1);
-                bid = resultSet.getString(3);
+            	//Answer: Throw an exception. (Joon)
+            	wid = resultSet.getString(1);
+            	if(wid == null) throw new RuntimeException("Item not in database!");
+            	bid = resultSet.getString(3);
                 name = resultSet.getString(4);
                 descr = resultSet.getString(5);
                 price = resultSet.getString(6);
@@ -417,10 +428,42 @@ public class DBCom
         /* This method assumes that an update needs to happen and thus
          * does not check to see if values provided by WishItem object
          * already match DB entry (Wait, why not?, says Joon)
+         * Joon: Let's be more efficient.
          */
     	
-        if(deleteWish(wi.getWID())) return addWish(wi);
-        return false;
+        command = queryBuilder(UPDATE, "wishes");
+        
+        switch(wi.getUpdate()){
+        	case WishItem.NONE:
+        		return false;
+        	case WishItem.BUYER:
+        		queryAppend(command, "SET", "bid=", wi.getBID(), "bname", wi.getBuyerName());
+        		break;
+        	case WishItem.DATE:
+        		queryAppend(command, "SET", "date=", wi.getDate().toString());
+        		break;
+        	case WishItem.DESC:
+        		queryAppend(command, "SET", "descr=", wi.getDescription());
+        		break;
+        	case WishItem.PICTURE:
+        		throw new UnsupportedOperationException();
+        	case WishItem.PRICE:
+        		queryAppend(command, "SET", "price=", wi.getPrice());
+        		break;
+        	case WishItem.USER:
+        		queryAppend(command, "SET", "uid=", wi.getUID(), "uname", wi.getUserName());
+        		break;
+        	case WishItem.WISH:
+        		queryAppend(command, "SET", "name=", wi.getName());
+        		break;
+        	case WishItem.STATUS:
+        		queryAppend(command, "SET", "status=", Integer.toString(wi.getStatus()));
+        		break;
+        	default:
+        		throw new RuntimeException("WTF is this? This is not supported...");
+        }
+        queryAppend(command, "WHERE", "wid=", wi.getWID());
+        return true;
     }
-
+   
 }

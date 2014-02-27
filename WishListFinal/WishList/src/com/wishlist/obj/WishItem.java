@@ -12,21 +12,22 @@ package com.wishlist.obj;
 
 import java.io.File;
 import java.util.*;
+import java.sql.Date;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class WishItem implements Comparable<WishItem>, Parcelable
 {
-	protected Pair<String, String> wish; //wish ID and name pair
-	protected Pair<String, String> user; //user ID and name pair
-	protected Pair<String, String> buyer; //buyer ID and name pair
+	protected StringPair wish; //wish ID and name pair
+	protected StringPair user; //user ID and name pair
+	protected StringPair buyer; //buyer ID and name pair
     protected String description; //description of item
     protected Date dateAdded; //date of the item added to user
     protected String price; //price of item
     protected Picture picture; //Picture object for image of item. Implement in sprint 2
     protected int status;  //status of item. Open, registered, bought, etc
     protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
-    protected int update = NONE; //update changes
+    protected int update = NONE; //update changes    
     
     //update codes
     public static final int NONE = 0;
@@ -71,6 +72,18 @@ public class WishItem implements Comparable<WishItem>, Parcelable
        setDate(dateAdded);
     }
     
+    public WishItem(String wid, String name, String uid, String uname, String bid, String bname,
+    				String descr, String price, int status, Date dateAdded)
+    {
+    	setWish(wid, name);
+        setUser(uid, uname);
+        setBuyer(bid, bname);
+        setDescription(descr);
+        setPrice(price);
+        setStatus(status);
+        setDate(dateAdded);
+    }
+    
     public String getWID()
     {
     	return wish.first;
@@ -103,7 +116,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     
     private void setWish(String ID, String name)
     {
-    	if(wish == null) wish = new Pair<String, String>(ID, name);
+    	if(wish == null) wish = new StringPair(ID, name);
     	else{
     		wish.first = ID;
     		wish.second = name;
@@ -117,7 +130,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     
     private void setUser(String ID, String name)
     {
-    	if(user == null) user = new Pair<String, String>(ID, name);
+    	if(user == null) user = new StringPair(ID, name);
     	else
     	{
     		user.first = ID;
@@ -127,7 +140,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     
     public void setBuyer(String ID, String name)
     {
-    	if(buyer == null) buyer = new Pair<String, String>(ID, name);
+    	if(buyer == null) buyer = new StringPair(ID, name);
     	else
     	{
     		buyer.first = ID;
@@ -177,12 +190,6 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     {
         dateAdded = d;
         update(DATE);
-    }
-
-    @SuppressWarnings("deprecation")
-    public void setDate(String in)
-    {
-        dateAdded = new Date(in);
     }
 
     public Picture getPicture()
@@ -258,17 +265,16 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         dest.writeInt(update);
     }
 
-    @SuppressWarnings("unchecked")
 	private WishItem(Parcel in)
     {
         update = in.readInt();
         setPrice(in.readString());
         setDescription(in.readString());
-		Pair<String, String> p = (Pair<String, String>) in.readParcelable(Pair.class.getClassLoader());
+		StringPair p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
         setBuyer(p.first, p.second);
-        p = (Pair<String, String>) in.readParcelable(Pair.class.getClassLoader());
+        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
         setUser(p.first, p.second);
-        p = (Pair<String, String>) in.readParcelable(Pair.class.getClassLoader());
+        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
         setWish(p.first, p.second);
     }
 }

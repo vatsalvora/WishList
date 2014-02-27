@@ -3,6 +3,7 @@
  * Pair class to link two objects together
  * 
  * EDIT: implementing Parcelable with generics is extremely tricky. Solution here is unfavorable. (Joon)
+ * EDIT2: Fuck it. Went into StringPair
  */
 
 package com.wishlist.obj;
@@ -10,17 +11,17 @@ package com.wishlist.obj;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Pair<A, B> implements Parcelable
+public class StringPair implements Parcelable
 {
-    public A first;
-    public B second;
+    public String first;
+    public String second;
 
-    public Pair()
+    public StringPair()
     {
         throw new RuntimeException("Invalid constructor!");
     }
 
-    public Pair(A a, B b)
+    public StringPair(String a, String b)
     {
         first = a;
         second = b;
@@ -32,15 +33,15 @@ public class Pair<A, B> implements Parcelable
         return 0;
     }
 
-    public static final Parcelable.Creator<Pair<String, String>> CREATOR
-    = new Parcelable.Creator<Pair<String, String>>()
+    public static final Parcelable.Creator<StringPair> CREATOR
+    = new Parcelable.Creator<StringPair>()
     {
-        public Pair<String, String> createFromParcel(Parcel in)
+        public StringPair createFromParcel(Parcel in)
         {
-            return new Pair<String, String>(in);
+            return new StringPair(in);
         }
 
-        public Pair<String, String>[] newArray(int size)
+        public StringPair[] newArray(int size)
         {
             throw new UnsupportedOperationException();
         }
@@ -53,11 +54,10 @@ public class Pair<A, B> implements Parcelable
         dest.writeString((String) second);
     }
 
-    @SuppressWarnings("unchecked")
-	private Pair(Parcel in)
+	private StringPair(Parcel in)
     {
-    	second = (B) in.readString();
-    	first = (A) in.readString();
+    	second = in.readString();
+    	first = in.readString();
     }
 
 }

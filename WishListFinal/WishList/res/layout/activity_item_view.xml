@@ -38,7 +38,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/description" >
+        android:layout_below="@+id/buyerView" >
 
     </ListView>
 

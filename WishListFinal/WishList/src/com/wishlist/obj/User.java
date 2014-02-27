@@ -18,8 +18,12 @@ public abstract class User implements Parcelable
     protected String uid; //ID of user
     protected String name; //name of user
     protected ArrayList<WishItem> wList; //wishlist for user
+    
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
-
+    public static final char NAME = 'n';
+    public static final char DATE = 'd';
+    public static final char PRICE = 'p';
+    
     public User()
     {
     }
@@ -77,13 +81,13 @@ public abstract class User implements Parcelable
     {
         switch(code)
         {
-        case 'n':
+        case NAME:
             Collections.sort(wList);
             break;
-        case 'd':
+        case DATE:
             Collections.sort(wList, new DateComparison());
             break;
-        case 'p':
+        case PRICE:
             Collections.sort(wList, new PriceComparison());
             break;
         default:

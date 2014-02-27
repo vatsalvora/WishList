@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 //import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.*;
 import com.wishlist.db.*;
 import com.wishlist.obj.User;
 //import android.widget.TextView;

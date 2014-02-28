@@ -76,6 +76,12 @@ public abstract class User implements Parcelable
     {
         return wList.remove(w);
     }
+    
+    public boolean removeItem(int position){
+    	if(position < 0 || position >= wList.size()) return false;
+    	wList.remove(position);
+    	return true;
+    }
 
     public static void sortList(char code, ArrayList<WishItem> wList)
     {

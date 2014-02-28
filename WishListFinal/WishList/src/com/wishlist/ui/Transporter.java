@@ -45,4 +45,13 @@ public class Transporter {
 	{
 		b.putString(key, val);
 	}
+	
+	public static final void unpackFromBundle(Bundle b, String key, Parcelable p){
+		p = b.getParcelable(key);
+	}
+	
+	public static final void unpackFromBundle(Bundle b, String key, ArrayList<? extends Parcelable> p){
+		p = b.getParcelableArrayList(key);
+	}
+	
 }

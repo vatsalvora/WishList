@@ -1,8 +1,13 @@
 package com.wishlist.ui;
 
+import java.util.ArrayList;
+
+import com.wishlist.obj.User;
+import com.wishlist.obj.WishItem;
+
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-public class WishDisplayFragment extends Fragment
+public class WishDisplayFragment extends ListFragment
 {/*
 Used to display wish lists (of the active user and of their friends). 
 Different actions are allowed depending on the user.
@@ -32,10 +37,40 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
     private View rootView;
-
+    private User u;
+    private ArrayList<WishItem> w;
+    private boolean isAppUser;
+    
+    public void onCreate(Bundle savedInstanceState)
+    {
+    	super.onCreate(savedInstanceState);
+    	Transporter.unpackFromBundle(this.getArguments(), Transporter.USER, u);
+    	w = u.getList();
+    	isAppUser = u.getIsAppUser();
+    }
+    
+    public void onStart()
+    {
+    	super.onStart();
+    }
+    
+    public void onResume()
+    {
+    	super.onResume();
+    }
+    
+    public void onStop()
+    {
+    	super.onStop();
+    }
+    
+    public void onDestroy()
+    {
+    	super.onDestroy();
+    }
+    
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
     	setHasOptionsMenu(true);
         View listView = inflater.inflate(R.layout.fragment_wish_display,
@@ -47,7 +82,9 @@ So the UI elements for certain actions are hidden based on user.
         rootView = listView;
         return listView;
     }
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
+	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//This displays the right action bar for the fragment
 		super.onCreateOptionsMenu(menu, inflater);
@@ -55,7 +92,9 @@ So the UI elements for certain actions are hidden based on user.
 		//TODO: display a different action bar (without the ability to add items) if the user doesn't own the list
 		
 	} 
-	public boolean onOptionsItemSelected(MenuItem item) {
+	
+    public boolean onOptionsItemSelected(MenuItem item) 
+	{
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
@@ -67,36 +106,44 @@ So the UI elements for certain actions are hidden based on user.
 	            return super.onOptionsItemSelected(item);
 	    }
 	}   
-    public void addWishItem(){ //called when the Add action is activated in the action bar
+    
+    public void addWishItem()
+    { //called when the Add action is activated in the action bar
     	
     	
     }
     
 }
-class WishAdapter extends BaseAdapter {
+
+class WishAdapter extends BaseAdapter 
+{
     private Context mContext;
 
-    public WishAdapter(Context c) {
+    public WishAdapter(Context c) 
+    {
         mContext = c;
     }
 
-    public int getCount() {
+    public int getCount() 
+    {
         return 0; 
     }
 
-    public Object getItem(int position) {
+    public Object getItem(int position) 
+    {
         return null;
     }
 
-    public long getItemId(int position) {
+    public long getItemId(int position) 
+    {
         return 0;
     }
 
     // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) 
+    {
 
     	return new View(mContext);
     }
-
-    
+  
 }

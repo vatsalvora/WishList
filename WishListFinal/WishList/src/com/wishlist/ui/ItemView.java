@@ -54,12 +54,7 @@ public class ItemView extends Activity
         return true;
     }
     
-    private void displayItem(){
-    	if(item == null){
-    		throw new RuntimeException("WHAT?????? ITEM IS NULL! WTF!!!!");
-    	}
-    	
-    	
-    	
+    public void displayItem(){
+    	if(item == null) throw new RuntimeException("WHAT?????? ITEM IS NULL! WTF!!!!");
     }
 }

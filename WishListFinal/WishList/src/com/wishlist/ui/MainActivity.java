@@ -56,8 +56,8 @@ public class MainActivity extends FragmentActivity implements
         
         //retrieve data from intent
         FBData = this.getIntent().getExtras();
-        appUser = FBData.getParcelable(Transporter.USER);
-        friends = FBData.getParcelableArrayList(Transporter.FRIENDS);
+        Transporter.unpackFromBundle(FBData, Transporter.USER, appUser);
+        Transporter.unpackFromBundle(FBData, Transporter.FRIENDS, friends);
         
         //get wishes for user
         appUser.setList(db.listWishes(appUser.getUID()));
@@ -72,8 +72,7 @@ public class MainActivity extends FragmentActivity implements
 
         // Create the adapter that will return a fragment for each of the two
         // tabs of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(
-            getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -142,8 +141,7 @@ public class MainActivity extends FragmentActivity implements
     }*/
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab,
-                              FragmentTransaction fragmentTransaction)
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
     {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
@@ -151,15 +149,14 @@ public class MainActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab,
-                                FragmentTransaction fragmentTransaction)
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
     {
     }
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab,
-                                FragmentTransaction fragmentTransaction)
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
     {
+    	onTabSelected(tab, fragmentTransaction);
     }
 
     /**

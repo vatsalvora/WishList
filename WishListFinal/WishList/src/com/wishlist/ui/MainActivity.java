@@ -5,6 +5,7 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -20,8 +21,8 @@ import com.wishlist.obj.User;
  *
  */
 
-public class MainActivity extends FragmentActivity implements
-    ActionBar.TabListener
+public class MainActivity extends FragmentActivity implements 
+	ActionBar.TabListener, WishCreatorDialog.WishCreatorDialogListener
 {
 
     /**
@@ -37,12 +38,17 @@ public class MainActivity extends FragmentActivity implements
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
     private DBCom db;
     private Bundle FBData;
     private User appUser;
     private User currentUser;
     private ArrayList<User> friends;
+    
+    private ActionBar actionBar;
+    private ViewPager mViewPager;
+    
+    public static final int WISH = 0;
+    public static final int FRIEND = 1;
     public static final int COUNT = 2;
 
     @Override
@@ -50,23 +56,64 @@ public class MainActivity extends FragmentActivity implements
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initDB(); //set up DB communication
+        initData(); //load FB data
+        initGraphics(); //load graphics
+    }
 
-        //set up DB communication
+    protected void onStart(){
+    	super.onStart();
+    }
+    
+    protected void onRestart()
+    {
+    	super.onRestart();
+    }
+    
+    protected void onPause()
+    {
+    	super.onPause();
+    }
+    
+    protected void onResume()
+    {
+    	super.onResume();
+    }
+    
+    protected void onStop()
+    {
+    	super.onStop();
+    }
+   
+    protected void onDestroy()
+    {
+    	super.onDestroy();
+    }
+    
+    protected void initDB(){
+    	//set up DB communication
         db = DBCom.instance();
-        
-        //retrieve data from intent
+    }
+    
+    protected void initData(){
+    	//retrieve data from intent
         FBData = this.getIntent().getExtras();
         Transporter.unpackFromBundle(FBData, Transporter.USER, appUser);
         Transporter.unpackFromBundle(FBData, Transporter.FRIENDS, friends);
         
-        //get wishes for user
-        appUser.setList(db.listWishes(appUser.getUID()));
-        
         //set current user as app user
-        currentUser = appUser;
-        
-        // Set up the action bar. (It contains the tabs)
-        final ActionBar actionBar = getActionBar();
+        setCurrentUser(appUser);
+    }
+    
+    protected void setCurrentUser(User u){
+    	currentUser = u;
+    	currentUser.setList(db.listWishes(u.getUID()));
+    }
+    
+    protected void initGraphics()
+    {
+    	// Set up the action bar. (It contains the tabs)
+        actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setTitle(R.string.app_name);
 
@@ -100,36 +147,7 @@ public class MainActivity extends FragmentActivity implements
             actionBar.addTab(actionBar.newTab()
                              .setText(mSectionsPagerAdapter.getPageTitle(i))
                              .setTabListener(this));
-        }
-    }
-
-    protected void onStart(){
-    	super.onStart();
-    }
-    
-    protected void onRestart()
-    {
-    	super.onRestart();
-    }
-    
-    protected void onPause()
-    {
-    	super.onPause();
-    }
-    
-    protected void onResume()
-    {
-    	super.onResume();
-    }
-    
-    protected void onStop()
-    {
-    	super.onStop();
-    }
-   
-    protected void onDestroy()
-    {
-    	super.onDestroy();
+        }	
     }
     
     /*@Override
@@ -180,12 +198,12 @@ public class MainActivity extends FragmentActivity implements
             Fragment fragment;
             switch(position)
             {
-	            case 0:
+	            case WISH:
 	            	Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
 	            	fragment = new WishDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;
-	            case 1:
+	            case FRIEND:
 	            	Transporter.packIntoBundle(args, Transporter.FRIENDS, friends);
 	                fragment = new FriendsListDisplayFragment();
 	                fragment.setArguments(args);
@@ -208,14 +226,34 @@ public class MainActivity extends FragmentActivity implements
             Locale l = Locale.getDefault();
             switch (position)
             {
-	            case 0:
+	            case WISH:
 	                return getString(R.string.title_section1).toUpperCase(l);
-	            case 1:
+	            case FRIEND:
 	                return getString(R.string.title_section2).toUpperCase(l);
 	            default:
-	                return null;
+	                throw new RuntimeException("Error Occured.");
             }
         }
     }
+    
+    public void showWishCreatorDialog()
+    {
+    	WishCreatorDialog d = new WishCreatorDialog();
+    	d.show(getSupportFragmentManager(), "WishCreatorDialog");
+    }
+    
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
 
 }

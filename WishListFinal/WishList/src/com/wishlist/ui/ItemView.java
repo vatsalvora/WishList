@@ -6,7 +6,7 @@ import com.wishlist.obj.WishItem;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.widget.*;
 
@@ -15,16 +15,16 @@ public class ItemView extends Activity
 
     private TextView nameView;
     private TextView descriptionView;
-    private TextView ownerView;
+    private TextView userView;
     private TextView buyerView;
     private TextView dateView;
     private TextView priceView;
     private ListView commentsView;
     private ImageView image;
-
+    private Drawable picture;
     private ArrayList<String> comments;
     private ArrayAdapter<String> adapter;
-    private Intent info;
+    private Bundle info;
     private WishItem item;
     
     @Override
@@ -32,18 +32,47 @@ public class ItemView extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
-
-        nameView = (TextView) findViewById(R.id.nameView);
+        
+        info = this.getIntent().getExtras();
+        item = info.getParcelable(Transporter.WISH);
+        
+        nameView = (TextView) findViewById(R.id.name);
         descriptionView = (TextView) findViewById(R.id.description);
-        commentsView = (ListView) findViewById(R.id.listOfComments);
+        userView = (TextView) findViewById(R.id.owner);
+        buyerView = (TextView) findViewById(R.id.buyer);
+        priceView = (TextView) findViewById(R.id.price);
+        dateView = (TextView) findViewById(R.id.dateAdded);
         image = (ImageView) findViewById(R.id.ItemImage);
 
         comments = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
         commentsView.setAdapter(adapter);
         
-        info = getIntent();
-        item =  info.getParcelableExtra("item");
+        displayItem();        
+    }
+    
+    protected void onStart(){
+    	super.onStart();
+    }
+    
+    protected void onRestart(){
+    	super.onRestart();
+    }
+    
+    protected void onResume(){
+    	super.onResume();
+    }
+    
+    protected void onPause(){
+    	super.onPause();
+    }
+    
+    protected void onStop(){
+    	super.onStop();
+    }
+    
+    protected void onDestroy(){
+    	super.onDestroy();
     }
     
     @Override
@@ -56,5 +85,12 @@ public class ItemView extends Activity
     
     public void displayItem(){
     	if(item == null) throw new RuntimeException("WHAT?????? ITEM IS NULL! WTF!!!!");
+    	nameView.setText("Name: "+item.getName());
+    	descriptionView.setText("Description: "+item.getDescription());
+    	userView.setText("User: "+item.getUserName());
+    	buyerView.setText("Buyer: "+item.getBuyerName());
+    	priceView.setText("Price: "+item.getPrice());
+    	dateView.setText("Date Added: "+item.getDate().toString());
+    	image.setImageDrawable(picture);
     }
 }

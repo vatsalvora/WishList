@@ -20,6 +20,8 @@ public abstract class User implements Parcelable
     protected ArrayList<WishItem> wList; //wishlist for user
     
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
+    
+    //hashcode for sorting
     public static final char NAME = 'n';
     public static final char DATE = 'd';
     public static final char PRICE = 'p';

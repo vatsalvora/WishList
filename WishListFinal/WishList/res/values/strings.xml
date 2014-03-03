@@ -28,5 +28,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_section1">Wish List</string>
     <string name="title_section2">Friends List</string>
-
+    <string name="confirm">Confirm</string>
+	<string name="cancel">Cancel</string>
+	<string name="temp">Temp</string>
 </resources>

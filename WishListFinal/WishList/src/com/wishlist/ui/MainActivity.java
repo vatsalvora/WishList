@@ -5,7 +5,6 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -22,7 +21,7 @@ import com.wishlist.obj.User;
  */
 
 public class MainActivity extends FragmentActivity implements 
-	ActionBar.TabListener, WishCreatorDialog.WishCreatorDialogListener
+	ActionBar.TabListener
 {
 
     /**
@@ -107,7 +106,7 @@ public class MainActivity extends FragmentActivity implements
     
     protected void setCurrentUser(User u){
     	currentUser = u;
-    	currentUser.setList(db.listWishes(u.getUID()));
+    	//currentUser.setList(db.listWishes(u.getUID()));
     }
     
     protected void initGraphics()
@@ -236,24 +235,4 @@ public class MainActivity extends FragmentActivity implements
         }
     }
     
-    public void showWishCreatorDialog()
-    {
-    	WishCreatorDialog d = new WishCreatorDialog();
-    	d.show(getSupportFragmentManager(), "WishCreatorDialog");
-    }
-    
-	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
 }

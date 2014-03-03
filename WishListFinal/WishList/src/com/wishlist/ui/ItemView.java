@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.Menu;
+import android.view.View;
 import android.widget.*;
 
 public class ItemView extends Activity
@@ -83,7 +84,7 @@ public class ItemView extends Activity
         return true;
     }
     
-    public void displayItem(){
+    protected void displayItem(){
     	if(item == null) throw new RuntimeException("WHAT?????? ITEM IS NULL! WTF!!!!");
     	nameView.setText("Name: "+item.getName());
     	descriptionView.setText("Description: "+item.getDescription());
@@ -92,5 +93,9 @@ public class ItemView extends Activity
     	priceView.setText("Price: "+item.getPrice());
     	dateView.setText("Date Added: "+item.getDate().toString());
     	image.setImageDrawable(picture);
+    }
+    
+    protected void setClickers(View... v){
+    
     }
 }

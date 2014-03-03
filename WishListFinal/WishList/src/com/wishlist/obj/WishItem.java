@@ -256,14 +256,15 @@ public class WishItem implements Comparable<WishItem>, Parcelable
 
 	private WishItem(Parcel in)
     {
-        update = in.readInt();
-        setPrice(in.readString());
-        setDescription(in.readString());
-		StringPair p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setBuyer(p.first, p.second);
+        StringPair p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
+        setWish(p.first, p.second);
         p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
         setUser(p.first, p.second);
         p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setWish(p.first, p.second);
+        setBuyer(p.first, p.second);
+        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
+        setDescription(in.readString());
+        setPrice(in.readString());
+        update = in.readInt();
     }
 }

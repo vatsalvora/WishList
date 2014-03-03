@@ -30,7 +30,7 @@ public class Login extends Activity
         * already logged in, it brings up the main activity.
         */
         startFBSession();
-       
+        test();
     }
 
     protected void onResume()
@@ -73,7 +73,11 @@ public class Login extends Activity
         super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         //Start the main activity
-        Transporter.packIntoBundle(FBData, Transporter.USER, currentAppUser);
+        packAndStart();
+    }
+    
+    public void packAndStart(){
+    	Transporter.packIntoBundle(FBData, Transporter.USER, currentAppUser);
         Transporter.packIntoBundle(FBData, Transporter.FRIENDS, friends);
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(Transporter.FBDATA, FBData);
@@ -125,5 +129,14 @@ public class Login extends Activity
     
     private void stopFBSession(){
     	s.close();
+    }
+    
+    private void test(){
+    	currentAppUser = new FBUser("1", "John Doe", true);
+    	friends = new ArrayList<FBUser>();
+    	for(int i=0; i<10; i++){
+    		friends.add(new FBUser(Integer.toString(i), Integer.toString(i), false));
+    	}
+    	packAndStart();
     }
 }

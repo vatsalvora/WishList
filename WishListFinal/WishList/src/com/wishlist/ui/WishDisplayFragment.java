@@ -7,6 +7,7 @@ import com.wishlist.obj.WishItem;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-public class WishDisplayFragment extends ListFragment
+public class WishDisplayFragment extends ListFragment implements WishCreatorDialog.WishCreatorDialogListener
 {/*
 Used to display wish lists (of the active user and of their friends). 
 Different actions are allowed depending on the user.
@@ -100,18 +101,35 @@ So the UI elements for certain actions are hidden based on user.
 	        case R.id.action_add:
 	            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT);
 	            toast.show();
-	            addWishItem();
-	            return true;
+	            return addWishItem();
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}   
     
-    public void addWishItem()
+    protected boolean addWishItem()
     { //called when the Add action is activated in the action bar
-    	
-    	
+    	showWishCreatorDialog();
+    	return true;
     }
+    
+    public void showWishCreatorDialog()
+    {
+    	WishCreatorDialog d = new WishCreatorDialog();
+    	d.show(getFragmentManager(), "WishCreatorDialog");
+    }
+    
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }
 

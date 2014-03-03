@@ -56,8 +56,8 @@ public class StringPair implements Parcelable
 
 	private StringPair(Parcel in)
     {
-    	second = in.readString();
-    	first = in.readString();
+		first = in.readString();
+		second = in.readString();
     }
 
 }

@@ -58,10 +58,10 @@ public class FBUser extends User
     private FBUser(Parcel in)
     {
         super();
-        in.readTypedList(wList, WishItem.CREATOR);
-        setName(in.readString());
-        setUID(in.readString());
         if(in.readInt() == 1) isAppUser = true;
         else isAppUser=false;
+        setUID(in.readString());
+        setName(in.readString());
+        in.readTypedList(wList, WishItem.CREATOR);
     }  
 }

@@ -38,13 +38,13 @@ public class MainActivity extends FragmentActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
     private DBCom db;
-    private Bundle FBData;
+    private Bundle userData;
     private User appUser;
     private User currentUser;
     private ArrayList<User> friends;
     
-    private ActionBar actionBar;
     private ViewPager mViewPager;
+    private ActionBar actionBar;
     
     public static final int WISH = 0;
     public static final int FRIEND = 1;
@@ -56,7 +56,7 @@ public class MainActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDB(); //set up DB communication
-        initData(); //load FB data
+        initData(); //load data from login
         initGraphics(); //load graphics
     }
 
@@ -96,23 +96,28 @@ public class MainActivity extends FragmentActivity implements
     
     protected void initData(){
     	//retrieve data from intent
-        FBData = this.getIntent().getExtras();
-        Transporter.unpackFromBundle(FBData, Transporter.USER, appUser);
-        Transporter.unpackFromBundle(FBData, Transporter.FRIENDS, friends);
+        userData = this.getIntent().getExtras();
+        Transporter.unpackFromBundle(userData, Transporter.USER, appUser);
+        Transporter.unpackFromBundle(userData, Transporter.FRIENDS, friends);
         
         //set current user as app user
         setCurrentUser(appUser);
+        //load wishes from database
+        //loadDBData(appUser);
     }
     
     protected void setCurrentUser(User u){
     	currentUser = u;
-    	//currentUser.setList(db.listWishes(u.getUID()));
+    }
+    
+    protected void loadDBData(User u){
+    	u.setList(db.listWishes(u.getUID()));
     }
     
     protected void initGraphics()
     {
     	// Set up the action bar. (It contains the tabs)
-        actionBar = getActionBar();
+    	actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setTitle(R.string.app_name);
 
@@ -198,7 +203,7 @@ public class MainActivity extends FragmentActivity implements
             switch(position)
             {
 	            case WISH:
-	            	Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
+	            	//Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
 	            	fragment = new WishDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;

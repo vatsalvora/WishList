@@ -11,25 +11,20 @@ import com.wishlist.obj.FBUser;
 import android.util.Log;
 import android.content.Intent;
 
-public class Login extends Activity
+public final class Login extends Activity
 {
 
-    public FBUser currentAppUser; //user object for the Facebook user actually using the app.
-    private ArrayList<FBUser> friends; //ID of friends
-    private Bundle FBData;
-    private Bundle FBSession;
-    private Session s;
+    private FBUser currentAppUser= null; //user object for the Facebook user actually using the app.
+    private ArrayList<FBUser> friends = null; //ID of friends
+    private Bundle FBData = null;
+    //private Bundle FBSession;
+    private Session s = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-//	    setContentView(R.layout.activity_login);
-        /* We don't need an actual layout here; if the user is not logged in the
-        *  code below automatically brings up the facebook login anyway. If the user is
-        * already logged in, it brings up the main activity.
-        */
-        startFBSession();
+        //startFBSession();
         test();
     }
 
@@ -41,7 +36,6 @@ public class Login extends Activity
     protected void onStart()
     {
     	super.onStart();
-    	startFBSession();
     }
     
     protected void onPause()
@@ -52,39 +46,44 @@ public class Login extends Activity
     protected void onRestart()
     {
     	super.onRestart();
-    	startFBSession();
     }
     
     protected void onStop()
     {
     	super.onStop();
-    	stopFBSession();
     }
     
     protected void onDestroy()
     {
     	super.onDestroy();
-    	stopFBSession();
     }
     
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         //Start the main activity
-        packAndStart();
+        //pack();
+        start();
     }
     
-    public void packAndStart(){
+    protected void pack()
+    {
+    	FBData = new Bundle();
     	Transporter.packIntoBundle(FBData, Transporter.USER, currentAppUser);
         Transporter.packIntoBundle(FBData, Transporter.FRIENDS, friends);
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Transporter.FBDATA, FBData);
-        startActivity(intent);
     }
     
-    private void startFBSession(){
+    protected void start()
+    {
+    	 Intent intent = new Intent(this, MainActivity.class);
+         if(FBData != null) intent.putExtra(Transporter.FBDATA, FBData);
+         startActivity(intent);
+    }
+    
+    protected void startFBSession()
+    {
     	 // start Facebook Login
         s = Session.openActiveSession(this, true, new Session.StatusCallback()
         {
@@ -124,19 +123,22 @@ public class Login extends Activity
         });
         
         //save the session in pair
-        Session.saveSession(s, FBSession);
+        //Session.saveSession(s, FBSession);
     }
     
-    private void stopFBSession(){
+    protected void stopFBSession()
+    {
     	s.close();
     }
     
-    private void test(){
-    	currentAppUser = new FBUser("1", "John Doe", true);
+    protected void test()
+    {
+    	currentAppUser = new FBUser("0", "John Doe", true);
     	friends = new ArrayList<FBUser>();
-    	for(int i=0; i<10; i++){
+    	for(int i=1; i<11; i++){
     		friends.add(new FBUser(Integer.toString(i), Integer.toString(i), false));
     	}
-    	packAndStart();
+    	pack();
+    	start();
     }
 }

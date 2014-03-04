@@ -7,8 +7,7 @@ import com.wishlist.obj.WishItem;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.*;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-public class WishDisplayFragment extends ListFragment implements WishCreatorDialog.WishCreatorDialogListener
+public class WishDisplayFragment extends Fragment implements WishCreatorDialog.WishCreatorDialogListener
 {/*
 Used to display wish lists (of the active user and of their friends). 
 Different actions are allowed depending on the user.
@@ -45,9 +44,9 @@ So the UI elements for certain actions are hidden based on user.
     public void onCreate(Bundle savedInstanceState)
     {
     	super.onCreate(savedInstanceState);
-    	Transporter.unpackFromBundle(this.getArguments(), Transporter.USER, u);
-    	w = u.getList();
-    	isAppUser = u.getIsAppUser();
+    	//Transporter.unpackFromBundle(this.getArguments(), Transporter.USER, u);
+    	//w = u.getList();
+    	//isAppUser = u.getIsAppUser();
     }
     
     public void onStart()

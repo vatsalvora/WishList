@@ -14,6 +14,7 @@ import android.os.Parcelable;
 public class Transporter {
 	
 	//hashcodes for transporting data around
+	//Shouldn't we put all of these in strings.xml with the other string resources? (Christa)
 	public static final String USER = "User";
 	public static final String CURRENT = "CurrentUser";
 	public static final String APP = "AppUser";

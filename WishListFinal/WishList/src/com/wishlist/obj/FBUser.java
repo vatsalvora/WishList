@@ -45,12 +45,9 @@ public class FBUser extends User
     public void writeToParcel(Parcel out, int flags)
     {
 
-        if(isAppUser)
-            out.writeInt(1);
-        else
-            out.writeInt(0);
-
-        out.writeString(uid); // I assume we can write ints like this
+        if(isAppUser) out.writeInt(1);
+        else out.writeInt(0);
+        out.writeString(uid);
         out.writeString(name);
         out.writeTypedList(wList);
     }

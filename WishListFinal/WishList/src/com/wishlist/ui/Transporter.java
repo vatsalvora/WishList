@@ -15,6 +15,11 @@ public class Transporter {
 	
 	//hashcodes for transporting data around
 	//Shouldn't we put all of these in strings.xml with the other string resources? (Christa)
+	/*
+	 * There's nothing wrong with that. Putting stuff in strings.xml means that the XML layouts can see this also.
+	 * The question is, do we want the layouts to see the data? My answer is I don't really care, but reference-wise in Java source,
+	 * it's clear where it is coming from (i.e. Transporter.USER) (Joon)
+	 */
 	public static final String USER = "User";
 	public static final String CURRENT = "CurrentUser";
 	public static final String APP = "AppUser";

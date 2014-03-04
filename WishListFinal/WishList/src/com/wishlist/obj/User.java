@@ -26,10 +26,7 @@ public abstract class User implements Parcelable
     public static final char DATE = 'd';
     public static final char PRICE = 'p';
     
-    public User()
-    {
-    }
-
+ 
     public User(String uid, String name, boolean isAppUser)
     {
         setName(name);

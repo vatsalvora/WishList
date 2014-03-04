@@ -132,7 +132,7 @@ public final class Login extends Activity
     }
     
     protected void test()
-    {
+    {// sets a dummy user for testing purposes
     	currentAppUser = new FBUser("0", "John Doe", true);
     	friends = new ArrayList<FBUser>();
     	for(int i=1; i<11; i++){

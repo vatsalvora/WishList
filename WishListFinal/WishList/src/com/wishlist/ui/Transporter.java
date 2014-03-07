@@ -39,25 +39,34 @@ public class Transporter {
 	//I'm using method overloading in order to standardize the transport process. (Joon)
 	public static final void packIntoBundle(Bundle b, String key, Parcelable p)
 	{
+		if(p == null) nullError();
 		b.putParcelable(key, p);
 	}
 	
 	public static final void packIntoBundle(Bundle b, String key, ArrayList<? extends Parcelable> p)
 	{
+		if(p == null) nullError();
 		b.putParcelableArrayList(key, p);
 	}
 	
-	public static final void packIntoBundle(Bundle b, String key, String val)
+	public static final void packIntoBundle(Bundle b, String key, String p)
 	{
-		b.putString(key, val);
+		if(p==null) nullError();
+		b.putString(key, p);
 	}
 	
 	public static final void unpackFromBundle(Bundle b, String key, Parcelable p){
+		if(p == null) nullError();
 		p = b.getParcelable(key);
 	}
 	
 	public static final void unpackFromBundle(Bundle b, String key, ArrayList<? extends Parcelable> p){
+		if(p== null) nullError();
 		p = b.getParcelableArrayList(key);
+	}
+	
+	protected static final void nullError(){
+		throw new RuntimeException("The object is null");
 	}
 	
 }

@@ -19,8 +19,7 @@ public final class Login extends Activity
     private FBUser currentAppUser= null; //user object for the Facebook user actually using the app.
     private ArrayList<FBUser> friends = null; //ID of friends
     private Bundle FBData = null;
-    //private Bundle FBSession;
-    private Session s = null;
+    private Session s = null; //current FB Session object
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,10 +62,10 @@ public final class Login extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultCode, data);
+        //start the main activity
+    	super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-        //Start the main activity
-        //pack();
+        pack();
         start();
     }
     
@@ -74,7 +73,7 @@ public final class Login extends Activity
     {
     	FBData = new Bundle();
     	Transporter.packIntoBundle(FBData, Transporter.USER, currentAppUser);
-        Transporter.packIntoBundle(FBData, Transporter.FRIENDS, friends);
+    	Transporter.packIntoBundle(FBData, Transporter.FRIENDS, friends);
     }
     
     protected void start()
@@ -123,9 +122,6 @@ public final class Login extends Activity
                 }
             }
         });
-        
-        //save the session in pair
-        //Session.saveSession(s, FBSession);
     }
     
     protected void stopFBSession()

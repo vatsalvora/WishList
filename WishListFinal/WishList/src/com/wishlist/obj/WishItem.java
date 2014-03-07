@@ -21,9 +21,9 @@ public class WishItem implements Comparable<WishItem>, Parcelable
 	protected StringPair wish; //wish ID and name pair
 	protected StringPair user; //user ID and name pair
 	protected StringPair buyer; //buyer ID and name pair
-    protected String description; //description of item
+    protected String description=""; //description of item
     protected Date dateAdded; //date of the item added to user
-    protected String price; //price of item
+    protected String price=""; //price of item
     //protected Drawable picture; //Picture object for image of item. Implement in sprint 2
     protected int status;  //status of item. Open, registered, bought, etc
     // What are the status codes? Assuming 0 = Open, 1 = registered, 2 = bought. 
@@ -240,14 +240,15 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         {
             return new WishItem[size];
         }
+        
     };
 
     @Override
-    public void writeToParcel(Parcel dest, int flags)
+    public void writeToParcel(Parcel dest, int args)
     {
-        dest.writeParcelable(wish, 1);
-        dest.writeParcelable(user, 1);
-        dest.writeParcelable(buyer, 1);
+        dest.writeParcelable(wish, args);
+        dest.writeParcelable(user, args);
+        dest.writeParcelable(buyer, args);
     	dest.writeString(description);
         dest.writeString(price);
         //dest.writeString(dateAdded.toString());
@@ -263,7 +264,6 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         setUser(p.first, p.second);
         p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
         setBuyer(p.first, p.second);
-        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
         setDescription(in.readString());
         setPrice(in.readString());
         update = in.readInt();

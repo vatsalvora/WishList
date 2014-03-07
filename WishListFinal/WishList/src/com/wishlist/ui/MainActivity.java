@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 //import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import com.wishlist.db.*;
+import com.wishlist.obj.FBUser;
 import com.wishlist.obj.User;
 //import android.widget.TextView;
 
@@ -33,18 +34,17 @@ public class MainActivity extends FragmentActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter; //returns the appropriate fragment for each tab. Defined below.
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private DBCom db;
-    private Bundle userData;
-    private User appUser;
-    private User currentUser;
-    private ArrayList<User> friends;
-    
     private ViewPager mViewPager;
     private ActionBar actionBar;
+    
+    private DBCom db; //DB pointer
+    private Bundle userData; //bundle from login
+    private User appUser = new FBUser(); //the app user
+    private User currentUser; //current user to view the data
+    private ArrayList<User> friends = new ArrayList<User>(); //friends of the app user
     
     public static final int WISH = 0;
     public static final int FRIEND = 1;
@@ -203,7 +203,7 @@ public class MainActivity extends FragmentActivity implements
             switch(position)
             {
 	            case WISH:
-	            	//Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
+	            	Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
 	            	fragment = new WishDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;

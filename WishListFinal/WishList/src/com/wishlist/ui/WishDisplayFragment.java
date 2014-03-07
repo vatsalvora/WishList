@@ -41,7 +41,7 @@ So the UI elements for certain actions are hidden based on user.
 	
     private View rootView;
     private Bundle b;
-    private User user;
+    private User user = new FBUser();
     private ArrayList<WishItem> wishlist;
     private boolean isAppUser;
     

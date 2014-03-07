@@ -96,7 +96,7 @@ public class MainActivity extends FragmentActivity implements
     
     protected void initData(){
     	//retrieve data from intent
-        userData = this.getIntent().getExtras();
+        userData = getIntent().getExtras();
         Transporter.unpackFromBundle(userData, Transporter.USER, appUser);
         Transporter.unpackFromBundle(userData, Transporter.FRIENDS, friends);
         
@@ -121,17 +121,18 @@ public class MainActivity extends FragmentActivity implements
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setTitle(R.string.app_name);
 
-        // Create the adapter that will return a fragment for each of the two
-        // tabs of the activity.
+        // Create the adapter that will return a fragment for each of the two tabs of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
+        /* When swiping between different sections, select the corresponding 
+         * tab. We can also use ActionBar.Tab#select() to do this if we have 
+         * a reference to the Tab.
+         */
+        
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
         {
             @Override
@@ -203,7 +204,7 @@ public class MainActivity extends FragmentActivity implements
             switch(position)
             {
 	            case WISH:
-	            	Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
+	            	Transporter.packIntoBundle(args, Transporter.USER, currentUser);
 	            	fragment = new WishDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;

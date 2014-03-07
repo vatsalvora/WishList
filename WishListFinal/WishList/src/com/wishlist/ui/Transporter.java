@@ -22,7 +22,6 @@ public class Transporter {
 	 */
 	public static final String USER = "User";
 	public static final String CURRENT = "CurrentUser";
-	public static final String APP = "AppUser";
 	public static final String WISH = "Wish";
 	public static final String WISHES = "Wishes";
 	public static final String FRIENDS = "Friends";
@@ -56,12 +55,10 @@ public class Transporter {
 	}
 	
 	public static final void unpackFromBundle(Bundle b, String key, Parcelable p){
-		if(p == null) nullError();
 		p = b.getParcelable(key);
 	}
 	
 	public static final void unpackFromBundle(Bundle b, String key, ArrayList<? extends Parcelable> p){
-		if(p== null) nullError();
 		p = b.getParcelableArrayList(key);
 	}
 	

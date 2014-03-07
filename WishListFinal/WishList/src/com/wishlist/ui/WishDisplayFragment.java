@@ -40,14 +40,14 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
     private View rootView;
-    private User user = new FBUser();
-    private ArrayList<WishItem> wishlist = new ArrayList<WishItem>();
+    private Bundle b;
+    private User user;
+    private ArrayList<WishItem> wishlist;
     private boolean isAppUser;
     
     public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	
     	Transporter.unpackFromBundle(this.getArguments(), Transporter.USER, user);
     	if(user == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);

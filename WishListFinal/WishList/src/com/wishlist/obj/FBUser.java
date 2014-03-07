@@ -11,8 +11,6 @@ package com.wishlist.obj;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
-
 public class FBUser extends User
 {
 
@@ -59,7 +57,7 @@ public class FBUser extends User
     private FBUser(Parcel in)
     {
         super();
-        if(in.readInt() == 1) isAppUser = true;
+    	if(in.readInt() == 1) isAppUser = true;
         else isAppUser=false;
         setUID(in.readString());
         setName(in.readString());

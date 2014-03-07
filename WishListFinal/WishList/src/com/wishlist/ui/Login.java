@@ -79,7 +79,7 @@ public final class Login extends Activity
     protected void start()
     {
     	 Intent intent = new Intent(this, MainActivity.class);
-         if(FBData != null) intent.putExtra(Transporter.FBDATA, FBData);
+         if(FBData != null) intent.putExtras(FBData);
          startActivity(intent);
     }
     
@@ -129,7 +129,8 @@ public final class Login extends Activity
     	s.close();
     }
     
-    protected void test()
+    @SuppressWarnings("deprecation")
+	protected void test()
     {// sets a dummy user for testing purposes
     	currentAppUser = new FBUser("0", "John Doe", true);
     	friends = new ArrayList<FBUser>();

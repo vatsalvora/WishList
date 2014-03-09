@@ -2,7 +2,7 @@
  * Shamelessly stolen from the internet and edited by Alex Bryan
  */
 import java.io.BufferedInputStream;
-import java.io.DataOutputStrea;
+import java.io.DataOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,7 +14,7 @@ public class WishListServer
     private ServerSocket server;
     private int port = 5600;
 
-    public Server()
+    public WishListServer()
     {
         try
         {
@@ -28,7 +28,7 @@ public class WishListServer
 
     public static void main(String[] args)
     {
-        Server server = new Server();
+        WishListServer server = new WishListServer();
         server.connection();
     }
 
@@ -81,9 +81,16 @@ public class WishListServer
                     {
                         playClem();
                     }
+
+                    if (line.equals("talk"))
+                    {
+                        dos.writeUTF("I'm talking");
+                        dos.flush();
+                    }
                 }
                 catch(IOException ioe)
                 {
+                    System.out.println("Client closed?");
                     done = true;
                 }
             }

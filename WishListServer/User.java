@@ -12,8 +12,9 @@
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.Serializable;
 
-public abstract class User
+public abstract class User implements Serializable
 {
     protected boolean isAppUser; //flag for current app user
     protected String uid; //ID of user

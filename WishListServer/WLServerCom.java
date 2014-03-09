@@ -35,9 +35,15 @@ public class WLServerCom {
      
     }
 
-    public void sendCMD(String cmd) throws IOException
+    public void sendObject(Object obj) throws IOException
     {
-        oos.writeObject(cmd);
+        oos.writeObject(obj);
+        oos.flush();
+    }
+
+    public void sendCode(int code) throws IOException
+    {
+        oos.writeInt(code);
         oos.flush();
     }
 

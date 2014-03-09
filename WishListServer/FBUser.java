@@ -19,10 +19,16 @@ public class FBUser extends User
         super(uid, name, isAppUser);
     }
     
-    @Override
     public int describeContents()
     {
         return 0;
+    }
+
+    public String toString()
+    {
+        /* Here for debug purposes */
+        String res = uid + "\t" + name + "\t" + isAppUser;
+        return res;
     }
 
 

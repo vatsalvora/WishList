@@ -12,6 +12,10 @@ import java.io.ObjectInputStream;
 
 public class WishListServer
 {
+    public static final int STRING = 0;
+    public static final int STRING_PLAY = 1;
+    public static final int FBUSER = 2;
+    public static final int WISHITEM = 3;
 
     private ServerSocket server;
     private int port = 5600;
@@ -71,23 +75,32 @@ public class WishListServer
 
 
             boolean done = false;
+            int code;
+            String msg;
             while (!done)
             {
                 try
                 {
-                    String line = (String)ois.readObject();
-                    System.out.println(line);
-                    done = line.equals("bye");
+                    code = ois.readInt();
+                    System.out.println(code);
 
-                    if (line.equals("play"))
+                    if(code == STRING)
+                    {
+                        msg = (String)ois.readObject();
+                        System.out.println(msg);
+                    }
+                    else if(code == STRING_PLAY)
                     {
                         playClem();
-                    }
+                        msg = (String)ois.readObject();
+                        System.out.println(msg);
+                    }              
 
-                    if (line.equals("talk"))
+                    else if(code == FBUSER)
                     {
-                        oos.writeObject("I'm talking");
-                        oos.flush();
+                        FBUser tu = (FBUser)ois.readObject();
+                        msg = tu.toString();
+                        System.out.println(msg);
                     }
                 }
                 catch(IOException ioe)

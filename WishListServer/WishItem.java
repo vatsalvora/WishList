@@ -13,7 +13,7 @@ import java.util.*;
 import java.sql.Date;
 //import android.graphics.drawable.Drawable;
 
-public class WishItem implements Comparable<WishItem>
+public class WishItem implements Comparable<WishItem>, Serializable
 {
     protected StringPair wish; //wish ID and name pair
     protected StringPair user; //user ID and name pair

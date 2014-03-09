@@ -7,6 +7,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 
 public class WishListServer
 {
@@ -61,10 +63,10 @@ public class WishListServer
             Socket socket = server.accept();
             System.out.println("Client accepted: " + socket);
 
-            DataInputStream dis = new DataInputStream(
+            ObjectInputStream ois = new ObjectInputStream(
                 new BufferedInputStream(socket.getInputStream()));
 
-            DataOutputStream dos = new DataOutputStream(
+            ObjectOutputStream oos = new ObjectOutputStream(
                 socket.getOutputStream());
 
 
@@ -73,7 +75,7 @@ public class WishListServer
             {
                 try
                 {
-                    String line = dis.readUTF();
+                    String line = (String)ois.readObject();
                     System.out.println(line);
                     done = line.equals("bye");
 
@@ -84,18 +86,23 @@ public class WishListServer
 
                     if (line.equals("talk"))
                     {
-                        dos.writeUTF("I'm talking");
-                        dos.flush();
+                        oos.writeObject("I'm talking");
+                        oos.flush();
                     }
                 }
                 catch(IOException ioe)
                 {
-                    System.out.println("Client closed?");
+                    System.out.println("Client closed");
+                    done = true;
+                }
+                catch (ClassNotFoundException e)
+                {
+                    e.printStackTrace();
                     done = true;
                 }
             }
-            dis.close();
-            dos.close();
+            ois.close();
+            oos.close();
             socket.close();
         }
         catch(IOException ioe)

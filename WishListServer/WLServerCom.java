@@ -5,14 +5,16 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.io.BufferedInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 
 public class WLServerCom {
     private static int port = 5600;
 
     protected InetAddress host;
     protected Socket socket;
-    protected DataOutputStream dos;
-    protected DataInputStream dis;
+    protected ObjectOutputStream oos;
+    protected ObjectInputStream ois;
 
 
     public WLServerCom() throws UnknownHostException, IOException
@@ -24,19 +26,19 @@ public class WLServerCom {
         socket = new Socket(host.getHostName(), port);
 
         //Open an output stream
-        dos = new DataOutputStream(
+        oos = new ObjectOutputStream(
                 socket.getOutputStream());
 
         //Open an input stream
-        dis = new DataInputStream(
+        ois = new ObjectInputStream(
                 socket.getInputStream());
      
     }
 
     public void sendCMD(String cmd) throws IOException
     {
-        dos.writeUTF(cmd);
-        dos.flush();
+        oos.writeObject(cmd);
+        oos.flush();
     }
 
 }

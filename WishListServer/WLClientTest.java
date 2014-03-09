@@ -4,12 +4,33 @@ public class WLClientTest
 {
     public static void main(String[] args)
     {
+        Scanner sc = new Scanner(System.in);
+
         try
         {
+            boolean done = false;
+            String msg = "";
             WLServerCom com = new WLServerCom();
-            com.sendCMD("play");
-            Scanner sc = new Scanner(System.in);
-            int x = sc.nextInt();
+
+            while(true)
+            {
+                try
+                {
+                    msg = sc.next();
+                    com.sendCMD(msg);
+
+                    if(msg.equals("bye"))
+                    {
+                        break;
+                    }
+                }
+                catch (IOException ioe)
+                {
+                    ioe.printStackTrace();
+                    break;
+                }
+            }
+
         }
         catch (IOException ioe)
         {

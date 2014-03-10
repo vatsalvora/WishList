@@ -2,6 +2,7 @@
 -- The user who runs this needs to have the proper permissions.
 -- Ideally, only the admin or any superusers should have the
 -- permission to drop tables.
+
 DROP TABLE wishes;
 
 CREATE TABLE wishes (

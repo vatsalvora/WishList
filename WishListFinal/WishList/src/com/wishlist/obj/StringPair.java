@@ -50,8 +50,8 @@ public class StringPair implements Parcelable
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeString((String) first);
-        dest.writeString((String) second);
+        dest.writeString(first);
+        dest.writeString(second);
     }
 
 	private StringPair(Parcel in)

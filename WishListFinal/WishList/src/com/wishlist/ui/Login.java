@@ -79,7 +79,7 @@ public final class Login extends Activity
     protected void start()
     {
     	 Intent intent = new Intent(this, MainActivity.class);
-         if(FBData != null) intent.putExtras(FBData);
+         intent.putExtras(FBData);
          startActivity(intent);
     }
     

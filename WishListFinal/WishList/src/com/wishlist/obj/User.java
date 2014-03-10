@@ -27,7 +27,10 @@ public abstract class User implements Parcelable
     public static final char PRICE = 'p';
     
     public User(){
-    	setList(new ArrayList<WishItem>());
+    	isAppUser = false;
+    	uid = "";
+    	name = "";
+    	wList = new ArrayList<WishItem>();
     }
     
     public User(String uid, String name, boolean isAppUser)

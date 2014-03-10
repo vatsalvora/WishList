@@ -12,8 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 //import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import com.wishlist.db.*;
-import com.wishlist.obj.FBUser;
-import com.wishlist.obj.User;
+import com.wishlist.obj.*;
 //import android.widget.TextView;
 
 /*
@@ -42,9 +41,9 @@ public class MainActivity extends FragmentActivity implements
     
     private DBCom db; //DB pointer
     private Bundle userData; //bundle from login
-    private User appUser = new FBUser(); //the app user
+    private User appUser; //the app user
     private User currentUser; //current user to view the data
-    private ArrayList<User> friends = new ArrayList<User>(); //friends of the app user
+    private ArrayList<User> friends; //friends of the app user
     
     public static final int WISH = 0;
     public static final int FRIEND = 1;
@@ -94,11 +93,12 @@ public class MainActivity extends FragmentActivity implements
         db = DBCom.instance();
     }
     
-    protected void initData(){
+    @SuppressWarnings("unchecked")
+	protected void initData(){
     	//retrieve data from intent
-        userData = getIntent().getExtras();
-        Transporter.unpackFromBundle(userData, Transporter.USER, appUser);
-        Transporter.unpackFromBundle(userData, Transporter.FRIENDS, friends);
+    	userData = getIntent().getExtras();
+        appUser = (FBUser) Transporter.unpackObjectFromBundle(userData, Transporter.USER);
+        friends = (ArrayList<User>) Transporter.unpackArrayListFromBundle(userData, Transporter.FRIENDS);
         
         //set current user as app user
         setCurrentUser(appUser);

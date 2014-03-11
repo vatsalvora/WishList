@@ -42,17 +42,16 @@ BOTH WISHLISTS:
 So the UI elements for certain actions are hidden based on user. 
 */
 	
-    private View rootView;
-    private User user;
-    private ArrayList<WishItem> wishlist;
-    private boolean isAppUser;
-    
-    public interface WishCreatorDialogListener{
+	public interface WishCreatorDialogListener{
 		void onDialogPositiveClick(DialogFragment dialog);
 		void onDialogNegativeClick(DialogFragment dialog);
 	}
 	
-	WishCreatorDialogListener l;
+	private View rootView;
+    private User user;
+    private ArrayList<WishItem> wishlist;
+    private boolean isAppUser;
+    private WishCreatorDialogListener l;
 	
 	public void onAttach(Activity activity)
 	{
@@ -170,7 +169,6 @@ So the UI elements for certain actions are hidden based on user.
     
     protected boolean addWishItem()
     {   //called when the Add action is activated in the action bar
-    	//showWishCreatorDialog();
     	return true;
     }
     

@@ -5,6 +5,7 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -44,11 +45,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private User currentUser; //current user to view the data
     private ArrayList<User> friends; //friends of the app user
     
-    public static final int WISH = 0;
-    public static final int FRIEND = 1;
-    public static final int COUNT = 2;
-
-    @Override
+     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -185,33 +182,50 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter
+    final class SectionsPagerAdapter extends FragmentPagerAdapter
     {
-
+    	private Fragment arr[];
+    	private boolean changeView;
+    	
+    	public static final int WISH = 0;
+        public static final int FRIEND = 1;
+        public static final int COUNT = 2;
+    	
         public SectionsPagerAdapter(FragmentManager fm)
         {
             super(fm);
+            arr = new Fragment[COUNT];
+            createFragment(arr[WISH], new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+            changeView = false;
+            createFragment(arr[FRIEND], new FriendsListDisplayFragment(), new Bundle(), Transporter.FRIENDS, friends);
         }
-
-        @Override
+        
+        private void createFragment(Fragment target, Fragment newfrag, Bundle b, String key, ArrayList<? extends Parcelable> p){
+        	target = newfrag;
+        	Transporter.pack(b, key, p);
+        	target.setArguments(b);
+        }
+        
+        private void createFragment(Fragment target, Fragment newfrag, Bundle b, String key, Parcelable p){
+        	target = newfrag;
+        	Transporter.pack(b, key, p);
+        	target.setArguments(b);
+        }
+        
+         @Override
         public Fragment getItem(int position)
         {
             // getItem is called to instantiate the fragment for the given page.
             // Return the appropriate fragment
-            Bundle args = new Bundle();
-            Fragment fragment;
-            switch(position)
+        	switch(position)
             {
 	            case WISH:
-	            	Transporter.pack(args, Transporter.USER, currentUser);
-	            	fragment = new WishDisplayFragment();
-	                fragment.setArguments(args);
-	                return fragment;
+	            	if(changeView){
+	            		createFragment(arr[WISH], new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+	            	}
+	                return arr[WISH];
 	            case FRIEND:
-	            	Transporter.pack(args, Transporter.FRIENDS, friends);
-	                fragment = new FriendsListDisplayFragment();
-	                fragment.setArguments(args);
-	                return fragment;
+	                return arr[FRIEND];
 	            default:
 	                throw new RuntimeException("Invalid position");
             }

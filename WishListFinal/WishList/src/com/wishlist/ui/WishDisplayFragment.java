@@ -3,9 +3,12 @@ package com.wishlist.ui;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +23,7 @@ import com.wishlist.obj.FBUser;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
-public class WishDisplayFragment extends Fragment implements WishCreatorDialog.WishCreatorDialogListener
+public class WishDisplayFragment extends DialogFragment
 {/*
 Used to display wish lists (of the active user and of their friends). 
 Different actions are allowed depending on the user.
@@ -40,15 +43,54 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
     private View rootView;
-    private Bundle b;
     private User user;
     private ArrayList<WishItem> wishlist;
     private boolean isAppUser;
     
+    public interface WishCreatorDialogListener{
+		void onDialogPositiveClick(DialogFragment dialog);
+		void onDialogNegativeClick(DialogFragment dialog);
+	}
+	
+	WishCreatorDialogListener l;
+	
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+		try{
+			l = (WishCreatorDialogListener) activity;
+		}
+		catch(ClassCastException e){
+			throw new ClassCastException(activity.toString() + "must implement WishCreatorDialogListener");
+		}
+	}
+	
+	public Dialog onCreateDialog(Bundle saveInstanceState)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		
+		builder.setView(inflater.inflate(R.layout.dialog_create_wish, null))
+		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				// TODO Auto-generated method stub
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				WishDisplayFragment.this.getDialog().cancel();
+			}
+		});
+		
+		return builder.create();
+	}
+    
     public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	user = (FBUser) Transporter.unpackObjectFromBundle(this.getArguments(), Transporter.USER);
+    	user = (FBUser) Transporter.unpackObject(this.getArguments(), Transporter.USER);
     	if(user == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);
             toast.show();			
@@ -105,12 +147,10 @@ So the UI elements for certain actions are hidden based on user.
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//This displays the correct action bar for the fragment
 		super.onCreateOptionsMenu(menu, inflater);
-		if(isAppUser){
-			inflater.inflate(R.menu.wish_list_view, menu);
-		}
-		else{
-			inflater.inflate(R.menu.main, menu);
-		}
+		
+		if(isAppUser) inflater.inflate(R.menu.wish_list_view, menu);
+		else inflater.inflate(R.menu.main, menu);
+		
 		//TODO: display a different action bar (without the ability to add items) if the user doesn't own the list
 		
 	} 
@@ -129,31 +169,12 @@ So the UI elements for certain actions are hidden based on user.
 	}   
     
     protected boolean addWishItem()
-    { //called when the Add action is activated in the action bar
-    	showWishCreatorDialog();
+    {   //called when the Add action is activated in the action bar
+    	//showWishCreatorDialog();
     	return true;
     }
     
-    public void showWishCreatorDialog()
-    {
-    	WishCreatorDialog d = new WishCreatorDialog();
-    	d.show(getFragmentManager(), "WishCreatorDialog");
-    }
-    
-	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
-		// TODO Auto-generated method stub
-		
-	}
-    
-	
-	protected void test(){
+    protected void test(){
 		// Dummy user
 		user = new FBUser("0", "John Doe", true);
     	ArrayList<WishItem> wishes = new ArrayList<WishItem>();

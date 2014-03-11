@@ -9,19 +9,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+
 import com.wishlist.db.*;
 import com.wishlist.obj.*;
-//import android.widget.TextView;
+
 
 /*
  * This class displays two fragments, one for the user's actual wish list and another for their friends list.
  *
  */
 
-public class MainActivity extends FragmentActivity implements 
-	ActionBar.TabListener
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
 
     /**
@@ -97,8 +96,8 @@ public class MainActivity extends FragmentActivity implements
 	protected void initData(){
     	//retrieve data from intent
     	userData = getIntent().getExtras();
-        appUser = (FBUser) Transporter.unpackObjectFromBundle(userData, Transporter.USER);
-        friends = (ArrayList<User>) Transporter.unpackArrayListFromBundle(userData, Transporter.FRIENDS);
+        appUser = (FBUser) Transporter.unpackObject(userData, Transporter.USER);
+        friends = (ArrayList<User>) Transporter.unpackArrayList(userData, Transporter.FRIENDS);
         
         //set current user as app user
         setCurrentUser(appUser);
@@ -181,7 +180,7 @@ public class MainActivity extends FragmentActivity implements
     {
     	onTabSelected(tab, fragmentTransaction);
     }
-
+    
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -204,12 +203,12 @@ public class MainActivity extends FragmentActivity implements
             switch(position)
             {
 	            case WISH:
-	            	Transporter.packIntoBundle(args, Transporter.USER, currentUser);
+	            	Transporter.pack(args, Transporter.USER, currentUser);
 	            	fragment = new WishDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;
 	            case FRIEND:
-	            	Transporter.packIntoBundle(args, Transporter.FRIENDS, friends);
+	            	Transporter.pack(args, Transporter.FRIENDS, friends);
 	                fragment = new FriendsListDisplayFragment();
 	                fragment.setArguments(args);
 	                return fragment;

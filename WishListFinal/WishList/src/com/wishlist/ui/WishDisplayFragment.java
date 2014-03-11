@@ -42,51 +42,9 @@ BOTH WISHLISTS:
 So the UI elements for certain actions are hidden based on user. 
 */
 	
-	public interface WishCreatorDialogListener{
-		void onDialogPositiveClick(DialogFragment dialog);
-		void onDialogNegativeClick(DialogFragment dialog);
-	}
+	private User user;
 	
-	private View rootView;
-    private User user;
-    private ArrayList<WishItem> wishlist;
-    private boolean isAppUser;
-    private WishCreatorDialogListener l;
-	
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		try{
-			l = (WishCreatorDialogListener) activity;
-		}
-		catch(ClassCastException e){
-			throw new ClassCastException(activity.toString() + "must implement WishCreatorDialogListener");
-		}
-	}
-	
-	public Dialog onCreateDialog(Bundle saveInstanceState)
-	{
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		
-		builder.setView(inflater.inflate(R.layout.dialog_create_wish, null))
-		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) 
-			{
-				// TODO Auto-generated method stub
-			}
-		})
-		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
-			public void onClick(DialogInterface dialog, int which) 
-			{
-				WishDisplayFragment.this.getDialog().cancel();
-			}
-		});
-		
-		return builder.create();
-	}
-    
-    public void onCreate(Bundle savedInstanceState)
+	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
     	user = (FBUser) Transporter.unpackObject(this.getArguments(), Transporter.USER);
@@ -94,12 +52,7 @@ So the UI elements for certain actions are hidden based on user.
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);
             toast.show();			
     	}
-    	else{
-	    	wishlist = user.getList();
-	    	isAppUser = user.getIsAppUser();
-    	}
-    	
-    	
+    	   	
     	//test();
     	
     }
@@ -132,13 +85,13 @@ So the UI elements for certain actions are hidden based on user.
                                          container, false);
 
             final ArrayList<String> list = new ArrayList<String>();
-            for (int i = 0; i < wishlist.size(); ++i) {
-              list.add(wishlist.get(i).getName());
+            for (int i = 0; i < user.getList().size(); ++i) {
+              list.add(user.getList().get(i).getName());
             }
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
             listView.setAdapter(adapter);
         
-        return rootView = listView;
+        return listView;
     }
 	
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
@@ -147,7 +100,7 @@ So the UI elements for certain actions are hidden based on user.
 		//This displays the correct action bar for the fragment
 		super.onCreateOptionsMenu(menu, inflater);
 		
-		if(isAppUser) inflater.inflate(R.menu.wish_list_view, menu);
+		if(user.getIsAppUser()) inflater.inflate(R.menu.wish_list_view, menu);
 		else inflater.inflate(R.menu.main, menu);
 		
 		//TODO: display a different action bar (without the ability to add items) if the user doesn't own the list
@@ -172,6 +125,28 @@ So the UI elements for certain actions are hidden based on user.
     	return true;
     }
     
+    public Dialog createDialog()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		
+		builder.setView(inflater.inflate(R.layout.dialog_create_wish, null))
+		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				user.getList().add(new WishItem());
+			}
+		})
+		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				WishDisplayFragment.this.getDialog().cancel();
+			}
+		});
+		
+		return builder.create();
+	}
+    
     protected void test(){
 		// Dummy user
 		user = new FBUser("0", "John Doe", true);
@@ -185,7 +160,5 @@ So the UI elements for certain actions are hidden based on user.
     	wishes.add(new WishItem("dummyID6", "Aurora Plush 12'' Venus Unicorn", user.getUID(), user.getName(), "", "", "It's really soft and cuddly with a delightful yellow rose attached to its purple ribbon collar. The yellow material on its horn, ears and feet is a little bit sparkly.", "20", 0, new Date(3,4,2014)));
      	   	
     	user.setList(wishes);
-    	wishlist = wishes; 
-    	isAppUser = user.getIsAppUser();
 	}
 }

@@ -36,26 +36,26 @@ public class Transporter {
 	
 	//for all pack_into_bundle methods, put the bundle, the key, and the parcelable object in the methods
 	//I'm using method overloading in order to standardize the transport process. (Joon)
-	public static final void packIntoBundle(Bundle b, String key, Parcelable p)
+	public static final void pack(Bundle b, String key, Parcelable p)
 	{
 		b.putParcelable(key, p);
 	}
 	
-	public static final void packIntoBundle(Bundle b, String key, ArrayList<? extends Parcelable> p)
+	public static final void pack(Bundle b, String key, ArrayList<? extends Parcelable> p)
 	{
 		b.putParcelableArrayList(key, p);
 	}
 	
-	public static final void packIntoBundle(Bundle b, String key, String p)
+	public static final void pack(Bundle b, String key, String p)
 	{
 		b.putString(key, p);
 	}
 	
-	public static final Parcelable unpackObjectFromBundle(Bundle b, String key){
+	public static final Parcelable unpackObject(Bundle b, String key){
 		return b.getParcelable(key);
 	}
 	
-	public static final ArrayList<? extends Parcelable> unpackArrayListFromBundle(Bundle b, String key){
+	public static final ArrayList<? extends Parcelable> unpackArrayList(Bundle b, String key){
 		return b.getParcelableArrayList(key);
 	}
 	

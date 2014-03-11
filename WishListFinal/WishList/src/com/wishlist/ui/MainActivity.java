@@ -5,23 +5,23 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+
 import com.wishlist.db.*;
 import com.wishlist.obj.*;
-//import android.widget.TextView;
+
 
 /*
  * This class displays two fragments, one for the user's actual wish list and another for their friends list.
  *
  */
 
-public class MainActivity extends FragmentActivity implements 
-	ActionBar.TabListener
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
 
     /**
@@ -45,11 +45,7 @@ public class MainActivity extends FragmentActivity implements
     private User currentUser; //current user to view the data
     private ArrayList<User> friends; //friends of the app user
     
-    public static final int WISH = 0;
-    public static final int FRIEND = 1;
-    public static final int COUNT = 2;
-
-    @Override
+     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -97,8 +93,8 @@ public class MainActivity extends FragmentActivity implements
 	protected void initData(){
     	//retrieve data from intent
     	userData = getIntent().getExtras();
-        appUser = (FBUser) Transporter.unpackObjectFromBundle(userData, Transporter.USER);
-        friends = (ArrayList<User>) Transporter.unpackArrayListFromBundle(userData, Transporter.FRIENDS);
+        appUser = (FBUser) Transporter.unpackObject(userData, Transporter.USER);
+        friends = (ArrayList<User>) Transporter.unpackArrayList(userData, Transporter.FRIENDS);
         
         //set current user as app user
         setCurrentUser(appUser);
@@ -181,38 +177,55 @@ public class MainActivity extends FragmentActivity implements
     {
     	onTabSelected(tab, fragmentTransaction);
     }
-
+    
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter
+    final class SectionsPagerAdapter extends FragmentPagerAdapter
     {
-
+    	private Fragment arr[];
+    	private boolean changeView;
+    	
+    	public static final int WISH = 0;
+        public static final int FRIEND = 1;
+        public static final int COUNT = 2;
+    	
         public SectionsPagerAdapter(FragmentManager fm)
         {
             super(fm);
+            arr = new Fragment[COUNT];
+            createFragment(arr[WISH], new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+            changeView = false;
+            createFragment(arr[FRIEND], new FriendsListDisplayFragment(), new Bundle(), Transporter.FRIENDS, friends);
         }
-
-        @Override
+        
+        private void createFragment(Fragment target, Fragment newfrag, Bundle b, String key, ArrayList<? extends Parcelable> p){
+        	target = newfrag;
+        	Transporter.pack(b, key, p);
+        	target.setArguments(b);
+        }
+        
+        private void createFragment(Fragment target, Fragment newfrag, Bundle b, String key, Parcelable p){
+        	target = newfrag;
+        	Transporter.pack(b, key, p);
+        	target.setArguments(b);
+        }
+        
+         @Override
         public Fragment getItem(int position)
         {
             // getItem is called to instantiate the fragment for the given page.
             // Return the appropriate fragment
-            Bundle args = new Bundle();
-            Fragment fragment;
-            switch(position)
+        	switch(position)
             {
 	            case WISH:
-	            	Transporter.packIntoBundle(args, Transporter.USER, currentUser);
-	            	fragment = new WishDisplayFragment();
-	                fragment.setArguments(args);
-	                return fragment;
+	            	if(changeView){
+	            		createFragment(arr[WISH], new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+	            	}
+	                return arr[WISH];
 	            case FRIEND:
-	            	Transporter.packIntoBundle(args, Transporter.FRIENDS, friends);
-	                fragment = new FriendsListDisplayFragment();
-	                fragment.setArguments(args);
-	                return fragment;
+	                return arr[FRIEND];
 	            default:
 	                throw new RuntimeException("Invalid position");
             }

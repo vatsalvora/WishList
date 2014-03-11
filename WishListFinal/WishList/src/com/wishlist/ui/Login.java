@@ -72,8 +72,8 @@ public final class Login extends Activity
     protected void pack()
     {
     	FBData = new Bundle();
-    	Transporter.packIntoBundle(FBData, Transporter.USER, currentAppUser);
-    	Transporter.packIntoBundle(FBData, Transporter.FRIENDS, friends);
+    	Transporter.pack(FBData, Transporter.USER, currentAppUser);
+    	Transporter.pack(FBData, Transporter.FRIENDS, friends);
     }
     
     protected void start()

@@ -121,30 +121,37 @@ So the UI elements for certain actions are hidden based on user.
 	}   
     
     protected boolean addWishItem()
-    {   //called when the Add action is activated in the action bar
+    {   
     	return true;
     }
     
-    public Dialog createDialog()
+    public Dialog createDialog(int hashcode)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
-		builder.setView(inflater.inflate(R.layout.dialog_create_wish, null))
-		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) 
-			{
-				user.getList().add(new WishItem());
-			}
-		})
-		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
-			public void onClick(DialogInterface dialog, int which) 
-			{
-				WishDisplayFragment.this.getDialog().cancel();
-			}
-		});
-		
-		return builder.create();
+		switch(hashcode){
+			case 0:
+				builder.setView(inflater.inflate(R.layout.dialog_create_wish, null))
+				.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						user.getList().add(new WishItem());
+					}
+				})
+				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						WishDisplayFragment.this.getDialog().cancel();
+					}
+				});
+				return builder.create();
+			case 1:
+				builder.setView(inflater.inflate(R.layout.dialog_update_confirmed, null));
+				return builder.create();
+			default:
+				throw new RuntimeException("Not supported yet.");
+		}
 	}
     
     protected void test(){

@@ -12,6 +12,7 @@ package com.wishlist.obj;
 
 import java.util.*;
 import java.sql.Date;
+import android.graphics.drawable.Drawable;
 //import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -24,7 +25,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     protected String description=""; //description of item
     protected Date dateAdded; //date of the item added to user
     protected String price=""; //price of item
-    //protected Drawable picture; //Picture object for image of item. Implement in sprint 2
+    protected Drawable picture; //Picture object for image of item. Implement in sprint 2
     protected int status;  //status of item. Open, registered, bought, etc
     // What are the status codes? Assuming 0 = Open, 1 = registered, 2 = bought. 
     protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
@@ -201,6 +202,10 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     public void setComment(String ID, String comment)
     {
         comments.put(ID, comment);
+    }
+    
+    public Drawable getDrawable(){
+    	return picture;
     }
 
     public int compareTo(WishItem arg0)

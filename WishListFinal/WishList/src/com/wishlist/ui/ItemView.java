@@ -6,26 +6,28 @@ import com.wishlist.obj.WishItem;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.*;
 
 public class ItemView extends Activity
 {
-
-    private TextView nameView;
-    private TextView descriptionView;
-    private TextView userView;
-    private TextView buyerView;
-    private TextView dateView;
-    private TextView priceView;
-    private ListView commentsView;
-    private ImageView image;
-    private Drawable picture;
+	
+	public static final int NAME = 0;
+	public static final int USER = 1;
+	public static final int BUYER = 2;
+	public static final int DATE = 3;
+	public static final int DESC = 4;
+	public static final int PRICE = 5;
+	
+	private TextView v[] = new TextView[PRICE+1];
+	
+    private ListView commentsV;
+    private ImageView imageV;
+    
     private ArrayList<String> comments;
     private ArrayAdapter<String> adapter;
-    private Bundle info;
     private WishItem item;
     
     @Override
@@ -34,26 +36,22 @@ public class ItemView extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
         
-        info = this.getIntent().getExtras();
-        item = info.getParcelable(Transporter.WISH);
+        v[NAME] = (TextView) findViewById(R.id.name);
+		v[DESC] = (TextView) findViewById(R.id.description);
+		v[USER] = (TextView) findViewById(R.id.owner);
+		v[BUYER] = (TextView) findViewById(R.id.buyer);
+		v[PRICE] = (TextView) findViewById(R.id.price);
+		v[DATE] = (TextView) findViewById(R.id.dateAdded);
+		
+		comments = new ArrayList<String>();
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
+		commentsV.setAdapter(adapter);
         
-        nameView = (TextView) findViewById(R.id.name);
-        descriptionView = (TextView) findViewById(R.id.description);
-        userView = (TextView) findViewById(R.id.owner);
-        buyerView = (TextView) findViewById(R.id.buyer);
-        priceView = (TextView) findViewById(R.id.price);
-        dateView = (TextView) findViewById(R.id.dateAdded);
-        image = (ImageView) findViewById(R.id.ItemImage);
-
-        comments = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
-        commentsView.setAdapter(adapter);
-        
-        displayItem();        
     }
     
     protected void onStart(){
     	super.onStart();
+    	displayItem();
     }
     
     protected void onRestart(){
@@ -85,17 +83,52 @@ public class ItemView extends Activity
     }
     
     protected void displayItem(){
+    	item = (WishItem) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.WISH);
     	if(item == null) throw new RuntimeException("WHAT?????? ITEM IS NULL! WTF!!!!");
-    	nameView.setText("Name: "+item.getName());
-    	descriptionView.setText("Description: "+item.getDescription());
-    	userView.setText("User: "+item.getUserName());
-    	buyerView.setText("Buyer: "+item.getBuyerName());
-    	priceView.setText("Price: "+item.getPrice());
-    	dateView.setText("Date Added: "+item.getDate().toString());
-    	image.setImageDrawable(picture);
-    }
-    
-    protected void setClickers(View... v){
-    
-    }
+		v[NAME].setText(item.getName());
+		v[USER].setText("Owner: "+item.getUserName());
+		v[BUYER].setText("Buyer: "+item.getBuyerName());
+		v[DESC].setText("Description: "+item.getDescription());
+		v[DATE].setText("Date Added: "+item.getDate().toString());
+		v[PRICE].setText("Price: "+item.getPrice());
+		imageV.setImageDrawable(item.getDrawable());
+		
+		v[NAME].setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				//TODO: create dialog for each one
+			}
+		});
+		
+		v[USER].setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				//TODO: create dialog for each one
+			}
+		});
+		
+		v[DESC].setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				//TODO: create dialog for each one
+			}
+		});
+		
+		v[PRICE].setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				//TODO: create dialog for each one
+			}
+		});
+		
+		v[BUYER].setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				//TODO: create dialog for each one
+			}
+		});
+		
+		v[DATE].setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				//TODO: create dialog for each one
+			}
+		});
+		
+		
+	}
 }

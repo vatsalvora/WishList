@@ -47,4 +47,9 @@ public class WLServerCom {
         oos.flush();
     }
 
+    public Object getObject() throws IOException, ClassNotFoundException
+    {
+        return ois.readObject();
+    }
+
 }

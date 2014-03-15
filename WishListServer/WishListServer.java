@@ -16,9 +16,13 @@ public class WishListServer
     public static final int STRING_PLAY = 1;
     public static final int FBUSER = 2;
     public static final int WISHITEM = 3;
+    public static final int ECHO = 4;
 
     private ServerSocket server;
     private int port = 5600;
+    private Socket socket;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
 
     public WishListServer()
     {
@@ -61,16 +65,20 @@ public class WishListServer
 
     public void connection()
     {
+        /*
+         * Does all server-side logic.
+         * A huge mess, might as well just be main
+         */
         System.out.println("Waiting for client ...");
         try
         {
-            Socket socket = server.accept();
+            socket = server.accept();
             System.out.println("Client accepted: " + socket);
 
-            ObjectInputStream ois = new ObjectInputStream(
+            ois = new ObjectInputStream(
                 new BufferedInputStream(socket.getInputStream()));
 
-            ObjectOutputStream oos = new ObjectOutputStream(
+            oos = new ObjectOutputStream(
                 socket.getOutputStream());
 
 
@@ -108,22 +116,41 @@ public class WishListServer
                         msg = wi.toString();
                         System.out.println(msg);
                     }
+                    else if(code == ECHO)
+                    {
+                        System.out.println("echo");
+                        oos.writeObject("echo");
+                        oos.flush();
+                    }
+
                 }
                 catch(IOException ioe)
                 {
                     System.out.println("Client closed");
-                    done = true;
+
+                    System.out.println("Waiting for new client ...");
+                    socket = server.accept();
+                    System.out.println("Client accepted: " + socket);
+
+                    ois = new ObjectInputStream(
+                        new BufferedInputStream(socket.getInputStream()));
+
+                    oos = new ObjectOutputStream(
+                        socket.getOutputStream());
+
+                    continue;
                 }
                 catch (ClassNotFoundException e)
                 {
                     e.printStackTrace();
                     done = true;
-                }
+                } 
             }
             ois.close();
             oos.close();
             socket.close();
         }
+                
         catch(IOException ioe)
         {
             System.out.println(ioe);

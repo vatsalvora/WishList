@@ -231,7 +231,15 @@ public class WishItem implements Comparable<WishItem>, Serializable
     {
         return 0;
     }
+    public String toString()
+    {
+        /*
+         * For debug/testing reasons. This really shouldn't be used in actual
+         * android app
+         */
 
+        return wish.first + "\t" + wish.second;
+    }
     
 
    }

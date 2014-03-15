@@ -6,6 +6,7 @@ public class WLClientTest
     public static final int STRING_PLAY = 1;
     public static final int FBUSER = 2;
     public static final int WISHITEM = 3;
+    public static final int ECHO = 4;
 
 
     public static void main(String[] args)
@@ -47,6 +48,19 @@ public class WLClientTest
                     {
                         com.sendCode(WISHITEM);
                         com.sendObject(wi);
+                    }
+                    else if(msg.equals("echo"))
+                    {
+                        com.sendCode(ECHO);
+                        try
+                        {
+                            String s = (String)com.getObject();
+                            System.out.println(s);
+                        }
+                        catch (ClassNotFoundException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     else
                     {

@@ -51,12 +51,20 @@ public class Transporter {
 		b.putString(key, p);
 	}
 	
+	public static final void pack(Bundle b, String key, int num){
+		b.putInt(key, num);
+	}
+	
 	public static final Parcelable unpackObject(Bundle b, String key){
 		return b.getParcelable(key);
 	}
 	
 	public static final ArrayList<? extends Parcelable> unpackArrayList(Bundle b, String key){
 		return b.getParcelableArrayList(key);
+	}
+	
+	public static final int unpackInteger(Bundle b, String key){
+		return b.getInt(key);
 	}
 	
 	protected static final void nullError(){

@@ -86,16 +86,15 @@ So the UI elements for certain actions are hidden based on user.
         final ListView listView = (ListView) inflater.inflate(R.layout.fragment_wish_display, container, false);
 
         final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < user.getList().size(); ++i) {
-          list.add(user.getList().get(i).getName());
-        }
+        for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
+        
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
         listView.setAdapter(adapter);
-        
         listView.setOnItemClickListener(new OnItemClickListener(){
-        	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         		Intent i = new Intent(getActivity(), ItemView.class);
         		Bundle b = new Bundle();
+        		Transporter.pack(b, Transporter.USER, user.getIsAppUser() ? 1:0);
         		Transporter.pack(b, Transporter.WISH, (WishItem) listView.getItemAtPosition(position));
         		i.putExtras(b);
         		startActivity(i);

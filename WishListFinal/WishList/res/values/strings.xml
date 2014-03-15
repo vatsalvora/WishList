@@ -22,6 +22,7 @@
     <string name="options">Options</string>
     <string name="password">Password</string>
     <string name="people">People</string>
+    <string name="placeholder">Replace at Runtime</string>
     <string name="price">Price</string>
     <string name="redo">Redo</string>
 	<string name="temp">Temp</string>

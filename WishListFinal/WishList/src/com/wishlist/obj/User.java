@@ -10,6 +10,7 @@ package com.wishlist.obj;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 import android.os.Parcelable;
 
 public abstract class User implements Parcelable

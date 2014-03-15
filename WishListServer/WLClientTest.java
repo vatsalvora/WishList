@@ -12,6 +12,7 @@ public class WLClientTest
     {
         Scanner sc = new Scanner(System.in);
         FBUser tu = new FBUser("0", "alex", false);
+        WishItem wi = new WishItem("w-000", "Coke", "u-000", "Alex");
 
                 try
         {
@@ -40,6 +41,12 @@ public class WLClientTest
                     {
                         com.sendCode(FBUSER);
                         com.sendObject(tu);
+                    }
+
+                    else if(msg.equals("wish_go"))
+                    {
+                        com.sendCode(WISHITEM);
+                        com.sendObject(wi);
                     }
                     else
                     {

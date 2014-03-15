@@ -11,6 +11,7 @@
 
 import java.util.*;
 import java.sql.Date;
+import java.io.Serializable;
 //import android.graphics.drawable.Drawable;
 
 public class WishItem implements Comparable<WishItem>, Serializable

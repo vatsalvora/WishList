@@ -39,7 +39,7 @@ public class WishListServer
     }
 
     public void playClem()
-    {
+    { 
         /** Starts playing a song in my music player
          * Written to test if server accepts commands correctly
          */
@@ -100,6 +100,12 @@ public class WishListServer
                     {
                         FBUser tu = (FBUser)ois.readObject();
                         msg = tu.toString();
+                        System.out.println(msg);
+                    }
+                    else if (code == WISHITEM)
+                    {
+                        WishItem wi = (WishItem)ois.readObject();
+                        msg = wi.toString();
                         System.out.println(msg);
                     }
                 }

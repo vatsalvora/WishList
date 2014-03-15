@@ -1,4 +1,4 @@
-/*Author: Joon Kim
+/* Author: Joon Kim
  *
  * Pair class to link two objects together
  * 
@@ -9,10 +9,17 @@
  * I love the cursing. Let the hate flow through you
  *
  */
+import java.io.Serializable;
 
 
-
-public class StringPair
+/*
+ * Note on Serializable:
+ *
+ * While a StringPair is never sent over a network on it's own,
+ * a StringPair object is sent over the network as part of a
+ * WishItem object, so making StringPair Serializable is necessary
+ */
+public class StringPair implements Serializable
 {
     public String first;
     public String second;

@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">WishList</string>
     <string name="action_settings">Settings</string>
+    <string name="app_id">1459203584303232</string>
+    <string name="app_name">WishList</string>
+    <string name="app">AppUser</string>
+	<string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="current">CurrentUser</string>    
+    <string name="email">E-mail</string>
+    <string name="friendlist">Friend Wishlist</string>
     <string name="hello_world">Hello world!</string>
-    <string name="login">Login</string>
+    <string name="item">Item</string>
     <string name="list">List</string>
-    <string name="undo">Undo</string>
-    <string name="redo">Redo</string>
+    <string name="login">Login</string>
+    <string name="logout">Log Out</string>
+    <string name="mylist">My Wishlist</string>
     <string name="name">Name</string>
 	<string name="new_wish">New Wish</string>
-    <string name="price">Price</string>
     <string name="notes">Notes</string>
-    <string name="mylist">My Wishlist</string>
-    <string name="friendlist">Friend Wishlist</string>
-    <string name="logout">Log Out</string>
     <string name="options">Options</string>
-    <string name="item">Item</string>
-    <string name="email">E-mail</string>
     <string name="password">Password</string>
-    <string name="title_activity__wishlist_view">_wishlist_view</string>
     <string name="people">People</string>
-    <string name="title_activity_people_list">PeopleList</string>
-    <string name="title_activity_login">Login</string>
+    <string name="placeholder">Replace at Runtime</string>
+    <string name="price">Price</string>
+    <string name="redo">Redo</string>
+	<string name="temp">Temp</string>
+    <string name="title_activity__wishlist_view">_wishlist_view</string>
     <string name="title_activity_item_view">ItemView</string>
-    <string name="app_id">1459203584303232</string>
+    <string name="title_activity_login">Login</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_people_list">PeopleList</string>
     <string name="title_section1">Wish List</string>
     <string name="title_section2">Friends List</string>
+    <string name="undo">Undo</string>
 
 </resources>

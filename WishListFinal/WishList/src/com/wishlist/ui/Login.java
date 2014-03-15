@@ -1,5 +1,6 @@
 package com.wishlist.ui;
 
+import java.sql.Date;
 import java.util.*;
 
 import android.os.Bundle;
@@ -7,30 +8,25 @@ import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
 import com.wishlist.obj.FBUser;
+import com.wishlist.obj.WishItem;
 
 import android.util.Log;
 import android.content.Intent;
 
-public class Login extends Activity
+public final class Login extends Activity
 {
 
-    public FBUser currentAppUser; //user object for the Facebook user actually using the app.
-    private ArrayList<FBUser> friends; //ID of friends
-    private Bundle FBData;
-    private Bundle FBSession;
-    private Session s;
+    private FBUser currentAppUser= null; //user object for the Facebook user actually using the app.
+    private ArrayList<FBUser> friends = null; //ID of friends
+    private Bundle FBData = null;
+    private Session s = null; //current FB Session object
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-//	    setContentView(R.layout.activity_login);
-        /* We don't need an actual layout here; if the user is not logged in the
-        *  code below automatically brings up the facebook login anyway. If the user is
-        * already logged in, it brings up the main activity.
-        */
-        startFBSession();
-       
+        //startFBSession();
+        test();
     }
 
     protected void onResume()
@@ -41,7 +37,6 @@ public class Login extends Activity
     protected void onStart()
     {
     	super.onStart();
-    	startFBSession();
     }
     
     protected void onPause()
@@ -52,35 +47,44 @@ public class Login extends Activity
     protected void onRestart()
     {
     	super.onRestart();
-    	startFBSession();
     }
     
     protected void onStop()
     {
     	super.onStop();
-    	stopFBSession();
     }
     
     protected void onDestroy()
     {
     	super.onDestroy();
-    	stopFBSession();
     }
     
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultCode, data);
+        //start the main activity
+    	super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-        //Start the main activity
-        Transporter.packIntoBundle(FBData, Transporter.USER, currentAppUser);
-        Transporter.packIntoBundle(FBData, Transporter.FRIENDS, friends);
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(Transporter.FBDATA, FBData);
-        startActivity(intent);
+        pack();
+        start();
     }
     
-    private void startFBSession(){
+    protected void pack()
+    {
+    	FBData = new Bundle();
+    	Transporter.pack(FBData, Transporter.USER, currentAppUser);
+    	Transporter.pack(FBData, Transporter.FRIENDS, friends);
+    }
+    
+    protected void start()
+    {
+    	 Intent intent = new Intent(this, MainActivity.class);
+         intent.putExtras(FBData);
+         startActivity(intent);
+    }
+    
+    protected void startFBSession()
+    {
     	 // start Facebook Login
         s = Session.openActiveSession(this, true, new Session.StatusCallback()
         {
@@ -118,12 +122,29 @@ public class Login extends Activity
                 }
             }
         });
-        
-        //save the session in pair
-        Session.saveSession(s, FBSession);
     }
     
-    private void stopFBSession(){
+    protected void stopFBSession()
+    {
     	s.close();
+    }
+    
+    @SuppressWarnings("deprecation")
+	protected void test()
+    {// sets a dummy user for testing purposes
+    	currentAppUser = new FBUser("0", "John Doe", true);
+    	friends = new ArrayList<FBUser>();
+    	for(int i=1; i<11; i++){
+    		friends.add(new FBUser(Integer.toString(i), Integer.toString(i), false));
+    	}
+    	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
+
+    	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", currentAppUser.getUID(), currentAppUser.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));
+    	wishes.add(new WishItem("dummyID2", "A Feast of Ice and Fire", currentAppUser.getUID(), currentAppUser.getName(), "", "", "Fresh out of the series that redefined fantasy, comes the cookbook that may just redefine dinner . . . and lunch, and breakfast. ", "20", 0, new Date(3,4,2014)));
+    	
+    	currentAppUser.setList(wishes);
+    	
+    	pack();
+    	start();
     }
 }

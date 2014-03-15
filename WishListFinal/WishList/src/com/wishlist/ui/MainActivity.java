@@ -5,23 +5,23 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-//import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+
 import com.wishlist.db.*;
-import com.wishlist.obj.User;
-//import android.widget.TextView;
+import com.wishlist.obj.*;
+
 
 /*
  * This class displays two fragments, one for the user's actual wish list and another for their friends list.
  *
  */
 
-public class MainActivity extends FragmentActivity implements
-    ActionBar.TabListener
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
 
     /**
@@ -33,75 +33,26 @@ public class MainActivity extends FragmentActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter; //returns the appropriate fragment for each tab. Defined below.
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private DBCom db;
-    private Bundle FBData;
-    private User appUser;
-    private User currentUser;
-    private ArrayList<User> friends;
-    public static final int COUNT = 2;
-
-    @Override
+    private ActionBar actionBar;
+    
+    private DBCom db; //DB pointer
+    private Bundle userData; //bundle from login
+    private User appUser; //the app user
+    private User currentUser; //current user to view the data
+    private ArrayList<User> friends; //friends of the app user
+    
+     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //set up DB communication
-        db = DBCom.instance();
-        
-        //retrieve data from intent
-        FBData = this.getIntent().getExtras();
-        appUser = FBData.getParcelable(Transporter.USER);
-        friends = FBData.getParcelableArrayList(Transporter.FRIENDS);
-        
-        //get wishes for user
-        appUser.setList(db.listWishes(appUser.getUID()));
-        
-        //set current user as app user
-        currentUser = appUser;
-        
-        // Set up the action bar. (It contains the tabs)
-        final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setTitle(R.string.app_name);
-
-        // Create the adapter that will return a fragment for each of the two
-        // tabs of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(
-            getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
-        {
-            @Override
-            public void onPageSelected(int position)
-            {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++)
-        {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(actionBar.newTab()
-                             .setText(mSectionsPagerAdapter.getPageTitle(i))
-                             .setTabListener(this));
-        }
+        initDB(); //set up DB communication
+        initData(); //load data from login
+        initGraphics(); //load graphics
     }
 
     protected void onStart(){
@@ -133,6 +84,73 @@ public class MainActivity extends FragmentActivity implements
     	super.onDestroy();
     }
     
+    protected void initDB(){
+    	//set up DB communication
+        db = DBCom.instance();
+    }
+    
+    @SuppressWarnings("unchecked")
+	protected void initData(){
+    	//retrieve data from intent
+    	userData = getIntent().getExtras();
+        appUser = (FBUser) Transporter.unpackObject(userData, Transporter.USER);
+        friends = (ArrayList<User>) Transporter.unpackArrayList(userData, Transporter.FRIENDS);
+        
+        //set current user as app user
+        setCurrentUser(appUser);
+        //load wishes from database
+        //loadDBData(appUser);
+    }
+    
+    protected void setCurrentUser(User u){
+    	currentUser = u;
+    }
+    
+    protected void loadDBData(User u){
+    	u.setList(db.listWishes(u.getUID()));
+    }
+    
+    protected void initGraphics()
+    {
+    	// Set up the action bar. (It contains the tabs)
+    	actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setTitle(R.string.app_name);
+
+        // Create the adapter that will return a fragment for each of the two tabs of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        /* When swiping between different sections, select the corresponding 
+         * tab. We can also use ActionBar.Tab#select() to do this if we have 
+         * a reference to the Tab.
+         */
+        
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
+        {
+            @Override
+            public void onPageSelected(int position)
+            {
+                actionBar.setSelectedNavigationItem(position);
+            }
+        });
+
+        // For each of the sections in the app, add a tab to the action bar.
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++)
+        {
+            // Create a tab with text corresponding to the page title defined by
+            // the adapter. Also specify this Activity object, which implements
+            // the TabListener interface, as the callback (listener) for when
+            // this tab is selected.
+            actionBar.addTab(actionBar.newTab()
+                             .setText(mSectionsPagerAdapter.getPageTitle(i))
+                             .setTabListener(this));
+        }	
+    }
+    
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -142,8 +160,7 @@ public class MainActivity extends FragmentActivity implements
     }*/
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab,
-                              FragmentTransaction fragmentTransaction)
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
     {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
@@ -151,48 +168,64 @@ public class MainActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab,
-                                FragmentTransaction fragmentTransaction)
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
     {
     }
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab,
-                                FragmentTransaction fragmentTransaction)
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
     {
+    	onTabSelected(tab, fragmentTransaction);
     }
-
+    
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter
+    final class SectionsPagerAdapter extends FragmentPagerAdapter
     {
-
+    	private Fragment arr[];
+    	private boolean changeView;
+    	
+    	public static final int WISH = 0;
+        public static final int FRIEND = 1;
+        public static final int COUNT = 2;
+    	
         public SectionsPagerAdapter(FragmentManager fm)
         {
             super(fm);
+            arr = new Fragment[COUNT];
+            arr[WISH] = createFragment(new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+            arr[FRIEND] = createFragment(new FriendsListDisplayFragment(), new Bundle(), Transporter.FRIENDS, friends);
+            changeView = false;
         }
-
-        @Override
+        
+        private Fragment createFragment(Fragment f, Bundle b, String key, ArrayList<? extends Parcelable> p){
+        	b.putParcelableArrayList(key, p);
+        	f.setArguments(b);
+        	return f;
+        }
+        
+        private Fragment createFragment(Fragment f, Bundle b, String key, Parcelable p){
+        	b.putParcelable(key, p);
+        	f.setArguments(b);
+        	return f;
+        }
+        
+         @Override
         public Fragment getItem(int position)
         {
             // getItem is called to instantiate the fragment for the given page.
             // Return the appropriate fragment
-            Bundle args = new Bundle();
-            Fragment fragment;
-            switch(position)
+        	switch(position)
             {
-	            case 0:
-	            	Transporter.packIntoBundle(args, Transporter.WISH, currentUser.getList());
-	            	fragment = new WishDisplayFragment();
-	                fragment.setArguments(args);
-	                return fragment;
-	            case 1:
-	            	Transporter.packIntoBundle(args, Transporter.FRIENDS, friends);
-	                fragment = new FriendsListDisplayFragment();
-	                fragment.setArguments(args);
-	                return fragment;
+	            case WISH:
+	            	if(changeView){
+	            		arr[WISH] = createFragment(new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+	            	}
+	                return arr[WISH];
+	            case FRIEND:
+	                return arr[FRIEND];
 	            default:
 	                throw new RuntimeException("Invalid position");
             }
@@ -211,14 +244,14 @@ public class MainActivity extends FragmentActivity implements
             Locale l = Locale.getDefault();
             switch (position)
             {
-	            case 0:
+	            case WISH:
 	                return getString(R.string.title_section1).toUpperCase(l);
-	            case 1:
+	            case FRIEND:
 	                return getString(R.string.title_section2).toUpperCase(l);
 	            default:
-	                return null;
+	                throw new RuntimeException("Error Occured.");
             }
         }
     }
-
+    
 }

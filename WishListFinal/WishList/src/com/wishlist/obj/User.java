@@ -10,6 +10,7 @@ package com.wishlist.obj;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 import android.os.Parcelable;
 
 public abstract class User implements Parcelable
@@ -20,19 +21,25 @@ public abstract class User implements Parcelable
     protected ArrayList<WishItem> wList; //wishlist for user
     
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
+    
+    //hashcode for sorting
     public static final char NAME = 'n';
     public static final char DATE = 'd';
     public static final char PRICE = 'p';
     
-    public User()
-    {
+    public User(){
+    	isAppUser = false;
+    	uid = "";
+    	name = "";
+    	wList = new ArrayList<WishItem>();
     }
-
+    
     public User(String uid, String name, boolean isAppUser)
     {
         setName(name);
         setUID(uid);
         setIsAppUser(isAppUser);
+        setList(new ArrayList<WishItem>()); 
     }
 
     public String getName()
@@ -75,6 +82,12 @@ public abstract class User implements Parcelable
     public boolean removeItem(WishItem w)
     {
         return wList.remove(w);
+    }
+    
+    public boolean removeItem(int position){
+    	if(position < 0 || position >= wList.size()) return false;
+    	wList.remove(position);
+    	return true;
     }
 
     public static void sortList(char code, ArrayList<WishItem> wList)

@@ -11,11 +11,13 @@ package com.wishlist.obj;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
-
 public class FBUser extends User
 {
 
+	public FBUser(){
+		
+	}
+	
     public FBUser(String uid, String name, boolean isAppUser)
     {
         super(uid, name, isAppUser);
@@ -45,12 +47,9 @@ public class FBUser extends User
     public void writeToParcel(Parcel out, int flags)
     {
 
-        if(isAppUser)
-            out.writeInt(1);
-        else
-            out.writeInt(0);
-
-        out.writeString(uid); // I assume we can write ints like this
+        if(isAppUser) out.writeInt(1);
+        else out.writeInt(0);
+        out.writeString(uid);
         out.writeString(name);
         out.writeTypedList(wList);
     }
@@ -58,10 +57,10 @@ public class FBUser extends User
     private FBUser(Parcel in)
     {
         super();
-        in.readTypedList(wList, WishItem.CREATOR);
-        setName(in.readString());
-        setUID(in.readString());
-        if(in.readInt() == 1) isAppUser = true;
+    	if(in.readInt() == 1) isAppUser = true;
         else isAppUser=false;
+        setUID(in.readString());
+        setName(in.readString());
+        in.readTypedList(wList, WishItem.CREATOR);
     }  
 }

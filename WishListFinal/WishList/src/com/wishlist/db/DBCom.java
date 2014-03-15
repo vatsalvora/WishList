@@ -30,7 +30,7 @@ import android.util.Log; //This needs to be imported to implement printing to lo
  *
  *  remove wid from methods - generate
  *
- *  Do we want to have ints as inputs to the methods? What does facebook return??!
+ *  Do we want to have ints as inputs to the methods? What does facebook return??! It's string. (Joon)
  */
 
 public class DBCom
@@ -213,7 +213,8 @@ public class DBCom
         }
         return query;
     }
-
+    
+    //this too (Joon)
     private static void queryAppend(String toAppend, String... in)
     {
     	for(String i : in)
@@ -463,7 +464,7 @@ public class DBCom
         		throw new RuntimeException("WTF is this? This is not supported...");
         }
         queryAppend(command, "WHERE", "wid=", wi.getWID());
-        return true;
+        return sendSQLnoReturn(command);
     }
    
 }

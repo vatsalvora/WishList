@@ -12,6 +12,7 @@ package com.wishlist.obj;
 
 import java.util.*;
 import java.sql.Date;
+import android.graphics.drawable.Drawable;
 //import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -24,7 +25,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     protected String description=""; //description of item
     protected Date dateAdded; //date of the item added to user
     protected String price=""; //price of item
-    //protected Drawable picture; //Picture object for image of item. Implement in sprint 2
+    protected Drawable picture; //Picture object for image of item. Implement in sprint 2
     protected int status;  //status of item. Open, registered, bought, etc
     // What are the status codes? Assuming 0 = Open, 1 = registered, 2 = bought. 
     protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
@@ -115,6 +116,40 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     	return buyer.second;
     }
     
+    public String getDescription()
+    {
+        return description;
+    }
+    
+    public String getPrice()
+    {
+        return price;
+    }
+    
+    public Date getDate()
+    {
+        return dateAdded;
+    }
+    
+    public int getStatus()
+    {
+        return status;
+    }
+    
+    public Drawable getDrawable(){
+    	return picture;
+    }
+    
+    public String getComment(String ID)
+    {
+        return comments.get(ID);
+    }
+    
+    public int getUpdate()
+    {
+        return update;
+    }
+    
     private final void setWish(String ID, String name)
     {
     	if(wish == null) wish = new StringPair(ID, name);
@@ -122,11 +157,13 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     		wish.first = ID;
     		wish.second = name;
     	}
+    	update(WISH);
     }
     
     public void setWishName(String name)
     {
     	wish.second = name;
+    	update(WISH);
     }
     
     private final void setUser(String ID, String name)
@@ -137,6 +174,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     		user.first = ID;
     		user.second = name;
     	}
+    	update(USER);
     }
     
     public final void setBuyer(String ID, String name)
@@ -147,22 +185,13 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     		buyer.first = ID;
     		buyer.second = name;
     	}
+    	update(BUYER);
     }
     
-    public int getStatus()
-    {
-        return status;
-    }
-
     public final void setStatus(int status)
     {
         this.status = status;
         update(STATUS);
-    }
-
-    public String getDescription()
-    {
-        return description;
     }
 
     public void setDescription(String description)
@@ -171,20 +200,10 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         update(DESC);
     }
 
-    public String getPrice()
-    {
-        return price;
-    }
-
     public void setPrice(String price)
     {
         this.price = price;
         update(PRICE);
-    }
-
-    public Date getDate()
-    {
-        return dateAdded;
     }
 
     public void setDate(Date d)
@@ -193,24 +212,14 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         update(DATE);
     }
 
-    public String getComment(String ID)
-    {
-        return comments.get(ID);
-    }
-
     public void setComment(String ID, String comment)
     {
         comments.put(ID, comment);
     }
-
+    
     public int compareTo(WishItem arg0)
     {
         return this.wish.second.compareTo(arg0.wish.second);
-    }
-
-    public int getUpdate()
-    {
-        return update;
     }
 
     private void update(int code)

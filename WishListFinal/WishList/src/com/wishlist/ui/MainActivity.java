@@ -195,21 +195,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         {
             super(fm);
             arr = new Fragment[COUNT];
-            createFragment(arr[WISH], new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+            arr[WISH] = createFragment(new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+            arr[FRIEND] = createFragment(new FriendsListDisplayFragment(), new Bundle(), Transporter.FRIENDS, friends);
             changeView = false;
-            createFragment(arr[FRIEND], new FriendsListDisplayFragment(), new Bundle(), Transporter.FRIENDS, friends);
         }
         
-        private void createFragment(Fragment target, Fragment newfrag, Bundle b, String key, ArrayList<? extends Parcelable> p){
-        	target = newfrag;
-        	Transporter.pack(b, key, p);
-        	target.setArguments(b);
+        private Fragment createFragment(Fragment f, Bundle b, String key, ArrayList<? extends Parcelable> p){
+        	b.putParcelableArrayList(key, p);
+        	f.setArguments(b);
+        	return f;
         }
         
-        private void createFragment(Fragment target, Fragment newfrag, Bundle b, String key, Parcelable p){
-        	target = newfrag;
-        	Transporter.pack(b, key, p);
-        	target.setArguments(b);
+        private Fragment createFragment(Fragment f, Bundle b, String key, Parcelable p){
+        	b.putParcelable(key, p);
+        	f.setArguments(b);
+        	return f;
         }
         
          @Override
@@ -221,7 +221,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             {
 	            case WISH:
 	            	if(changeView){
-	            		createFragment(arr[WISH], new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+	            		arr[WISH] = createFragment(new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
 	            	}
 	                return arr[WISH];
 	            case FRIEND:

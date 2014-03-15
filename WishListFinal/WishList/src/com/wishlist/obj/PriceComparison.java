@@ -7,6 +7,7 @@ package com.wishlist.obj;
 
 import java.util.Comparator;
 
+
 public class PriceComparison implements Comparator<WishItem>
 {
 

@@ -3,10 +3,10 @@ package com.wishlist.ui;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -81,15 +83,23 @@ So the UI elements for certain actions are hidden based on user.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
     	setHasOptionsMenu(true);
-        ListView listView = (ListView) inflater.inflate(R.layout.fragment_wish_display,
-                                         container, false);
+        final ListView listView = (ListView) inflater.inflate(R.layout.fragment_wish_display, container, false);
 
-            final ArrayList<String> list = new ArrayList<String>();
-            for (int i = 0; i < user.getList().size(); ++i) {
-              list.add(user.getList().get(i).getName());
+        final ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
+        
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new OnItemClickListener(){
+        	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+        		Intent i = new Intent(getActivity(), ItemView.class);
+        		Bundle b = new Bundle();
+        		Transporter.pack(b, Transporter.USER, user.getIsAppUser() ? 1:0);
+        		Transporter.pack(b, Transporter.WISH, (WishItem) listView.getItemAtPosition(position));
+        		i.putExtras(b);
+        		startActivity(i);
             }
-            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
-            listView.setAdapter(adapter);
+        });
         
         return listView;
     }
@@ -122,6 +132,7 @@ So the UI elements for certain actions are hidden based on user.
     
     protected boolean addWishItem()
     {   
+    	//TODO
     	return true;
     }
     
@@ -154,7 +165,8 @@ So the UI elements for certain actions are hidden based on user.
 		}
 	}
     
-    protected void test(){
+    @SuppressWarnings("deprecation")
+	protected void test(){
 		// Dummy user
 		user = new FBUser("0", "John Doe", true);
     	ArrayList<WishItem> wishes = new ArrayList<WishItem>();

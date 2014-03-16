@@ -176,6 +176,7 @@ public class WishListServer
                     catch(IOException ioe)
                     {
                         System.out.println("Client closed");
+                        done = true;
                     }
                     catch (ClassNotFoundException e)
                     {

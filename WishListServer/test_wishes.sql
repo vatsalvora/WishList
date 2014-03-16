@@ -3,6 +3,9 @@
 -- Ideally, only the admin or any superusers should have the
 -- permission to drop tables.
 
+-- REMEMBER TO GIVE wl_app A PASSWORD
+
+
 DROP TABLE wishes;
 
 CREATE TABLE wishes (

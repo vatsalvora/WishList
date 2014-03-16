@@ -375,8 +375,10 @@ public class DBCom
          * to the given user
          */
 
+        String uidStr = "\'" + uid + "\'";
+
         ArrayList<WishItem> wishList = new ArrayList<WishItem>();
-        command = queryBuilder(SELECT, ALL, FROM, "wishes", WHERE, "uid=", uid);
+        command = queryBuilder(SELECT, ALL, FROM, "wishes", WHERE, "uid=", uidStr);
         ResultSet resultSet = sendSQLwithReturn(command);
 
         String bid, wid;

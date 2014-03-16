@@ -1,5 +1,11 @@
+/*
+ * Created by Alex Bryan
+ *
+ * Created only to test server side capabilities
+ */
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
 public class WLClientTest
 {   
     public static final int STRING = 0;
@@ -74,6 +80,14 @@ public class WLClientTest
                     {
                         boolean isUser = com.isUser("0");
                         System.out.println(isUser);
+                    }
+                    else if(msg.equals("list_wishes"))
+                    {
+                        ArrayList<WishItem> wishes = com.listWishes("13");
+                        for(int i = 0; i < wishes.size(); i++)
+                        {
+                            System.out.println(wishes.get(i).toString());
+                        }
                     }
                         
                     else

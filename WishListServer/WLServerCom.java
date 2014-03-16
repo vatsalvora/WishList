@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.io.BufferedInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 public class WLServerCom {
     private static int port = 5600;
@@ -25,6 +26,7 @@ public class WLServerCom {
     public static final int WISH_RM = 5;
     public static final int WISH_UP = 6;
     public static final int IS_USER = 7;
+    public static final int LIST_WISHES = 8;
 
     public WLServerCom() throws UnknownHostException, IOException
     {
@@ -93,6 +95,16 @@ public class WLServerCom {
         sendCode(IS_USER);
         sendObject(wid);
         return dis.readBoolean();
+    }
+    public ArrayList<WishItem> listWishes(String uid) throws IOException,
+           ClassNotFoundException
+    {
+        /** Returns an ArrayList of wish objects that belong to the given
+         * user 
+         */
+        sendCode(LIST_WISHES);
+        sendObject(uid);
+        return (ArrayList<WishItem>)getObject();
     }
 
 }

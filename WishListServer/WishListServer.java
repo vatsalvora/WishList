@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 public class WishListServer
 {
@@ -20,6 +21,7 @@ public class WishListServer
     public static final int WISH_RM = 5;
     public static final int WISH_UP = 6;
     public static final int IS_USER = 7;
+    public static final int LIST_WISHES = 8;
 
     private ServerSocket server;
     private int port = 5600;
@@ -148,6 +150,13 @@ public class WishListServer
                         dos.writeBoolean(isUser);
                         dos.flush();
                     }                    
+                    else if(code == LIST_WISHES)
+                    {
+                        String uid = (String)ois.readObject();
+                        ArrayList<WishItem> uWishes = db.listWishes(uid);
+                        oos.writeObject(uWishes);
+                        oos.flush();
+                    }
 
                 }
                 catch(IOException ioe)

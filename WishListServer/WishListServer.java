@@ -176,19 +176,6 @@ public class WishListServer
                     catch(IOException ioe)
                     {
                         System.out.println("Client closed");
-
-                        System.out.println("Waiting for new client ...");
-                        clientSocket = server.accept();
-                        System.out.println("Client accepted: " + clientSocket);
-
-                        ois = new ObjectInputStream(
-                            new BufferedInputStream(
-                                clientSocket.getInputStream()));
-
-                        oos = new ObjectOutputStream(
-                            clientSocket.getOutputStream());
-
-                        continue;
                     }
                     catch (ClassNotFoundException e)
                     {

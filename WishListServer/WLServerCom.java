@@ -15,6 +15,7 @@ public class WLServerCom {
     protected Socket socket;
     protected ObjectOutputStream oos;
     protected ObjectInputStream ois;
+    protected DataInputStream dis;
 
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
@@ -23,6 +24,7 @@ public class WLServerCom {
     public static final int USER_SEND = 4;
     public static final int WISH_RM = 5;
     public static final int WISH_UP = 6;
+    public static final int IS_USER = 7;
 
     public WLServerCom() throws UnknownHostException, IOException
     {
@@ -38,6 +40,9 @@ public class WLServerCom {
 
         //Open an input stream
         ois = new ObjectInputStream(
+                socket.getInputStream());
+
+        dis = new DataInputStream(
                 socket.getInputStream());
      
     }
@@ -81,6 +86,13 @@ public class WLServerCom {
         /** Updates a wish in the db */
         rmWish(wi.getWID());
         addWish(wi);
+    }
+    public boolean isUser(String wid) throws IOException, ClassNotFoundException
+    {
+        /** Returns true if given user is in database */
+        sendCode(IS_USER);
+        sendObject(wid);
+        return dis.readBoolean();
     }
 
 }

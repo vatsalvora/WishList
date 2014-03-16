@@ -239,7 +239,8 @@ public class DBCom
 
         /** Returns true if given uid is in database */
         
-        command = queryBuilder(SELECT, ALL, FROM, "users", WHERE, "uid =", uid);
+        String uidStr = "\'" + uid + "\'";
+        command = queryBuilder(SELECT, ALL, FROM, "users", WHERE, "uid =", uidStr);
         ResultSet resultSet = sendSQLwithReturn(command);
 
         boolean isU = false;

@@ -70,6 +70,11 @@ public class WLClientTest
                         wi.setDescription("Delicious");
                         com.updateWish(wi);
                     } 
+                    else if(msg.equals("is_user"))
+                    {
+                        boolean isUser = com.isUser("0");
+                        System.out.println(isUser);
+                    }
                         
                     else
                     {
@@ -80,6 +85,11 @@ public class WLClientTest
                 catch (IOException ioe)
                 {
                     ioe.printStackTrace();
+                    break;
+                }
+                catch (ClassNotFoundException e)
+                {
+                    e.printStackTrace();
                     break;
                 }
             }

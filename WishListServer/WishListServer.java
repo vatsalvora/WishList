@@ -19,12 +19,15 @@ public class WishListServer
     public static final int USER_SEND = 4;
     public static final int WISH_RM = 5;
     public static final int WISH_UP = 6;
+    public static final int IS_USER = 7;
 
     private ServerSocket server;
     private int port = 5600;
     private Socket socket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+
+    private DataOutputStream dos;
 
     private DBCom db;
 
@@ -86,6 +89,9 @@ public class WishListServer
             oos = new ObjectOutputStream(
                 socket.getOutputStream());
 
+            dos = new DataOutputStream(
+                    socket.getOutputStream());
+
 
             boolean done = false;
             int code;
@@ -135,7 +141,13 @@ public class WishListServer
                         String wid = (String)ois.readObject();
                         db.deleteWish(wid);
                     }
-                    
+                    else if(code == IS_USER)
+                    {
+                        String uid = (String)ois.readObject();
+                        boolean isUser = db.isUser(uid);
+                        dos.writeBoolean(isUser);
+                        dos.flush();
+                    }                    
 
                 }
                 catch(IOException ioe)

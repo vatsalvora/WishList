@@ -5,9 +5,10 @@ public class WLClientTest
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
     public static final int USER_ADD = 2;
-    public static final int WISHITEM = 3;
+    public static final int WISH_ADD = 3;
     public static final int USER_SEND = 4;
-
+    public static final int WISH_RM = 5;
+    public static final int WISH_UP = 6;
 
     public static void main(String[] args)
     {
@@ -15,7 +16,7 @@ public class WLClientTest
         FBUser tu = new FBUser("0", "alex", false);
         WishItem wi = new WishItem("w-000", "Coke", "u-000", "Alex");
 
-                try
+        try
         {
             boolean done = false;
             String msg = "";
@@ -40,14 +41,12 @@ public class WLClientTest
 
                     else if(msg.equals("user_add"))
                     {
-                        com.sendCode(USER_ADD);
-                        com.sendObject(tu);
+                        com.addUser(tu);
                     }
 
-                    else if(msg.equals("wish_go"))
+                    else if(msg.equals("wish_add"))
                     {
-                        com.sendCode(WISHITEM);
-                        com.sendObject(wi);
+                        com.addWish(wi); 
                     }
                     else if(msg.equals("user_send"))
                     {
@@ -62,6 +61,16 @@ public class WLClientTest
                             e.printStackTrace();
                         }
                     }
+                    else if(msg.equals("wish_rm"))
+                    {
+                        com.rmWish("w-000");
+                    }
+                    else if(msg.equals("wish_update"))
+                    {
+                        wi.setDescription("Delicious");
+                        com.updateWish(wi);
+                    } 
+                        
                     else
                     {
                         com.sendCode(STRING);

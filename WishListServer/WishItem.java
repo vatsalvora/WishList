@@ -112,7 +112,14 @@ public class WishItem implements Comparable<WishItem>, Serializable
     
     public String getBID()
     {
-        return buyer.first;
+        if(buyer == null)
+        {
+            return null;
+        }
+        else
+        {
+            return buyer.first;
+        }
     }
     
     public String getBuyerName()
@@ -122,8 +129,12 @@ public class WishItem implements Comparable<WishItem>, Serializable
     
     private final void setWish(String ID, String name)
     {
-        if(wish == null) wish = new StringPair(ID, name);
-        else{
+        if(wish == null)
+        {
+            wish = new StringPair(ID, name);
+        }
+        else
+        {
                 wish.first = ID;
                 wish.second = name;
         }
@@ -136,7 +147,10 @@ public class WishItem implements Comparable<WishItem>, Serializable
     
     private final void setUser(String ID, String name)
     {
-        if(user == null) user = new StringPair(ID, name);
+        if(user == null)
+        {
+            user = new StringPair(ID, name);
+        }
         else
         {
                 user.first = ID;
@@ -146,7 +160,10 @@ public class WishItem implements Comparable<WishItem>, Serializable
     
     public final void setBuyer(String ID, String name)
     {
-        if(buyer == null) buyer = new StringPair(ID, name);
+        if(buyer == null)
+        {
+            buyer = new StringPair(ID, name);
+        }
         else
         {
                 buyer.first = ID;

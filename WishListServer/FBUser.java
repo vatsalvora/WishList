@@ -10,9 +10,10 @@
 public class FBUser extends User
 {
 
-	public FBUser(){
+    public FBUser()
+    {
 		
-	}
+    }
 	
     public FBUser(String uid, String name, boolean isAppUser)
     {
@@ -30,9 +31,4 @@ public class FBUser extends User
         String res = uid + "\t" + name + "\t" + isAppUser;
         return res;
     }
-
-
-    
-
-      
 }

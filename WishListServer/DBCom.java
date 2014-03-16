@@ -16,7 +16,7 @@ public class DBCom
 {
 
     private static DBCom _instance = null;
-	
+        
     /* Alex's ip. Please don't DDOS */
     //private String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
     private String dburl = "jdbc:postgresql://localhost/wishlist";
@@ -45,10 +45,10 @@ public class DBCom
     private Connection connect;
     
     public static DBCom instance(){
-    	if(_instance == null){
-    		_instance = new DBCom();
-    	}
-    	return _instance;
+        if(_instance == null){
+                _instance = new DBCom();
+        }
+        return _instance;
     }
     
     private DBCom()
@@ -197,17 +197,17 @@ public class DBCom
     //this too (Joon)
     private static void queryAppend(String toAppend, String... in)
     {
-    	for(String i : in)
-    	{
-    		toAppend += i + " ";
-    	}
-    	toAppend += "\n";
+        for(String i : in)
+        {
+                toAppend += i + " ";
+        }
+        toAppend += "\n";
     }
     
     public boolean addUser(String uid, String name)
     {
         /* Do we need to keep this method around ? */
-    	command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
+        command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
         return sendSQLnoReturn(command);
 
     }
@@ -238,8 +238,8 @@ public class DBCom
     {
 
         /** Returns true if given uid is in database */
-    	
-    	command = queryBuilder(SELECT, ALL, FROM, "users", WHERE, "uid =", uid);
+        
+        command = queryBuilder(SELECT, ALL, FROM, "users", WHERE, "uid =", uid);
         ResultSet resultSet = sendSQLwithReturn(command);
 
         boolean isU = false;
@@ -326,10 +326,28 @@ public class DBCom
         }
         
 
+        /*
+         * Not sure if all of these are necessary.
+         * The thrid one (price.equals("")) is necessary for sure
+         *
+         * Price is represented by the money type in the db.
+         * Inserting '' for a money type defaults to $0.00.
+         * Is this what we want?
+         */
         if (price == "0.00")
         {
-            priceStr = "NULL";
+            priceStr = "\'\'";
         }
+        if(price == null)
+        {
+            priceStr = "\'\'";
+        }
+        if(price.equals(""))
+        {
+            priceStr = "\'\'";
+        }
+
+
         else
         {
             priceStr = price;
@@ -339,6 +357,7 @@ public class DBCom
                                       uid, bid, name, descr, priceStr, status, wid);
 
         command = queryBuilder(INSERT, INTO, "wishes", "(uid, bid, name, descr, price, status, wid)", "VALUES", tuple);
+        System.out.println(command);
 
         return sendSQLnoReturn(command);
 
@@ -372,10 +391,10 @@ public class DBCom
                 //uid is in col 2, but we already have that since it was passed
                 
                 /* What happens when value in DB is NULL ? */
-            	//Answer: Throw an exception. (Joon)
-            	wid = resultSet.getString(1);
-            	if(wid == null) throw new RuntimeException("Item not in database!");
-            	bid = resultSet.getString(3);
+                //Answer: Throw an exception. (Joon)
+                wid = resultSet.getString(1);
+                if(wid == null) throw new RuntimeException("Item not in database!");
+                bid = resultSet.getString(3);
                 name = resultSet.getString(4);
                 descr = resultSet.getString(5);
                 price = resultSet.getString(6);
@@ -406,8 +425,10 @@ public class DBCom
          * delete a local copy of the wish and does not remove the wish
          * from the wList object in the User class
          */
-    	
-    	command = queryBuilder(DELETE, FROM, "wishes", WHERE, "wid=", wid);
+        
+        String widStr = "\'" + wid + "\'";
+        command = queryBuilder(DELETE, FROM, "wishes", WHERE, "wid=", widStr);
+        System.out.println(command);
         return sendSQLnoReturn(command);
     }
 
@@ -422,40 +443,48 @@ public class DBCom
          * already match DB entry (Wait, why not?, says Joon)
          * Joon: Let's be more efficient.
          */
-    	
+
+        /*
+         * Doesn't work. Will work on later.
+         */
+        
         command = queryBuilder(UPDATE, "wishes");
         
-        switch(wi.getUpdate()){
-        	case WishItem.NONE:
-        		return false;
-        	case WishItem.BUYER:
-        		queryAppend(command, "SET", "bid=", wi.getBID(), "bname", wi.getBuyerName());
-        		break;
-        	case WishItem.DATE:
-        		queryAppend(command, "SET", "date=", wi.getDate().toString());
-        		break;
-        	case WishItem.DESC:
-        		queryAppend(command, "SET", "descr=", wi.getDescription());
-        		break;
-        	case WishItem.PICTURE:
-        		throw new UnsupportedOperationException();
-        	case WishItem.PRICE:
-        		queryAppend(command, "SET", "price=", wi.getPrice());
-        		break;
-        	case WishItem.USER:
-        		queryAppend(command, "SET", "uid=", wi.getUID(), "uname", wi.getUserName());
-        		break;
-        	case WishItem.WISH:
-        		queryAppend(command, "SET", "name=", wi.getName());
-        		break;
-        	case WishItem.STATUS:
-        		queryAppend(command, "SET", "status=", Integer.toString(wi.getStatus()));
-        		break;
-        	default:
-        		throw new RuntimeException("WTF is this? This is not supported...");
+        switch(wi.getUpdate())
+        {
+                case WishItem.NONE:
+                        return false;
+                case WishItem.BUYER:
+                        queryAppend(command, "SET", "bid=", wi.getBID(), "bname", wi.getBuyerName());
+                        break;
+                case WishItem.DATE:
+                        queryAppend(command, "SET", "date=", wi.getDate().toString());
+                        break;
+                case WishItem.DESC:
+                        queryAppend(command, "SET", "descr=", wi.getDescription());
+                        break;
+                case WishItem.PICTURE:
+                        throw new UnsupportedOperationException();
+                case WishItem.PRICE:
+                        queryAppend(command, "SET", "price=", wi.getPrice());
+                        break;
+                case WishItem.USER:
+                        queryAppend(command, "SET", "uid=", wi.getUID(), "uname", wi.getUserName());
+                        break;
+                case WishItem.WISH:
+                        queryAppend(command, "SET", "name=", wi.getName());
+                        break;
+                case WishItem.STATUS:
+                        queryAppend(command, "SET", "status=", Integer.toString(wi.getStatus()));
+                        break;
+                default:
+                        throw new RuntimeException("WTF is this? This is not supported...");
         }
         queryAppend(command, "WHERE", "wid=", wi.getWID());
+        System.out.println(command);
         return sendSQLnoReturn(command);
     }
+   
+
    
 }

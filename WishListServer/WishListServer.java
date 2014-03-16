@@ -15,8 +15,10 @@ public class WishListServer
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
     public static final int USER_ADD = 2;
-    public static final int WISHITEM = 3;
+    public static final int WISH_ADD = 3;
     public static final int USER_SEND = 4;
+    public static final int WISH_RM = 5;
+    public static final int WISH_UP = 6;
 
     private ServerSocket server;
     private int port = 5600;
@@ -116,10 +118,11 @@ public class WishListServer
                         db.addUser(tu);
                         System.out.println(msg);
                     }
-                    else if (code == WISHITEM)
+                    else if (code == WISH_ADD)
                     {
                         WishItem wi = (WishItem)ois.readObject();
                         msg = wi.toString();
+                        db.addWish(wi);
                         System.out.println(msg);
                     }
                     else if(code == USER_SEND)
@@ -127,6 +130,12 @@ public class WishListServer
                         oos.writeObject(fb);
                         oos.flush();                     
                     }
+                    else if(code == WISH_RM)
+                    {
+                        String wid = (String)ois.readObject();
+                        db.deleteWish(wid);
+                    }
+                    
 
                 }
                 catch(IOException ioe)

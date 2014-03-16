@@ -4,9 +4,9 @@ public class WLClientTest
 {   
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
-    public static final int FBUSER = 2;
+    public static final int USER_ADD = 2;
     public static final int WISHITEM = 3;
-    public static final int ECHO = 4;
+    public static final int USER_SEND = 4;
 
 
     public static void main(String[] args)
@@ -38,9 +38,9 @@ public class WLClientTest
                         com.sendObject("play");
                     }
 
-                    else if(msg.equals("user_go"))
+                    else if(msg.equals("user_add"))
                     {
-                        com.sendCode(FBUSER);
+                        com.sendCode(USER_ADD);
                         com.sendObject(tu);
                     }
 
@@ -49,13 +49,13 @@ public class WLClientTest
                         com.sendCode(WISHITEM);
                         com.sendObject(wi);
                     }
-                    else if(msg.equals("echo"))
+                    else if(msg.equals("user_send"))
                     {
-                        com.sendCode(ECHO);
+                        com.sendCode(USER_SEND);
                         try
                         {
-                            String s = (String)com.getObject();
-                            System.out.println(s);
+                            FBUser fb = (FBUser)com.getObject();
+                            System.out.println(fb.toString());
                         }
                         catch (ClassNotFoundException e)
                         {

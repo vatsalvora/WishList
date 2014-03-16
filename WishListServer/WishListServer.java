@@ -14,15 +14,17 @@ public class WishListServer
 {
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
-    public static final int FBUSER = 2;
+    public static final int USER_ADD = 2;
     public static final int WISHITEM = 3;
-    public static final int ECHO = 4;
+    public static final int USER_SEND = 4;
 
     private ServerSocket server;
     private int port = 5600;
     private Socket socket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+
+    private DBCom db;
 
     public WishListServer()
     {
@@ -34,6 +36,7 @@ public class WishListServer
         {
             e.printStackTrace();
         }
+        db = DBCom.instance();
     }
 
     public static void main(String[] args)
@@ -85,6 +88,8 @@ public class WishListServer
             boolean done = false;
             int code;
             String msg;
+
+            FBUser fb = new FBUser("0", "alex", false);
             while (!done)
             {
                 try
@@ -104,10 +109,11 @@ public class WishListServer
                         System.out.println(msg);
                     }              
 
-                    else if(code == FBUSER)
+                    else if(code == USER_ADD)
                     {
                         FBUser tu = (FBUser)ois.readObject();
                         msg = tu.toString();
+                        db.addUser(tu);
                         System.out.println(msg);
                     }
                     else if (code == WISHITEM)
@@ -116,11 +122,10 @@ public class WishListServer
                         msg = wi.toString();
                         System.out.println(msg);
                     }
-                    else if(code == ECHO)
+                    else if(code == USER_SEND)
                     {
-                        System.out.println("echo");
-                        oos.writeObject("echo");
-                        oos.flush();
+                        oos.writeObject(fb);
+                        oos.flush();                     
                     }
 
                 }

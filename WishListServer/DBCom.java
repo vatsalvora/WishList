@@ -19,8 +19,8 @@ public class DBCom
 	
     /* Alex's ip. Please don't DDOS */
     //private String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
-    private String dburl = "jdbc:postgresql://localhost/whlist";
-    private String username = "wishlist_app";
+    private String dburl = "jdbc:postgresql://localhost/wishlist";
+    private String username = "wl_app";
     private String password = "wl_app";
     private String command;
     private String output = "";
@@ -217,7 +217,19 @@ public class DBCom
 
         /** Adds user to database */
 
-        command = queryBuilder(INSERT, INTO, "users", VALUES, u.getUID(), u.getName());
+        String uName = "\'" + u.getName() + "\'";
+        String uid = "\'" + u.getUID() + "\'";
+
+        System.out.println(uName);
+        System.out.println(uid);
+
+        /*
+         * Using this query builder doesn't work. Suck it Joon
+         */
+        //command = queryBuilder(INSERT, INTO, "users", VALUES, uid, uName);
+
+        command = String.format("INSERT INTO users (uid, name) VALUES (%s, %s)",
+                uid, uName);
         
         return sendSQLnoReturn(command);
     }

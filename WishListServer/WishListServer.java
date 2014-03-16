@@ -26,12 +26,9 @@ public class WishListServer
     private ServerSocket server;
     private int port = 5600;
     private Socket socket;
-    private ObjectInputStream ois;
-    private ObjectOutputStream oos;
+    
 
-    private DataOutputStream dos;
-
-    private DBCom db;
+    private boolean serverOn = true;
 
     public WishListServer()
     {
@@ -43,154 +40,177 @@ public class WishListServer
         {
             e.printStackTrace();
         }
-        db = DBCom.instance();
+        //db = DBCom.instance();
+
+        while(serverOn)
+        {
+            try
+            {
+                Socket clientSocket = server.accept();
+
+                ClientServiceThread csThread = new ClientServiceThread(
+                        clientSocket);
+                csThread.start();
+            }
+            catch(IOException ioe)
+            {
+                System.out.println("Error occured on accept. Ignoring. trace:");
+                ioe.printStackTrace();
+            }
+        }
+        try
+        {
+            server.close();
+            System.out.println("Server stopped");
+        }
+        catch (Exception e)
+        {
+            System.out.println("Problem stopping server socket");
+            System.exit(-1);
+        }
+
     }
 
     public static void main(String[] args)
     {
-        WishListServer server = new WishListServer();
-        server.connection();
+        new WishListServer();
     }
 
-    public void playClem()
-    { 
-        /** Starts playing a song in my music player
-         * Written to test if server accepts commands correctly
-         */
-        String cmd = "clementine -p";
+    class ClientServiceThread extends Thread
+    {
+        Socket clientSocket;
+        boolean runThread = true;
+        private DBCom db;
+        private ObjectInputStream ois;
+        private ObjectOutputStream oos;
 
-        try
+        private DataOutputStream dos;
+
+        public ClientServiceThread()
+        {
+            super();
+        }
+
+        ClientServiceThread(Socket s)
+        {
+            clientSocket = s;
+            db = new DBCom();
+        }
+
+        public void run()
         {
             /*
-             * Nothing to do with WL. No need to understand this line
+             * TODO, make this function shorter with some helper functions
              */
-            Process pb = Runtime.getRuntime().exec(cmd);
-        }
-        catch (IOException ioe)
-        {
-            System.out.println("Something fucked up");
-        }
-    }
+            System.out.println("Client accepted: " + clientSocket);
 
-
-    public void connection()
-    {
-        /*
-         * Does all server-side logic.
-         * A huge mess, might as well just be main
-         */
-        System.out.println("Waiting for client ...");
-        try
-        {
-            socket = server.accept();
-            System.out.println("Client accepted: " + socket);
-
-            ois = new ObjectInputStream(
-                new BufferedInputStream(socket.getInputStream()));
-
-            oos = new ObjectOutputStream(
-                socket.getOutputStream());
-
-            dos = new DataOutputStream(
-                    socket.getOutputStream());
-
-
-            boolean done = false;
-            int code;
-            String msg;
-
-            FBUser fb = new FBUser("0", "alex", false);
-            while (!done)
+            try
             {
-                try
+                ois = new ObjectInputStream(
+                    new BufferedInputStream(clientSocket.getInputStream()));
+
+                oos = new ObjectOutputStream(
+                    clientSocket.getOutputStream());
+
+                dos = new DataOutputStream(
+                        clientSocket.getOutputStream());
+
+
+                boolean done = false;
+                int code;
+                String msg;
+
+                FBUser fb = new FBUser("0", "alex", false);
+                while (!done)
                 {
-                    code = ois.readInt();
-                    System.out.println(code);
+                    try
+                    {
+                        code = ois.readInt();
+                        System.out.println(code);
 
-                    if(code == STRING)
-                    {
-                        msg = (String)ois.readObject();
-                        System.out.println(msg);
-                    }
-                    else if(code == STRING_PLAY)
-                    {
-                        playClem();
-                        msg = (String)ois.readObject();
-                        System.out.println(msg);
-                    }              
+                        if(code == STRING)
+                        {
+                            msg = (String)ois.readObject();
+                            System.out.println(msg);
+                        }
+                        else if(code == USER_ADD)
+                        {
+                            FBUser tu = (FBUser)ois.readObject();
+                            msg = tu.toString();
+                            db.addUser(tu);
+                            System.out.println(msg);
+                        }
+                        else if (code == WISH_ADD)
+                        {
+                            WishItem wi = (WishItem)ois.readObject();
+                            msg = wi.toString();
+                            db.addWish(wi);
+                            System.out.println(msg);
+                        }
+                        else if(code == USER_SEND)
+                        {
+                            oos.writeObject(fb);
+                            oos.flush();                     
+                        }
+                        else if(code == WISH_RM)
+                        {
+                            String wid = (String)ois.readObject();
+                            db.deleteWish(wid);
+                        }
+                        else if(code == IS_USER)
+                        {
+                            String uid = (String)ois.readObject();
+                            boolean isUser = db.isUser(uid);
+                            dos.writeBoolean(isUser);
+                            dos.flush();
+                        }                    
+                        else if(code == LIST_WISHES)
+                        {
+                            String uid = (String)ois.readObject();
+                            ArrayList<WishItem> uWishes = db.listWishes(uid);
+                            oos.writeObject(uWishes);
+                            oos.flush();
+                        }
 
-                    else if(code == USER_ADD)
-                    {
-                        FBUser tu = (FBUser)ois.readObject();
-                        msg = tu.toString();
-                        db.addUser(tu);
-                        System.out.println(msg);
                     }
-                    else if (code == WISH_ADD)
+                    catch(IOException ioe)
                     {
-                        WishItem wi = (WishItem)ois.readObject();
-                        msg = wi.toString();
-                        db.addWish(wi);
-                        System.out.println(msg);
+                        System.out.println("Client closed");
+
+                        System.out.println("Waiting for new client ...");
+                        clientSocket = server.accept();
+                        System.out.println("Client accepted: " + clientSocket);
+
+                        ois = new ObjectInputStream(
+                            new BufferedInputStream(
+                                clientSocket.getInputStream()));
+
+                        oos = new ObjectOutputStream(
+                            clientSocket.getOutputStream());
+
+                        continue;
                     }
-                    else if(code == USER_SEND)
+                    catch (ClassNotFoundException e)
                     {
-                        oos.writeObject(fb);
-                        oos.flush();                     
-                    }
-                    else if(code == WISH_RM)
-                    {
-                        String wid = (String)ois.readObject();
-                        db.deleteWish(wid);
-                    }
-                    else if(code == IS_USER)
-                    {
-                        String uid = (String)ois.readObject();
-                        boolean isUser = db.isUser(uid);
-                        dos.writeBoolean(isUser);
-                        dos.flush();
-                    }                    
-                    else if(code == LIST_WISHES)
-                    {
-                        String uid = (String)ois.readObject();
-                        ArrayList<WishItem> uWishes = db.listWishes(uid);
-                        oos.writeObject(uWishes);
-                        oos.flush();
+                        e.printStackTrace();
+                        done = true;
                     }
 
                 }
-                catch(IOException ioe)
-                {
-                    System.out.println("Client closed");
 
-                    System.out.println("Waiting for new client ...");
-                    socket = server.accept();
-                    System.out.println("Client accepted: " + socket);
-
-                    ois = new ObjectInputStream(
-                        new BufferedInputStream(socket.getInputStream()));
-
-                    oos = new ObjectOutputStream(
-                        socket.getOutputStream());
-
-                    continue;
-                }
-                catch (ClassNotFoundException e)
-                {
-                    e.printStackTrace();
-                    done = true;
-                } 
+                ois.close();
+                oos.close();
+                clientSocket.close();
             }
-            ois.close();
-            oos.close();
-            socket.close();
-        }
-                
-        catch(IOException ioe)
-        {
-            System.out.println(ioe);
-        }
+        
+               
+            catch(IOException ioe)
+            {
+                System.out.println(ioe);
+            }
 
+        }
     }
+    
 }
 

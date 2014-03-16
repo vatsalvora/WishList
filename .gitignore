@@ -30,3 +30,6 @@ gen/
 
 ## Something left by Dolphin?
 .directory
+
+## Vim session files
+*.vims

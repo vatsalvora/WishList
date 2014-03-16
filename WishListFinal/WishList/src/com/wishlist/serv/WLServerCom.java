@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class WLServerCom {
     private static int port = 5600;
-    private static String servIP = "98.180.57.56";
 
     protected InetAddress host;
     protected Socket socket;
@@ -34,8 +33,8 @@ public class WLServerCom {
         
         //Create connection to server
         //For testing, server will be run on local host
-        //host = InetAddress.getLocalHost();
-        socket = new Socket(servIP, port);
+        host = InetAddress.getLocalHost();
+        socket = new Socket(host.getHostName(), port);
 
         //Open an output stream
         oos = new ObjectOutputStream(

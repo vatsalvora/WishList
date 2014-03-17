@@ -1,13 +1,16 @@
+package com.wishlist.serv;
+
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.io.BufferedInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+
+import com.wishlist.obj.FBUser;
+import com.wishlist.obj.WishItem;
 
 public class WLServerCom {
     private static int port = 5600;
@@ -96,7 +99,9 @@ public class WLServerCom {
         sendObject(wid);
         return dis.readBoolean();
     }
-    public ArrayList<WishItem> listWishes(String uid) throws IOException,
+    
+    @SuppressWarnings("unchecked")
+	public ArrayList<WishItem> listWishes(String uid) throws IOException,
            ClassNotFoundException
     {
         /** Returns an ArrayList of wish objects that belong to the given

@@ -57,7 +57,7 @@ public class DBCom
         return _instance;
     }
     
-    public DBCom()
+    private DBCom()
     {
         //This is the constructor for the Database Communication Object. An instance of this object is required to
         //use any coomunication methods. It provides the setup, linking the app with the postgres driver.

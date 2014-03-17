@@ -14,6 +14,8 @@ import android.widget.*;
 
 public class ItemView extends FragmentActivity implements DialogListener
 {
+	private WishItem item;
+	private int isAppUser;
 	
 	public static final int NAME = 0;
 	public static final int USER = 1;
@@ -25,14 +27,12 @@ public class ItemView extends FragmentActivity implements DialogListener
 	
 	private TextView v[] = new TextView[TOTAL];
 	
-    private ListView commentsV;
-    private ImageView imageV;
+    //private ListView commentsV;
+    //private ImageView imageV;
     
-    private ArrayList<String> comments;
-    private ArrayAdapter<String> adapter;
-    private WishItem item;
-    private int isAppUser;
-    
+    //private ArrayList<String> comments;
+    //private ArrayAdapter<String> adapter;
+       
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,9 +46,9 @@ public class ItemView extends FragmentActivity implements DialogListener
 		v[PRICE] = (TextView) findViewById(R.id.price);
 		v[DATE] = (TextView) findViewById(R.id.dateAdded);
 		
-		comments = new ArrayList<String>();
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
-		commentsV.setAdapter(adapter);
+		//comments = new ArrayList<String>();
+		//adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
+		//commentsV.setAdapter(adapter);
         
 		displayItem();
     }
@@ -95,7 +95,7 @@ public class ItemView extends FragmentActivity implements DialogListener
 		v[DESC].setText("Description: "+item.getDescription());
 		v[DATE].setText("Date Added: "+item.getDate().toString());
 		v[PRICE].setText("Price: "+item.getPrice());
-		imageV.setImageDrawable(item.getDrawable());
+		//imageV.setImageDrawable(item.getDrawable());
 		
 		if(isAppUser == 1){
 			for(int i=0; i<TOTAL; i++){

@@ -211,6 +211,11 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         dateAdded = d;
         update(DATE);
     }
+    
+    public void setDate(String s){
+    	dateAdded = Date.valueOf(s);
+    	update(DATE);
+    }
 
     public void setComment(String ID, String comment)
     {
@@ -260,8 +265,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         dest.writeParcelable(buyer, args);
     	dest.writeString(description);
         dest.writeString(price);
-        //dest.writeString(dateAdded.toString());
-        //dest.writeString(picture.toString());
+        dest.writeString(dateAdded.toString());
         dest.writeInt(update);
     }
 
@@ -275,6 +279,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         setBuyer(p.first, p.second);
         setDescription(in.readString());
         setPrice(in.readString());
+        setDate(in.readString());
         update = in.readInt();
     }
 }

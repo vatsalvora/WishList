@@ -71,7 +71,11 @@ public abstract class User implements Parcelable
     {
         wList = in;
     }
-
+    
+    public WishItem getItem(int index){
+    	return wList.get(index);
+    }
+    
     public boolean addItem(WishItem w)
     {
         if(wList.size() == MAXITEMS) return false;

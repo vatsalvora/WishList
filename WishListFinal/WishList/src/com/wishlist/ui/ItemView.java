@@ -1,9 +1,6 @@
 package com.wishlist.ui;
 
-import java.util.ArrayList;
-
 import com.wishlist.obj.WishItem;
-
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,7 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-public class ItemView extends FragmentActivity implements DialogListener
+public class ItemView extends FragmentActivity implements WishUpdateFragment.WishUpdateListener
 {
 	private WishItem item;
 	private int isAppUser;
@@ -118,20 +115,15 @@ public class ItemView extends FragmentActivity implements DialogListener
     }
     
 	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
+	public void onDialogPositiveClick(WishUpdateFragment dialog) {
 		// TODO Auto-generated method stub
 		dialog.dismiss();
 	}
 
 	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
+	public void onDialogNegativeClick(WishUpdateFragment dialog) {
 		// TODO Auto-generated method stub
 		dialog.dismiss();
 	}
 
-	@Override
-	public void onDialogNeutralClick(DialogFragment dialog) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
 }

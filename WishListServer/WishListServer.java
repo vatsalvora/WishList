@@ -13,18 +13,19 @@ import java.util.ArrayList;
 
 public class WishListServer
 {
+    /* Control signals */
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
-    public static final int USER_ADD = 2;
-    public static final int WISH_ADD = 3;
-    public static final int USER_SEND = 4;
-    public static final int WISH_RM = 5;
-    public static final int WISH_UP = 6;
-    public static final int IS_USER = 7;
-    public static final int LIST_WISHES = 8;
+    public static final int USER_ADD = 2; //Add user to DB
+    public static final int WISH_ADD = 3; //add wish to DB
+    public static final int USER_SEND = 4; //Send user object to client (app)
+    public static final int WISH_RM = 5;  //Delete wish from DB
+    public static final int WISH_UP = 6;  //Update wish in DB
+    public static final int IS_USER = 7;  //Check is user is in DB
+    public static final int LIST_WISHES = 8; //Return wishes in DB owned by user
 
     private ServerSocket server;
-    private int port = 5600;
+    private final int port = 5600;
     private Socket socket;
     
 
@@ -40,12 +41,18 @@ public class WishListServer
         {
             e.printStackTrace();
         }
-        //db = DBCom.instance();
 
         while(serverOn)
         {
             try
             {
+                /*
+                 * Listen for new connections, then spawn a new thread for
+                 * each new connection.
+                 *
+                 * Control doesn't flow past this line until a new
+                 * connection is made
+                 */
                 Socket clientSocket = server.accept();
 
                 ClientServiceThread csThread = new ClientServiceThread(
@@ -78,6 +85,11 @@ public class WishListServer
 
     class ClientServiceThread extends Thread
     {
+        /** Thread that serves clients:
+         *  grabs control signal (code)
+         *  and acts accordingly
+         */
+
         Socket clientSocket;
         boolean runThread = true;
         private DBCom db;
@@ -106,6 +118,12 @@ public class WishListServer
 
             try
             {
+                /* Init objects to transport data across network */
+
+                /* 
+                 * Object IO streams are to transport objects
+                 * Data IO streams are to transport simple data types (boolean)
+                 */
                 ois = new ObjectInputStream(
                     new BufferedInputStream(clientSocket.getInputStream()));
 
@@ -120,7 +138,7 @@ public class WishListServer
                 int code;
                 String msg;
 
-                FBUser fb = new FBUser("0", "alex", false);
+                FBUser fb = new FBUser("0", "alex", false); //Just for testing
                 while (!done)
                 {
                     try

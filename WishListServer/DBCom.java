@@ -44,13 +44,6 @@ public class DBCom
 
     private Connection connect;
     
-    public static DBCom instance(){
-        if(_instance == null){
-                _instance = new DBCom();
-        }
-        return _instance;
-    }
-    
     public DBCom()
     {
         //This is the constructor for the Database Communication Object. An instance of this object is required to

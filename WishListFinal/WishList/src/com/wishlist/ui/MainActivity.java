@@ -2,6 +2,7 @@ package com.wishlist.ui;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import android.util.Log;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -12,8 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.wishlist.db.*;
 import com.wishlist.obj.*;
+import com.wishlist.serv.*;
 
 
 /*
@@ -39,7 +40,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private ViewPager mViewPager;
     private ActionBar actionBar;
     
-    private DBCom db; //DB pointer
+    private WLServerCom com; //DB pointer
     private Bundle userData; //bundle from login
     private User appUser; //the app user
     private User currentUser; //current user to view the data
@@ -86,7 +87,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     
     protected void initDB(){
     	//set up DB communication
-        db = DBCom.instance();
+    	try
+    	{
+    		com = new WLServerCom();
+    	}
+    	catch (Exception e)
+    	{
+    		Log.e("Backend", "Error, couldn't connect to server");
+    	}
     }
     
     @SuppressWarnings("unchecked")
@@ -107,7 +115,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
     
     protected void loadDBData(User u){
-    	u.setList(db.listWishes(u.getUID()));
+    	try
+    	{
+    		u.setList(com.listWishes(u.getUID()));
+    	}
+    	catch (Exception e)
+    	{
+    		Log.e("Backend", "Could not loadWishes");
+    	}
+    		
     }
     
     protected void initGraphics()

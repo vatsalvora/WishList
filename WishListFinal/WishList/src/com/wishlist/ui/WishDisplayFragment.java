@@ -95,7 +95,7 @@ So the UI elements for certain actions are hidden based on user.
         		Intent i = new Intent(getActivity(), ItemView.class);
         		Bundle b = new Bundle();
         		Transporter.pack(b, Transporter.USER, user.getIsAppUser() ? 1:0);
-        		Transporter.pack(b, Transporter.WISH, (WishItem) listView.getItemAtPosition(position));
+        		Transporter.pack(b, Transporter.WISH, user.getItem(position));
         		i.putExtras(b);
         		startActivity(i);
             }

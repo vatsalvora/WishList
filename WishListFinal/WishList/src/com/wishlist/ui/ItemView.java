@@ -1,9 +1,6 @@
 package com.wishlist.ui;
 
-import java.util.ArrayList;
-
 import com.wishlist.obj.WishItem;
-
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,8 +9,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-public class ItemView extends FragmentActivity implements DialogListener
+public class ItemView extends FragmentActivity implements WishUpdateFragment.WishUpdateListener
 {
+	private WishItem item;
+	private int isAppUser;
 	
 	public static final int NAME = 0;
 	public static final int USER = 1;
@@ -25,14 +24,12 @@ public class ItemView extends FragmentActivity implements DialogListener
 	
 	private TextView v[] = new TextView[TOTAL];
 	
-    private ListView commentsV;
-    private ImageView imageV;
+    //private ListView commentsV;
+    //private ImageView imageV;
     
-    private ArrayList<String> comments;
-    private ArrayAdapter<String> adapter;
-    private WishItem item;
-    private int isAppUser;
-    
+    //private ArrayList<String> comments;
+    //private ArrayAdapter<String> adapter;
+       
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,9 +43,9 @@ public class ItemView extends FragmentActivity implements DialogListener
 		v[PRICE] = (TextView) findViewById(R.id.price);
 		v[DATE] = (TextView) findViewById(R.id.dateAdded);
 		
-		comments = new ArrayList<String>();
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
-		commentsV.setAdapter(adapter);
+		//comments = new ArrayList<String>();
+		//adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
+		//commentsV.setAdapter(adapter);
         
 		displayItem();
     }
@@ -95,7 +92,7 @@ public class ItemView extends FragmentActivity implements DialogListener
 		v[DESC].setText("Description: "+item.getDescription());
 		v[DATE].setText("Date Added: "+item.getDate().toString());
 		v[PRICE].setText("Price: "+item.getPrice());
-		imageV.setImageDrawable(item.getDrawable());
+		//imageV.setImageDrawable(item.getDrawable());
 		
 		if(isAppUser == 1){
 			for(int i=0; i<TOTAL; i++){
@@ -118,20 +115,15 @@ public class ItemView extends FragmentActivity implements DialogListener
     }
     
 	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
+	public void onDialogPositiveClick(WishUpdateFragment dialog) {
 		// TODO Auto-generated method stub
 		dialog.dismiss();
 	}
 
 	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
+	public void onDialogNegativeClick(WishUpdateFragment dialog) {
 		// TODO Auto-generated method stub
 		dialog.dismiss();
 	}
 
-	@Override
-	public void onDialogNeutralClick(DialogFragment dialog) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
 }

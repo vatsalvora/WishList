@@ -1,19 +1,20 @@
 /* Author: Joon Kim
  *
  * Class for users of this app.
- * The user has a unique ID, a name, a flag for app user, and a list of items in the database.
- * The app user can add and remove items from his/her own list and sort the list by name, date, or price.
+ * The user has a unique ID, a name, a flag for app user, and a list of items
+ * in the database.
+ * The app user can add and remove items from his/her own list and sort the
+ * list by name, date, or price.
+ *
+ * Edited by: Alex Bryan
  */
 
-package com.wishlist.obj;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.Serializable;
 
-
-import android.os.Parcelable;
-
-public abstract class User implements Parcelable
+public abstract class User implements Serializable
 {
     protected boolean isAppUser; //flag for current app user
     protected String uid; //ID of user
@@ -28,10 +29,7 @@ public abstract class User implements Parcelable
     public static final char PRICE = 'p';
     
     public User(){
-    	isAppUser = false;
-    	uid = "";
-    	name = "";
-    	wList = new ArrayList<WishItem>();
+    	setList(new ArrayList<WishItem>());
     }
     
     public User(String uid, String name, boolean isAppUser)
@@ -71,11 +69,7 @@ public abstract class User implements Parcelable
     {
         wList = in;
     }
-    
-    public WishItem getItem(int index){
-    	return wList.get(index);
-    }
-    
+
     public boolean addItem(WishItem w)
     {
         if(wList.size() == MAXITEMS) return false;

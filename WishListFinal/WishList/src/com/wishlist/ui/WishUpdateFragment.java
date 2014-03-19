@@ -9,11 +9,20 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class WishUpdateFragment extends DialogFragment{
 	
 	private WishItem item;
+	private TextView tv;
+	private EditText ev;
+	private View root;
+	
+	public interface WishUpdateListener{
+		void onDialogPositiveClick(WishUpdateFragment dialog);
+		void onDialogNegativeClick(WishUpdateFragment dialog);
+	}
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
@@ -47,11 +56,13 @@ public class WishUpdateFragment extends DialogFragment{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
-		View v = inflater.inflate(R.layout.dialog_update_wish, null);
-		TextView tv = (TextView) v.findViewById(R.id.update_wish_title);
+		root = inflater.inflate(R.layout.dialog_update_wish, null);
+		tv = (TextView) root.findViewById(R.id.update_wish_title);
 		tv.setText("Update "+item.getName());
+		ev = (EditText) root.findViewById(R.id.editfield);
+		ev.setHint("Enter update info here");
 		
-		builder.setView(v)
+		builder.setView(root)
 		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) 
 			{
@@ -61,7 +72,7 @@ public class WishUpdateFragment extends DialogFragment{
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
 			public void onClick(DialogInterface dialog, int which) 
 			{
-				//TODO
+				
 			}
 		});
 		

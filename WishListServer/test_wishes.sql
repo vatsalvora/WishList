@@ -2,6 +2,10 @@
 -- The user who runs this needs to have the proper permissions.
 -- Ideally, only the admin or any superusers should have the
 -- permission to drop tables.
+
+-- REMEMBER TO GIVE wl_app A PASSWORD
+
+
 DROP TABLE wishes;
 
 CREATE TABLE wishes (
@@ -41,3 +45,11 @@ INSERT INTO users (UID, name)
 INSERT INTO users (UID, name)
     VALUES ('79', 'Little Bitch');
 
+CREATE ROLE wl_app;
+GRANT INSERT ON users to wl_app;
+GRANT INSERT ON wishes to wl_app;
+GRANT UPDATE ON users to wl_app;
+GRANT UPDATE ON wishes to wl_app;
+GRANT DELETE ON wishes to wl_app;
+GRANT SELECT ON wishes to wl_app;
+GRANT SELECT ON users to wl_app;

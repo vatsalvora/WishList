@@ -27,3 +27,9 @@ gen/
 
 ## Allow DB Library to be included
 !postgresql-9.1-903.jdbc4.jar
+
+## Something left by Dolphin?
+.directory
+
+## Vim session files
+*.vims

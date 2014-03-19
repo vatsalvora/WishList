@@ -8,27 +8,31 @@
  * database.
  */
 
-package com.wishlist.obj;
 
 import java.util.*;
 import java.sql.Date;
-import android.graphics.drawable.Drawable;
+import java.io.Serializable;
 //import android.graphics.drawable.Drawable;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class WishItem implements Comparable<WishItem>, Parcelable
+public class WishItem implements Comparable<WishItem>, Serializable
 {
-	protected StringPair wish; //wish ID and name pair
-	protected StringPair user; //user ID and name pair
-	protected StringPair buyer; //buyer ID and name pair
+    protected StringPair wish; //wish ID and name pair
+    protected StringPair user; //user ID and name pair
+    protected StringPair buyer; //buyer ID and name pair
     protected String description=""; //description of item
     protected Date dateAdded; //date of the item added to user
     protected String price=""; //price of item
-    protected Drawable picture; //Picture object for image of item. Implement in sprint 2
+
+    //protected Drawable picture;
+    //Picture object for image of item. Implement in sprint 2
+
     protected int status;  //status of item. Open, registered, bought, etc
     // What are the status codes? Assuming 0 = Open, 1 = registered, 2 = bought. 
-    protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
+    // You assumed correctly
+
+    protected TreeMap<String, String> comments; //Map ID with comment
+    //Implement in sprint 2
+
     protected int update = NONE; //update changes    
     
     //update codes
@@ -75,9 +79,9 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     }
     
     public WishItem(String wid, String name, String uid, String uname, String bid, String bname,
-    				String descr, String price, int status, Date dateAdded)
+                                String descr, String price, int status, Date dateAdded)
     {
-    	setWish(wid, name);
+        setWish(wid, name);
         setUser(uid, uname);
         setBuyer(bid, bname);
         setDescription(descr);
@@ -88,110 +92,99 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     
     public String getWID()
     {
-    	return wish.first;
+        return wish.first;
     }
     
     public String getName()
     {
-    	return wish.second;
+        return wish.second;
     }
     
     public String getUID()
     {
-    	return user.first;
+        return user.first;
     }
     
     public String getUserName()
     {
-    	return user.second;
+        return user.second;
     }
     
     public String getBID()
     {
-    	return buyer.first;
+        if(buyer == null)
+        {
+            return null;
+        }
+        else
+        {
+            return buyer.first;
+        }
     }
     
     public String getBuyerName()
     {
-    	return buyer.second;
+        return buyer.second;
     }
     
-    public String getDescription()
+    private final void setWish(String ID, String name)
     {
-        return description;
+        if(wish == null)
+        {
+            wish = new StringPair(ID, name);
+        }
+        else
+        {
+                wish.first = ID;
+                wish.second = name;
+        }
     }
     
-    public String getPrice()
+    public void setWishName(String name)
     {
-        return price;
+        wish.second = name;
     }
     
-    public Date getDate()
+    private final void setUser(String ID, String name)
     {
-        return dateAdded;
+        if(user == null)
+        {
+            user = new StringPair(ID, name);
+        }
+        else
+        {
+                user.first = ID;
+                user.second = name;
+        }
+    }
+    
+    public final void setBuyer(String ID, String name)
+    {
+        if(buyer == null)
+        {
+            buyer = new StringPair(ID, name);
+        }
+        else
+        {
+                buyer.first = ID;
+                buyer.second = name;
+        }
     }
     
     public int getStatus()
     {
         return status;
     }
-    
-    public Drawable getDrawable(){
-    	return picture;
-    }
-    
-    public String getComment(String ID)
-    {
-        return comments.get(ID);
-    }
-    
-    public int getUpdate()
-    {
-        return update;
-    }
-    
-    private final void setWish(String ID, String name)
-    {
-    	if(wish == null) wish = new StringPair(ID, name);
-    	else{
-    		wish.first = ID;
-    		wish.second = name;
-    	}
-    	update(WISH);
-    }
-    
-    public void setWishName(String name)
-    {
-    	wish.second = name;
-    	update(WISH);
-    }
-    
-    private final void setUser(String ID, String name)
-    {
-    	if(user == null) user = new StringPair(ID, name);
-    	else
-    	{
-    		user.first = ID;
-    		user.second = name;
-    	}
-    	update(USER);
-    }
-    
-    public final void setBuyer(String ID, String name)
-    {
-    	if(buyer == null) buyer = new StringPair(ID, name);
-    	else
-    	{
-    		buyer.first = ID;
-    		buyer.second = name;
-    	}
-    	update(BUYER);
-    }
-    
+
     public final void setStatus(int status)
     {
         this.status = status;
         update(STATUS);
+    }
+
+    public String getDescription()
+    {
+        return description;
     }
 
     public void setDescription(String description)
@@ -200,10 +193,20 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         update(DESC);
     }
 
+    public String getPrice()
+    {
+        return price;
+    }
+
     public void setPrice(String price)
     {
         this.price = price;
         update(PRICE);
+    }
+
+    public Date getDate()
+    {
+        return dateAdded;
     }
 
     public void setDate(Date d)
@@ -211,20 +214,25 @@ public class WishItem implements Comparable<WishItem>, Parcelable
         dateAdded = d;
         update(DATE);
     }
-    
-    public void setDate(String s){
-    	dateAdded = Date.valueOf(s);
-    	update(DATE);
+
+    public String getComment(String ID)
+    {
+        return comments.get(ID);
     }
 
     public void setComment(String ID, String comment)
     {
         comments.put(ID, comment);
     }
-    
+
     public int compareTo(WishItem arg0)
     {
         return this.wish.second.compareTo(arg0.wish.second);
+    }
+
+    public int getUpdate()
+    {
+        return update;
     }
 
     private void update(int code)
@@ -233,53 +241,22 @@ public class WishItem implements Comparable<WishItem>, Parcelable
     }
     
     public void doneUpdate(){
-    	update = NONE;
+        update = NONE;
     }
     
-    @Override
     public int describeContents()
     {
         return 0;
     }
-
-    public static final Parcelable.Creator<WishItem> CREATOR
-    = new Parcelable.Creator<WishItem>()
+    public String toString()
     {
-        public WishItem createFromParcel(Parcel in)
-        {
-            return new WishItem(in);
-        }
+        /*
+         * For debug/testing reasons. This really shouldn't be used in actual
+         * android app
+         */
 
-        public WishItem[] newArray(int size)
-        {
-            return new WishItem[size];
-        }
-        
-    };
-
-    @Override
-    public void writeToParcel(Parcel dest, int args)
-    {
-        dest.writeParcelable(wish, args);
-        dest.writeParcelable(user, args);
-        dest.writeParcelable(buyer, args);
-    	dest.writeString(description);
-        dest.writeString(price);
-        dest.writeString(dateAdded.toString());
-        dest.writeInt(update);
+        return wish.first + "\t" + wish.second;
     }
+    
 
-	private WishItem(Parcel in)
-    {
-        StringPair p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setWish(p.first, p.second);
-        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setUser(p.first, p.second);
-        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setBuyer(p.first, p.second);
-        setDescription(in.readString());
-        setPrice(in.readString());
-        setDate(in.readString());
-        update = in.readInt();
-    }
-}
+   }

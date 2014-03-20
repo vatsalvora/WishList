@@ -27,6 +27,7 @@ public class WishListServer
     private ServerSocket server;
     private final int port = 5600;
     private Socket socket;
+	private int currentWID;
     
 
     private boolean serverOn = true;

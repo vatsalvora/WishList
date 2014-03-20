@@ -489,7 +489,9 @@ public class DBCom
 		
 		if(resultSet.next())
 		{
-			return Integer.parseInt( resultSet.getString(1) );
+			String result = resultSet.getString(1);
+			resultSet.close();
+			return Integer.parseInt( result );
 		}
 		else{
 			return 0;

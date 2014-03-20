@@ -163,6 +163,15 @@ public class WishListServer
                         else if (code == WISH_ADD)
                         {
                             WishItem wi = (WishItem)ois.readObject();
+                            
+                            /*
+                            String widTemp = wi.getWid();
+                            if(widTemp == "" || widTemp = null){
+                            	currentWID++;
+                            	wi.setWish(currentWID, wi.getName());
+                            }
+                            */
+                            
                             msg = wi.toString();
                             db.addWish(wi);
                             System.out.println(msg);

@@ -10,7 +10,7 @@ package com.wishlist.obj;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
+import android.graphics.Bitmap;
 import android.os.Parcelable;
 
 public abstract class User implements Parcelable
@@ -19,7 +19,7 @@ public abstract class User implements Parcelable
     protected String uid; //ID of user
     protected String name; //name of user
     protected ArrayList<WishItem> wList; //wishlist for user
-    
+    protected Bitmap profilePicture; //profile picture of the user 
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
     
     //hashcode for sorting
@@ -111,7 +111,14 @@ public abstract class User implements Parcelable
             throw new RuntimeException("code not found.");
         }
     }
-
+    
+    public void setProfilePicture(Bitmap profilePicture){
+    	this.profilePicture = profilePicture;
+    }
+    
+    public Bitmap getProfilePicture(){
+    	return profilePicture; 
+    }
     public boolean getIsAppUser()
     {
         return isAppUser;

@@ -230,7 +230,7 @@ public class WishListServer
         
         private void updateCurrentWID(){
         	
-        	DBcom dbtemp = new DBCom();
+        	DBCom dbtemp = new DBCom();
         	currentWID = dbtemp.getCurrentMaxWID();
         	
         }

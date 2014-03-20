@@ -27,6 +27,7 @@ public class WishListServer
     private ServerSocket server;
     private final int port = 5600;
     private Socket socket;
+	private int currentWID;
     
 
     private boolean serverOn = true;
@@ -36,6 +37,7 @@ public class WishListServer
         try
         {
             server = new ServerSocket(port);
+            //updateCurrentWID(); This line will automatically query DB for largest WID.
         }
         catch (IOException e)
         {
@@ -216,6 +218,14 @@ public class WishListServer
             }
 
         }
+        
+        private void updateCurrentWID(){
+        	
+        	DBcom dbtemp = new DBCom();
+        	currentWID = dbtemp.getCurrentMaxWID();
+        	
+        }
+        
     }
     
 }

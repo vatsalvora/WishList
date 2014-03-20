@@ -52,18 +52,22 @@ public class WLServerCom
                 socket.getInputStream());
      
     }
+
+	//Should be private, but public for testing reasons
     public void sendObject(Object obj) throws IOException
     {
         oos.writeObject(obj);
         oos.flush();
     }
 
+	//Should be private, but public for testing reasons
     public void sendCode(int code) throws IOException
     {
         oos.writeInt(code);
         oos.flush();
     }
 
+	//Should be private, but public for testing reasons
     public Object getObject() throws IOException, ClassNotFoundException
     {
         return ois.readObject();

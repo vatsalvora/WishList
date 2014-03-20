@@ -9,8 +9,11 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-public class WLServerCom {
+public class WLServerCom 
+{
     private static int port = 5600;
+
+    /* Alex's IP. Do not DDOS */
     private static String servIP = "98.180.57.56";
 
     protected InetAddress host;
@@ -49,18 +52,22 @@ public class WLServerCom {
                 socket.getInputStream());
      
     }
+
+	//Should be private, but public for testing reasons
     public void sendObject(Object obj) throws IOException
     {
         oos.writeObject(obj);
         oos.flush();
     }
 
+	//Should be private, but public for testing reasons
     public void sendCode(int code) throws IOException
     {
         oos.writeInt(code);
         oos.flush();
     }
 
+	//Should be private, but public for testing reasons
     public Object getObject() throws IOException, ClassNotFoundException
     {
         return ois.readObject();
@@ -105,6 +112,8 @@ public class WLServerCom {
          */
         sendCode(LIST_WISHES);
         sendObject(uid);
+
+        /* Gives warning. TODO: make warning go away */
         return (ArrayList<WishItem>)getObject();
     }
 

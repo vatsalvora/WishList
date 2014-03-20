@@ -21,6 +21,7 @@ public class WLClientTest
         Scanner sc = new Scanner(System.in);
         FBUser tu = new FBUser("0", "alex", false);
         WishItem wi = new WishItem("w-000", "Coke", "u-000", "Alex");
+		WishItem wid_empty = new WishItem("", "More Coke", "u-000", "Alex");
 
         try
         {
@@ -52,7 +53,7 @@ public class WLClientTest
 
                     else if(msg.equals("wish_add"))
                     {
-                        com.addWish(wi); 
+                        com.addWish(wid_empty); 
                     }
                     else if(msg.equals("user_send"))
                     {

@@ -10,6 +10,12 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.*;
 
+/*
+ * The item detail view for wishes
+ * 
+ */
+
+
 public class ItemView extends FragmentActivity implements WishUpdateFragment.WishUpdateListener
 {
 	private WishItem item;

@@ -32,12 +32,17 @@ public class WishListServer
 
     private boolean serverOn = true;
 
+	private void updateCurrentWID()
+	{        	
+		DBCom dbtemp = new DBCom();
+		currentWID = dbtemp.getCurrentMaxWID();	
+	}
     public WishListServer()
     {
         try
         {
             server = new ServerSocket(port);
-            //updateCurrentWID(); This line will automatically query DB for largest WID.
+            updateCurrentWID(); 
         }
         catch (IOException e)
         {
@@ -228,12 +233,7 @@ public class WishListServer
 
         }
         
-        private void updateCurrentWID(){
-        	
-        	DBCom dbtemp = new DBCom();
-        	currentWID = dbtemp.getCurrentMaxWID();
-        	
-        }
+        
         
     }
     

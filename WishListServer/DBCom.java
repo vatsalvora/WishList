@@ -487,13 +487,21 @@ public class DBCom
 		command = queryBuilder(SELECT, "wid", FROM, "wishes", "ORDER BY", "wid", "DESC", "LIMIT 1");
 		ResultSet resultSet = sendSQLwithReturn(command);
 		
-		if(resultSet.next())
+		try
 		{
-			String result = resultSet.getString(1);
-			resultSet.close();
-			return Integer.parseInt( result );
+			if(resultSet.next())
+			{
+				String result = resultSet.getString(1);
+				resultSet.close();
+				return Integer.parseInt( result );
+			}
+			else{
+				return 0;
+			}
 		}
-		else{
+		catch (Exception e)
+		{
+			//Error, add log here
 			return 0;
 		}
 	

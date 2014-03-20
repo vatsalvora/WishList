@@ -169,13 +169,14 @@ public class WishListServer
                         {
                             WishItem wi = (WishItem)ois.readObject();
                             
-                            /*
-                            String widTemp = wi.getWid();
-                            if(widTemp == "" || widTemp = null){
+                            
+                            String widTemp = wi.getWID();
+                            if(widTemp.equals("") || widTemp == null)
+							{
                             	currentWID++;
-                            	wi.setWish(currentWID, wi.getName());
+                            	wi.setWID(Integer.toString(currentWID));
                             }
-                            */
+                            
                             
                             msg = wi.toString();
                             db.addWish(wi);

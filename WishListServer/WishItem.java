@@ -144,6 +144,11 @@ public class WishItem implements Comparable<WishItem>, Serializable
     {
         wish.second = name;
     }
+
+	public void setWID(String wid)
+	{
+		wish.first = wid;
+	}
     
     private final void setUser(String ID, String name)
     {

@@ -482,7 +482,8 @@ public class DBCom
         return sendSQLnoReturn(command);
     }
    
-	public int getCurrentMaxWID(){
+	public int getCurrentMaxWID()
+	{
 		
 		command = queryBuilder(SELECT, "wid", FROM, "wishes", "ORDER BY", "wid", "DESC", "LIMIT 1");
 		ResultSet resultSet = sendSQLwithReturn(command);

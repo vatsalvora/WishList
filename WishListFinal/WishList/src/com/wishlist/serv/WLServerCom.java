@@ -1,19 +1,20 @@
-package com.wishlist.serv;
-
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.io.BufferedInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import com.wishlist.obj.FBUser;
-import com.wishlist.obj.WishItem;
-
-public class WLServerCom {
+public class WLServerCom 
+{
     private static int port = 5600;
+
+    /* Alex's IP. Do not DDOS */
+    private static String servIP = "98.180.57.56";
 
     protected InetAddress host;
     protected Socket socket;
@@ -36,8 +37,8 @@ public class WLServerCom {
         
         //Create connection to server
         //For testing, server will be run on local host
-        host = InetAddress.getLocalHost();
-        socket = new Socket(host.getHostName(), port);
+        //host = InetAddress.getLocalHost();
+        socket = new Socket(servIP, port);
 
         //Open an output stream
         oos = new ObjectOutputStream(
@@ -51,18 +52,22 @@ public class WLServerCom {
                 socket.getInputStream());
      
     }
+
+	//Should be private, but public for testing reasons
     public void sendObject(Object obj) throws IOException
     {
         oos.writeObject(obj);
         oos.flush();
     }
 
+	//Should be private, but public for testing reasons
     public void sendCode(int code) throws IOException
     {
         oos.writeInt(code);
         oos.flush();
     }
 
+	//Should be private, but public for testing reasons
     public Object getObject() throws IOException, ClassNotFoundException
     {
         return ois.readObject();
@@ -99,9 +104,7 @@ public class WLServerCom {
         sendObject(wid);
         return dis.readBoolean();
     }
-    
-    @SuppressWarnings("unchecked")
-	public ArrayList<WishItem> listWishes(String uid) throws IOException,
+    public ArrayList<WishItem> listWishes(String uid) throws IOException,
            ClassNotFoundException
     {
         /** Returns an ArrayList of wish objects that belong to the given
@@ -109,6 +112,8 @@ public class WLServerCom {
          */
         sendCode(LIST_WISHES);
         sendObject(uid);
+
+        /* Gives warning. TODO: make warning go away */
         return (ArrayList<WishItem>)getObject();
     }
 

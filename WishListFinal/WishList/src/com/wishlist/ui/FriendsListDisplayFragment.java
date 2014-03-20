@@ -1,5 +1,7 @@
 package com.wishlist.ui;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.wishlist.obj.FBUser;
+import com.wishlist.obj.User;
+
 public class FriendsListDisplayFragment extends Fragment
 {
     /**
@@ -18,22 +23,37 @@ public class FriendsListDisplayFragment extends Fragment
      */
 
     private View rootView;
-
+    private ArrayList<User> friends; 
     public static final String ARG_SECTION_NUMBER = "section_number";
 
     public FriendsListDisplayFragment()
     {
     }
-
+    
+	public void onCreate(Bundle savedInstanceState)
+    {	
+    	super.onCreate(savedInstanceState);
+    	friends = (ArrayList<User>) Transporter.unpackObject(this.getArguments(), Transporter.FRIENDS);
+    	if(friends == null){
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Friends list unavailable!", Toast.LENGTH_SHORT);
+            toast.show();			
+    	}
+    	   	    	
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
 
-        View rootView = inflater.inflate(R.layout.fragment_friends_list_display,
+        View listView = inflater.inflate(R.layout.fragment_friends_list_display,
                                          container, false);
-
-        return rootView;
+        
+        		
+        		
+        
+        
+        
+        return listView;
     }
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Inflate the menu; this adds items to the action bar if it is present.

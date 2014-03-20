@@ -111,12 +111,18 @@ So the UI elements for certain actions are hidden based on user.
 	                // Respond to clicks on the actions in the CAB
 	                switch (item.getItemId()) {
 	                    case R.id.action_delete:
-	 		            	// deleteItem(item.getItemId())
+	                    	deleteItem(item.getItemId());
 	                        mode.finish(); // Action picked, so close the CAB
 	                        return true;
 	                    default:
 	                        return false;
 	                } 
+	            }
+	            
+	            public boolean deleteItem(int itemID){
+	            	//remove id from user
+	            	//update database? 
+	            	return false;
 	            }
 	
 	            @Override

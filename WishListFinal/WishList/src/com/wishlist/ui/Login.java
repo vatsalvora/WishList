@@ -134,9 +134,12 @@ public final class Login extends Activity
 
                         public void onCompleted(List<GraphUser> users, Response response)
                         {
+                        	friends = new ArrayList<FBUser>();
                             for(GraphUser i : users){ 
                             	Log.i("Facebook", i.getName());
                             	Log.i("Facebook", i.getId());
+                            	friends.add(new FBUser(i.getId(),i.getName(),true));
+                            	
                             }
                         }
                     }).executeAsync();

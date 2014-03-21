@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class WishListServer
@@ -24,6 +25,7 @@ public class WishListServer
     public static final int WISH_UP = 6;  //Update wish in DB
     public static final int IS_USER = 7;  //Check is user is in DB
     public static final int LIST_WISHES = 8; //Return wishes in DB owned by user
+    public static final int RECIEVE_IMAGE = 9;
 
     private ServerSocket server;
     private final int port = 5600;
@@ -38,6 +40,7 @@ public class WishListServer
 		DBCom dbtemp = new DBCom();
 		currentWID = dbtemp.getCurrentMaxWID();	
 	}
+	
     public WishListServer()
     {
         try
@@ -139,7 +142,9 @@ public class WishListServer
                     clientSocket.getOutputStream());
 
                 dos = new DataOutputStream(
-                        clientSocket.getOutputStream());
+                    clientSocket.getOutputStream());
+                    
+                
 
 
                 boolean done = false;
@@ -207,6 +212,11 @@ public class WishListServer
                             oos.writeObject(uWishes);
                             oos.flush();
                         }
+                        else if(code == RECIEVE_IMAGE)
+                        {
+                        	String name = (String)ois.readObject();
+                        	listenForImage(name);                       	
+                        }
 
                     }
                     catch(IOException ioe)
@@ -215,6 +225,11 @@ public class WishListServer
                         done = true;
                     }
                     catch (ClassNotFoundException e)
+                    {
+                        e.printStackTrace();
+                        done = true;
+                    }
+                    catch (Exception e)
                     {
                         e.printStackTrace();
                         done = true;
@@ -235,6 +250,22 @@ public class WishListServer
 
         }
         
+        private void listenForImage(String imageName) throws Exception 
+        {
+
+    		DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+    		FileOutputStream fout = new FileOutputStream(imageName);
+    		
+    		int i;
+    		while ( (i = dis.read()) > -1) {
+    			fout.write(i);
+    		}
+    		
+    		fout.flush();
+    		fout.close();
+    		dis.close();
+    		
+    	}
         
         
     }

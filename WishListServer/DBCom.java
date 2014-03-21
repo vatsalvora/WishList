@@ -41,6 +41,7 @@ public class DBCom
     public static final String WHERE = "WHERE";
     public static final String ALL = "*";
     public static final String SET = "SET";
+	public static final String ORDER_BY = "ORDER BY";
 
     private Connection connect;
     
@@ -481,6 +482,31 @@ public class DBCom
         return sendSQLnoReturn(command);
     }
    
+	public int getCurrentMaxWID()
+	{
+		
+		command = queryBuilder(SELECT, "wid", FROM, "wishes", "ORDER BY", "wid", "DESC", "LIMIT 1");
+		ResultSet resultSet = sendSQLwithReturn(command);
+		
+		try
+		{
+			if(resultSet.next())
+			{
+				String result = resultSet.getString(1);
+				resultSet.close();
+				return Integer.parseInt( result );
+			}
+			else{
+				return 0;
+			}
+		}
+		catch (Exception e)
+		{
+			//Error, add log here
+			return 0;
+		}
+	
+	}
 
    
 }

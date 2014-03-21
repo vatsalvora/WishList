@@ -1,4 +1,5 @@
 /*
+ * Testing git commit - Linux Command Line
  * Shamelessly stolen from the internet and edited by Alex Bryan
  */
 import java.io.BufferedInputStream;
@@ -27,15 +28,22 @@ public class WishListServer
     private ServerSocket server;
     private final int port = 5600;
     private Socket socket;
+	private int currentWID;
     
 
     private boolean serverOn = true;
 
+	private void updateCurrentWID()
+	{        	
+		DBCom dbtemp = new DBCom();
+		currentWID = dbtemp.getCurrentMaxWID();	
+	}
     public WishListServer()
     {
         try
         {
             server = new ServerSocket(port);
+            updateCurrentWID(); 
         }
         catch (IOException e)
         {
@@ -161,6 +169,16 @@ public class WishListServer
                         else if (code == WISH_ADD)
                         {
                             WishItem wi = (WishItem)ois.readObject();
+                            
+                            
+                            String widTemp = wi.getWID();
+                            if(widTemp.equals("") || widTemp == null)
+							{
+                            	currentWID++;
+                            	wi.setWID(Integer.toString(currentWID));
+                            }
+                            
+                            
                             msg = wi.toString();
                             db.addWish(wi);
                             System.out.println(msg);
@@ -216,6 +234,9 @@ public class WishListServer
             }
 
         }
+        
+        
+        
     }
     
 }

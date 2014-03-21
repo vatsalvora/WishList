@@ -7,7 +7,14 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.*;
+
+/*
+ * The item detail view for wishes
+ * 
+ */
+
 
 public class ItemView extends FragmentActivity implements WishUpdateFragment.WishUpdateListener
 {
@@ -96,11 +103,35 @@ public class ItemView extends FragmentActivity implements WishUpdateFragment.Wis
 		
 		if(isAppUser == 1){
 			for(int i=0; i<TOTAL; i++){
-				v[i].setOnClickListener(new OnClickListener(){
-					public void onClick(View j){
+				v[i].setOnLongClickListener(new OnLongClickListener(){
+					public boolean onLongClick(View j){
 						showUpdateDialog();
+						return true;
 					}
 				});
+				switch(i){
+					case 0:
+						v[i].setOnClickListener(new OnClickListener(){
+							public void onClick(View j){
+								Toast t = new Toast(getApplicationContext());
+								t.setText("blahhhhhhhhhhhh");
+								t.show();
+							}
+						});
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					default:
+						break;
+				}
 			}
 		}		
 		

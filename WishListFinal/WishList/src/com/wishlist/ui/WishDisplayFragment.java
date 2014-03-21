@@ -9,12 +9,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -90,7 +92,63 @@ So the UI elements for certain actions are hidden based on user.
         
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new OnItemClickListener(){
+        
+        if(user.getIsAppUser()){
+	        //Enabling the contextual action mode for deletion IF the current user owns the wishlist
+	        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+	
+	        listView.setMultiChoiceModeListener(new MultiChoiceModeListener(){
+	        	//the listener for the contextual action bar
+	            @Override
+	            public void onItemCheckedStateChanged(ActionMode mode, int position,
+	                                                  long id, boolean checked) {
+	                // Here you can do something when items are selected/de-selected,
+	                // such as update the title in the CAB
+	            }
+	
+	            @Override
+	            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	                // Respond to clicks on the actions in the CAB
+	                switch (item.getItemId()) {
+	                    case R.id.action_delete:
+	                    	deleteItem(item.getItemId());
+	                        mode.finish(); // Action picked, so close the CAB
+	                        return true;
+	                    default:
+	                        return false;
+	                } 
+	            }
+	            
+	            public boolean deleteItem(int itemID){
+	            	//remove id from user
+	            	//update database? 
+	            	return false;
+	            }
+	
+	            @Override
+	            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	                // Inflate the menu for the CAB
+	                MenuInflater inflater = mode.getMenuInflater();
+	                inflater.inflate(R.menu.contextual_menu_wishdisplay, menu);
+	                return true;
+	            }
+	
+	            @Override
+	            public void onDestroyActionMode(ActionMode mode) {
+	                // Here you can make any necessary updates to the activity when
+	                // the CAB is removed. By default, selected items are deselected/unchecked.
+	            }
+	
+	            @Override
+	            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	                // Here you can perform updates to the CAB due to
+	                // an invalidate() request
+	                return false;
+	            }
+	        });
+        }
+        
+       listView.setOnItemClickListener(new OnItemClickListener(){
         	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         		Intent i = new Intent(getActivity(), ItemView.class);
         		Bundle b = new Bundle();
@@ -99,7 +157,7 @@ So the UI elements for certain actions are hidden based on user.
         		i.putExtras(b);
         		startActivity(i);
             }
-        });
+        }); 
         
         return listView;
     }
@@ -181,3 +239,4 @@ So the UI elements for certain actions are hidden based on user.
     	user.setList(wishes);
 	}
 }
+

@@ -26,7 +26,7 @@ INSERT INTO wishes (WID, UID, BID, name, descr, price, status)
     VALUES ('70', '13', '79', 'an old new car', 'A not so shiny one', 15, 1);
 
 
-DROP table users;
+DROP TABLE users;
 
 CREATE TABLE users (
     UID varchar(64) PRIMARY KEY,
@@ -44,6 +44,14 @@ INSERT INTO users (UID, name)
 
 INSERT INTO users (UID, name)
     VALUES ('79', 'Little Bitch');
+    
+DROP TABLE pictures;
+
+CREATE TABLE pictures (
+	PID varchar(64) PRIMARY KEY,
+	WID varchar(64) NOT NULL,
+	path varchar(80) NOT NULL
+);
 
 CREATE ROLE wl_app;
 GRANT INSERT ON users to wl_app;

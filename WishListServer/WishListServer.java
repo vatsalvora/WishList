@@ -25,7 +25,7 @@ public class WishListServer
     public static final int WISH_UP = 6;  //Update wish in DB
     public static final int IS_USER = 7;  //Check is user is in DB
     public static final int LIST_WISHES = 8; //Return wishes in DB owned by user
-    public static final int RECIEVE_IMAGE = 9;
+    public static final int STORE_IMAGE = 9;
 
     private ServerSocket server;
     private final int port = 5600;
@@ -212,7 +212,7 @@ public class WishListServer
                             oos.writeObject(uWishes);
                             oos.flush();
                         }
-                        else if(code == RECIEVE_IMAGE)
+                        else if(code == STORE_IMAGE)
                         {
                         	String name = (String)ois.readObject();
                         	listenForImage(name);                       	

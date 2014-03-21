@@ -108,6 +108,7 @@ public class WishListServer
         private ObjectOutputStream oos;
 
         private DataOutputStream dos;
+        private DataInputStream dis;
 
         public ClientServiceThread()
         {
@@ -143,6 +144,9 @@ public class WishListServer
 
                 dos = new DataOutputStream(
                     clientSocket.getOutputStream());
+                
+                dis = new DataInputStream(
+                	clientSocket.getInputStream());
                     
                 
 
@@ -252,8 +256,7 @@ public class WishListServer
         
         private void listenForImage(String imageName) throws Exception 
         {
-
-    		DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+        	
     		FileOutputStream fout = new FileOutputStream(imageName);
     		
     		int i;
@@ -263,7 +266,6 @@ public class WishListServer
     		
     		fout.flush();
     		fout.close();
-    		dis.close();
     		
     	}
         

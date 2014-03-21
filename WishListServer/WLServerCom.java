@@ -23,6 +23,7 @@ public class WLServerCom
     protected ObjectOutputStream oos;
     protected ObjectInputStream ois;
     protected DataInputStream dis;
+    protected DataOutputStream dos;
 
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
@@ -53,6 +54,9 @@ public class WLServerCom
 
         dis = new DataInputStream(
                 socket.getInputStream());
+        
+        dos = new DataOutputStream(
+        		socket.getOutputStream());
      
     }
 
@@ -129,12 +133,10 @@ public class WLServerCom
     	
     	int i;
 		FileInputStream fis = new FileInputStream(path);
-		DataOutputStream os = new DataOutputStream(socket.getOutputStream());
 		while ((i = fis.read()) > -1)
-			os.write(i);
+			dos.write(i);
 
 		fis.close();
-		os.close();
     }
 
 }

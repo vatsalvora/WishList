@@ -36,6 +36,7 @@ public class FriendsListDisplayFragment extends Fragment
     {
     }
     
+	@SuppressWarnings("unchecked")
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);

@@ -128,6 +128,8 @@ public final class Login extends Activity
                             	friends.add(new FBUser(i.getId(),i.getName(),true));
                             }
                             
+                            Collections.sort(friends);
+                            
                         	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
 
                         	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", currentAppUser.getUID(), currentAppUser.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));

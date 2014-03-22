@@ -29,7 +29,7 @@ public class FriendsListDisplayFragment extends Fragment
      */
 
     private View rootView;
-    private ArrayList<FBUser> friends; 
+    private ArrayList<User> friends; 
     public static final String ARG_SECTION_NUMBER = "section_number";
 
     public FriendsListDisplayFragment()
@@ -40,11 +40,13 @@ public class FriendsListDisplayFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	friends = (ArrayList<FBUser>) Transporter.unpackArrayList(this.getArguments(), Transporter.FRIENDS);
+
+    	friends = (ArrayList<User>) Transporter.unpackArrayList(this.getArguments(), Transporter.FRIENDS);
+
     	if(friends == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Friends list unavailable!", Toast.LENGTH_SHORT);
             toast.show();		
-            friends = test(); 
+            //friends = test(); 
     	}
     	 
     }
@@ -96,12 +98,12 @@ public class FriendsListDisplayFragment extends Fragment
 
 class friendsListAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<FBUser> displayItems; //The users to be displayed in the friends list
+    private ArrayList<User> displayItems; //The users to be displayed in the friends list
 
-    public friendsListAdapter(Context c, ArrayList<FBUser> friends) {
+    public friendsListAdapter(Context c, ArrayList<User> friends) {
         mContext = c;
         if(friends == null){
-        	displayItems = new ArrayList<FBUser>();
+        	displayItems = new ArrayList<User>();
         }
         else{
         	displayItems = friends; 

@@ -13,7 +13,7 @@ import java.util.Collections;
 import android.graphics.Bitmap;
 import android.os.Parcelable;
 
-public abstract class User implements Parcelable
+public abstract class User implements Parcelable, Comparable<User>
 {
     protected boolean isAppUser; //flag for current app user
     protected String uid; //ID of user
@@ -127,5 +127,9 @@ public abstract class User implements Parcelable
     protected final void setIsAppUser(boolean flag)
     {
         isAppUser = flag;
-    }    
+    }
+    
+    public int compareTo(User u){
+    	return this.getName().compareTo(u.getName());
+    }
 }

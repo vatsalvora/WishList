@@ -36,24 +36,7 @@ public final class WLServerCom
     public static final int LIST_WISHES = 8;
     
     public static void init() throws UnknownHostException, IOException{
-    	 socket = new Socket(servIP, port);
-
-         //Open an output stream
-         oos = new ObjectOutputStream(
-                 socket.getOutputStream());
-
-         //Open an input stream
-         ois = new ObjectInputStream(
-                 socket.getInputStream());
-
-         dis = new DataInputStream(
-                 socket.getInputStream());
-    }
-    
-    private WLServerCom() throws UnknownHostException, IOException
-    {
-        
-        //Create connection to server
+    	//Create connection to server
         //For testing, server will be run on local host
         //host = InetAddress.getLocalHost();
         socket = new Socket(servIP, port);
@@ -68,6 +51,13 @@ public final class WLServerCom
 
         dis = new DataInputStream(
                 socket.getInputStream());
+    
+    }
+    
+    private WLServerCom() throws UnknownHostException, IOException
+    {
+        
+       init();
      
     }
     

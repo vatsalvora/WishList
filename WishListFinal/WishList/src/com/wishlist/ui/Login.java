@@ -126,6 +126,7 @@ public final class Login extends Activity
                           if (user != null) {
                             Log.i("Facebook",user.getName());
                             Log.i("Facebook", user.getId());
+                            currentAppUser = new FBUser(user.getName(),user.getId(), true);
                           }
                         }
                       }).executeAsync();
@@ -139,8 +140,17 @@ public final class Login extends Activity
                             	Log.i("Facebook", i.getName());
                             	Log.i("Facebook", i.getId());
                             	friends.add(new FBUser(i.getId(),i.getName(),true));
-                            	
                             }
+                            
+                        	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
+
+                        	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", currentAppUser.getUID(), currentAppUser.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));
+                        	wishes.add(new WishItem("dummyID2", "A Feast of Ice and Fire", currentAppUser.getUID(), currentAppUser.getName(), "", "", "Fresh out of the series that redefined fantasy, comes the cookbook that may just redefine dinner . . . and lunch, and breakfast. ", "20", 0, new Date(3,4,2014)));
+                        	
+                        	currentAppUser.setList(wishes);
+                        	
+                            pack();
+                            start();
                         }
                     }).executeAsync();
                 }

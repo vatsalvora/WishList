@@ -40,7 +40,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private ViewPager mViewPager;
     private ActionBar actionBar;
     
-    private WLServerCom com; //DB pointer
     private Bundle userData; //bundle from login
     private User appUser; //the app user
     private User currentUser; //current user to view the data
@@ -89,7 +88,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	//set up DB communication
     	try
     	{
-    		com = new WLServerCom();
+    		WLServerCom.init();
     	}
     	catch (Exception e)
     	{
@@ -117,7 +116,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void loadDBData(User u){
     	try
     	{
-    		u.setList(com.listWishes(u.getUID()));
+    		u.setList(WLServerCom.listWishes(u.getUID()));
     	}
     	catch (Exception e)
     	{

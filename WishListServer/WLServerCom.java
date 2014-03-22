@@ -7,6 +7,8 @@ import java.net.UnknownHostException;
 import java.io.BufferedInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 public class WLServerCom 
@@ -21,6 +23,7 @@ public class WLServerCom
     protected ObjectOutputStream oos;
     protected ObjectInputStream ois;
     protected DataInputStream dis;
+    protected DataOutputStream dos;
 
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
@@ -31,6 +34,7 @@ public class WLServerCom
     public static final int WISH_UP = 6;
     public static final int IS_USER = 7;
     public static final int LIST_WISHES = 8;
+    public static final int STORE_IMAGE = 9;
 
     public WLServerCom() throws UnknownHostException, IOException
     {
@@ -50,6 +54,9 @@ public class WLServerCom
 
         dis = new DataInputStream(
                 socket.getInputStream());
+        
+        dos = new DataOutputStream(
+        		socket.getOutputStream());
      
     }
 
@@ -99,6 +106,7 @@ public class WLServerCom
     }
     public boolean isUser(String wid) throws IOException, ClassNotFoundException
     {
+		//Is this supposed to be UID? -- Will
         /** Returns true if given user is in database */
         sendCode(IS_USER);
         sendObject(wid);
@@ -115,6 +123,21 @@ public class WLServerCom
 
         /* Gives warning. TODO: make warning go away */
         return (ArrayList<WishItem>)getObject();
+    }
+    
+    //Primative method to store image in the database.
+    //To do : make it extract the name from the path itself -- WILL NEIL
+    public void storeImage(String name, String path) throws IOException, ClassNotFoundException
+    {
+    	sendCode(STORE_IMAGE);
+    	sendObject(name);
+    	
+    	int i;
+		FileInputStream fis = new FileInputStream(path);
+		while ((i = fis.read()) > -1)
+			dos.write(i);
+
+		fis.close();
     }
 
 }

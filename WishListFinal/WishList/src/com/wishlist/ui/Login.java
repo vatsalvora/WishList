@@ -1,5 +1,7 @@
 package com.wishlist.ui;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.*;
 
@@ -10,8 +12,14 @@ import com.facebook.model.*;
 import com.wishlist.obj.FBUser;
 import com.wishlist.obj.WishItem;
 
+import android.util.Base64;
 import android.util.Log;
+import android.widget.TextView;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 public final class Login extends Activity
 {
@@ -25,8 +33,23 @@ public final class Login extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //startFBSession();
-        test();
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.facebook.samples.hellofacebook", 
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                }
+        } catch (NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+        startFBSession();
+        //test();
     }
 
     protected void onResume()
@@ -95,30 +118,34 @@ public final class Login extends Activity
             {
                 if (session.isOpened())
                 {
-                    Log.i("MyActivity", "MyClass.getView() � get item number ");
-                    // make request to the /me API
-                    Request.newMeRequest(session, new Request.GraphUserCallback()
-                    {
+                	Request.newMeRequest(session, new Request.GraphUserCallback() {
 
                         // callback after Graph API response with user object
                         @Override
-                        public void onCompleted(GraphUser user, Response response)
-                        {
-                            currentAppUser = new FBUser(user.getId(), user.getName(), true);
+                        public void onCompleted(GraphUser user, Response response) {
+                          if (user != null) {
+                            Log.i("Facebook",user.getName());
+                            Log.i("Facebook", user.getId());
+                          }
                         }
-                    });
-
-                    //make request to the /friends-list API
-                    Request.newMyFriendsRequest(session, new Request.GraphUserListCallback()
+                      }).executeAsync();
+                	Request.newMyFriendsRequest(session, new Request.GraphUserListCallback()
                     {
 
-                        @Override
                         public void onCompleted(List<GraphUser> users, Response response)
                         {
-                            friends = new ArrayList<FBUser>();
-                            for(GraphUser i : users) friends.add(new FBUser(i.getId(), i.getName(), false));
+                        	friends = new ArrayList<FBUser>();
+                            for(GraphUser i : users){ 
+                            	Log.i("Facebook", i.getName());
+                            	Log.i("Facebook", i.getId());
+                            	friends.add(new FBUser(i.getId(),i.getName(),true));
+                            	
+                            }
                         }
-                    });
+                    }).executeAsync();
+                }
+                else if(session.isClosed()){
+                	Log.i("Facebook", session.getState().toString());
                 }
             }
         });

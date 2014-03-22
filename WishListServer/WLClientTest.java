@@ -90,7 +90,10 @@ public class WLClientTest
                             System.out.println(wishes.get(i).toString());
                         }
                     }
-                        
+                    else if(msg.equals("pawel_Image"))
+                    {
+                    	com.storeImage("image.jpg", "image.jpg");
+                    }
                     else
                     {
                         com.sendCode(STRING);

@@ -81,10 +81,10 @@ public class FriendsListDisplayFragment extends Fragment
 		ArrayList<User> friends = new ArrayList<User>(); 
 		FBUser Oberyn = new FBUser("0", "Oberyn Martell", false); 
 		FBUser Tyene = new FBUser("1", "Tyene Sand", false);
-		FBUser Oleanna = new FBUser("2", "Oleanna Tyrell", false);
+		FBUser Olenna = new FBUser("2", "Olenna Tyrell", false);
 		FBUser Margaery = new FBUser("3", "Margaery Tyrell", false);
 		
-		friends.add(Oberyn); friends.add(Tyene); friends.add(Oleanna); friends.add(Margaery);
+		friends.add(Oberyn); friends.add(Tyene); friends.add(Olenna); friends.add(Margaery);
 		
 		return friends;
 		

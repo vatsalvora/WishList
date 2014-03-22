@@ -29,7 +29,7 @@ public class FriendsListDisplayFragment extends Fragment
      */
 
     private View rootView;
-    private ArrayList<User> friends; 
+    private ArrayList<FBUser> friends; 
     public static final String ARG_SECTION_NUMBER = "section_number";
 
     public FriendsListDisplayFragment()
@@ -39,7 +39,7 @@ public class FriendsListDisplayFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	friends = (ArrayList<User>) Transporter.unpackObject(this.getArguments(), Transporter.FRIENDS);
+    	friends = (ArrayList<FBUser>) Transporter.unpackArrayList(this.getArguments(), Transporter.FRIENDS);
     	if(friends == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Friends list unavailable!", Toast.LENGTH_SHORT);
             toast.show();		
@@ -77,8 +77,8 @@ public class FriendsListDisplayFragment extends Fragment
 	            return super.onOptionsItemSelected(item);
 	    }
 	} 
-	public ArrayList<User> test(){ //makes a test friends list
-		ArrayList<User> friends = new ArrayList<User>(); 
+	public ArrayList<FBUser> test(){ //makes a test friends list
+		ArrayList<FBUser> friends = new ArrayList<FBUser>(); 
 		FBUser Oberyn = new FBUser("0", "Oberyn Martell", false); 
 		FBUser Tyene = new FBUser("1", "Tyene Sand", false);
 		FBUser Olenna = new FBUser("2", "Olenna Tyrell", false);
@@ -95,15 +95,15 @@ public class FriendsListDisplayFragment extends Fragment
 
 class friendsListAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<User> displayItems; //The users to be displayed in the friends list
+    private ArrayList<FBUser> displayItems; //The users to be displayed in the friends list
 
-    public friendsListAdapter(Context c, ArrayList<User> displayables) {
+    public friendsListAdapter(Context c, ArrayList<FBUser> friends) {
         mContext = c;
-        if(displayables == null){
-        	displayItems = new ArrayList<User>();
+        if(friends == null){
+        	displayItems = new ArrayList<FBUser>();
         }
         else{
-        	displayItems = displayables; 
+        	displayItems = friends; 
         }
         
     }

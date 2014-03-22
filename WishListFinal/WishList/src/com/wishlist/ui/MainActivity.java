@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private Bundle userData; //bundle from login
     private User appUser; //the app user
     private User currentUser; //current user to view the data
-    private ArrayList<User> friends; //friends of the app user
+    private ArrayList<FBUser> friends; //friends of the app user
     
      @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -101,7 +101,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	//retrieve data from intent
     	userData = getIntent().getExtras();
         appUser = (FBUser) Transporter.unpackObject(userData, Transporter.USER);
-        friends = (ArrayList<User>) Transporter.unpackArrayList(userData, Transporter.FRIENDS);
+        friends = (ArrayList<FBUser>) Transporter.unpackArrayList(userData, Transporter.FRIENDS);
         
         //set current user as app user
         setCurrentUser(appUser);

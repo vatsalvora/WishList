@@ -34,8 +34,8 @@ public final class Login extends Activity
     {
         super.onCreate(savedInstanceState);
 
-        //startFBSession();
-        test();
+        startFBSession();
+        //test();
     }
 
     protected void onResume()
@@ -134,7 +134,7 @@ public final class Login extends Activity
                         	wishes.add(new WishItem("dummyID2", "A Feast of Ice and Fire", currentAppUser.getUID(), currentAppUser.getName(), "", "", "Fresh out of the series that redefined fantasy, comes the cookbook that may just redefine dinner . . . and lunch, and breakfast. ", "20", 0, new Date(3,4,2014)));
                         	
                         	currentAppUser.setList(wishes);
-                        	
+                        	Log.i("IsNULL",friends.toString());
                             pack();
                             start();
                         }

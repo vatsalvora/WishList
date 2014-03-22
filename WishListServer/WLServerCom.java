@@ -106,6 +106,7 @@ public class WLServerCom
     }
     public boolean isUser(String wid) throws IOException, ClassNotFoundException
     {
+		//Is this supposed to be UID? -- Will
         /** Returns true if given user is in database */
         sendCode(IS_USER);
         sendObject(wid);

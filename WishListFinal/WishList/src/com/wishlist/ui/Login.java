@@ -1,14 +1,17 @@
 package com.wishlist.ui;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
 
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
+import com.facebook.android.Facebook;
 import com.facebook.model.*;
 import com.wishlist.obj.FBUser;
 import com.wishlist.obj.WishItem;
+import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
 import android.content.Intent;
@@ -65,7 +68,9 @@ public final class Login extends Activity
     {
         //start the main activity
     	super.onActivityResult(requestCode, resultCode, data);
+
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+
     }
     
     protected void pack()
@@ -100,9 +105,9 @@ public final class Login extends Activity
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
                           if (user != null) {
-                            Log.i("Facebook",user.getName());
-                            Log.i("Facebook", user.getId());
-                            currentAppUser = new FBUser(user.getId(),user.getName(), true);
+                            //Log.i("Facebook",user.getName());
+                            //Log.i("Facebook", user.getId());
+                            currentAppUser = new FBUser(user.getName(),user.getId(), true);
                           }
                         }
                       }).executeAsync();

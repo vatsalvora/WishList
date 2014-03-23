@@ -50,8 +50,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initDB(); //set up DB communication
         initData(); //load data from login
+        initDB(); //set up DB communication
         initGraphics(); //load graphics
     }
 
@@ -86,14 +86,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     
     protected void initDB(){
     	//set up DB communication
+    	new Thread(){ public void run(){
     	try
     	{
     		WLServerCom.init();
+    		Log.e("User",((FBUser)currentUser).toString());
+    		WLServerCom.addUser((FBUser)currentUser);
     	}
     	catch (Exception e)
     	{
+    		Log.e("Backend",e.toString());
     		Log.e("Backend", "Error, couldn't connect to server");
     	}
+    	}
+    	}.start();
     }
     
     @SuppressWarnings("unchecked")

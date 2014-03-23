@@ -11,13 +11,14 @@
 package com.wishlist.obj;
 
 import java.util.*;
+import java.io.Serializable;
 import java.sql.Date;
 import android.graphics.drawable.Drawable;
 //import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class WishItem implements Comparable<WishItem>, Parcelable
+public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
 {
 	protected StringPair wish; //wish ID and name pair
 	protected StringPair user; //user ID and name pair

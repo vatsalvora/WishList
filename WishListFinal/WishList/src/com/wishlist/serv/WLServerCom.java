@@ -1,12 +1,14 @@
 package com.wishlist.serv;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import com.wishlist.obj.FBUser;
@@ -24,6 +26,7 @@ public final class WLServerCom
     protected static ObjectOutputStream oos;
     protected static ObjectInputStream ois;
     protected static DataInputStream dis;
+    protected static DataOutputStream dos;
 
     public static final int STRING = 0;
     public static final int STRING_PLAY = 1;
@@ -34,9 +37,10 @@ public final class WLServerCom
     public static final int WISH_UP = 6;
     public static final int IS_USER = 7;
     public static final int LIST_WISHES = 8;
-    
+    public static final int STORE_IMAGE = 9;
+
     public static void init() throws UnknownHostException, IOException{
-    	//Create connection to server
+    	 //Create connection to server
         //For testing, server will be run on local host
         //host = InetAddress.getLocalHost();
         socket = new Socket(servIP, port);
@@ -51,16 +55,16 @@ public final class WLServerCom
 
         dis = new DataInputStream(
                 socket.getInputStream());
-    
+        
+        dos = new DataOutputStream(
+        		socket.getOutputStream());
     }
     
     private WLServerCom() throws UnknownHostException, IOException
     {
-        
-       init();
-     
+        init();    
     }
-    
+
 	//Should be private, but public for testing reasons
     public static void sendObject(Object obj) throws IOException
     {
@@ -105,14 +109,15 @@ public final class WLServerCom
         rmWish(wi.getWID());
         addWish(wi);
     }
-    public static boolean isUser(String wid) throws IOException, ClassNotFoundException
+    public static boolean isUser(String uid) throws IOException, ClassNotFoundException
     {
+		//Is this supposed to be UID? -- Will
+		//yes -- Alex
         /** Returns true if given user is in database */
         sendCode(IS_USER);
-        sendObject(wid);
+        sendObject(uid);
         return dis.readBoolean();
     }
-    
     @SuppressWarnings("unchecked")
 	public static ArrayList<WishItem> listWishes(String uid) throws IOException,
            ClassNotFoundException
@@ -124,6 +129,21 @@ public final class WLServerCom
         sendObject(uid);
 
         return (ArrayList<WishItem>)getObject();
+    }
+    
+    //Primative method to store image in the database.
+    //To do : make it extract the name from the path itself -- WILL NEIL
+    public static void storeImage(String name, String path) throws IOException, ClassNotFoundException
+    {
+    	sendCode(STORE_IMAGE);
+    	sendObject(name);
+    	
+    	int i;
+		FileInputStream fis = new FileInputStream(path);
+		while ((i = fis.read()) > -1)
+			dos.write(i);
+
+		fis.close();
     }
 
 }

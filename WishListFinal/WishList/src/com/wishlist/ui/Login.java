@@ -1,7 +1,5 @@
 package com.wishlist.ui;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.*;
 
@@ -13,14 +11,8 @@ import com.facebook.model.*;
 import com.wishlist.obj.FBUser;
 import com.wishlist.obj.WishItem;
 
-import android.util.Base64;
 import android.util.Log;
-import android.widget.TextView;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.content.pm.PackageManager.NameNotFoundException;
 
 public final class Login extends Activity
 {
@@ -74,7 +66,9 @@ public final class Login extends Activity
     {
         //start the main activity
     	super.onActivityResult(requestCode, resultCode, data);
-    	
+
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+
     }
     
     protected void pack()
@@ -118,13 +112,14 @@ public final class Login extends Activity
                 	Request.newMyFriendsRequest(session, new Request.GraphUserListCallback()
                     {
 
-                        public void onCompleted(List<GraphUser> users, Response response)
+                        @SuppressWarnings("deprecation")
+						public void onCompleted(List<GraphUser> users, Response response)
                         {
                         	friends = new ArrayList<FBUser>();
                             for(GraphUser i : users){ 
                             	//Log.i("Facebook", i.getName());
                             	//Log.i("Facebook", i.getId());
-                            	friends.add(new FBUser(i.getId(),i.getName(),true));
+                            	friends.add(new FBUser(i.getId(),i.getName(),false));
                             }
                             
                             Collections.sort(friends);
@@ -138,6 +133,7 @@ public final class Login extends Activity
                         	//Log.i("IsNULL",friends.toString());
                             pack();
                             start();
+                           
                         }
                     }).executeAsync();
                 }

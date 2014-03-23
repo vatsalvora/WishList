@@ -28,7 +28,6 @@ public class FriendsListDisplayFragment extends Fragment
      * fragment.
      */
 
-    private View rootView;
     private ArrayList<User> friends; 
     public static final String ARG_SECTION_NUMBER = "section_number";
 

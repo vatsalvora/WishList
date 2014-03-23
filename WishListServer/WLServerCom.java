@@ -104,12 +104,13 @@ public class WLServerCom
         rmWish(wi.getWID());
         addWish(wi);
     }
-    public boolean isUser(String wid) throws IOException, ClassNotFoundException
+    public boolean isUser(String uid) throws IOException, ClassNotFoundException
     {
 		//Is this supposed to be UID? -- Will
+		//yes -- Alex
         /** Returns true if given user is in database */
         sendCode(IS_USER);
-        sendObject(wid);
+        sendObject(uid);
         return dis.readBoolean();
     }
     public ArrayList<WishItem> listWishes(String uid) throws IOException,

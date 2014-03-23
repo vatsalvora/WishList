@@ -7,23 +7,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ItemView" >
-    
-    <ImageView
-        android:id="@+id/ItemImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_launcher" />
-
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/owner"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ItemImage"
-        android:text="@string/temp" />
 
     <TextView
         android:id="@+id/buyer"
@@ -44,15 +27,6 @@
         android:text="@string/temp" />
 
     <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/ItemImage"
-        android:text="@string/temp" />
-
-    <TextView
         android:id="@+id/owner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,5 +40,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ItemImage"
+        android:layout_centerVertical="true"
+        android:text="@string/temp" />
+
+    <ImageView
+        android:id="@+id/ItemImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dateAdded"
+        android:layout_alignTop="@+id/owner"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ratingBar2"
+        android:layout_alignParentBottom="true"
+        android:text="Comment" />
+
+    <RatingBar
+        android:id="@+id/ratingBar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignLeft="@+id/ItemImage"
+        android:layout_marginBottom="39dp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dateAdded"
+        android:layout_alignTop="@+id/dateAdded"
+        android:text="@string/temp" />
 
 </RelativeLayout>

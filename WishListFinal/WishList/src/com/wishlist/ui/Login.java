@@ -1,5 +1,6 @@
 package com.wishlist.ui;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
 
@@ -10,6 +11,7 @@ import com.facebook.android.Facebook;
 import com.facebook.model.*;
 import com.wishlist.obj.FBUser;
 import com.wishlist.obj.WishItem;
+import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
 import android.content.Intent;

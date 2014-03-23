@@ -7,13 +7,14 @@
 
 package com.wishlist.obj;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import android.graphics.Bitmap;
 import android.os.Parcelable;
 
-public abstract class User implements Parcelable, Comparable<User>
+public abstract class User implements Parcelable, Comparable<User>, Serializable
 {
     protected boolean isAppUser; //flag for current app user
     protected String uid; //ID of user

@@ -11,6 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import com.wishlist.obj.FBUser;
 import com.wishlist.obj.WishItem;
 
@@ -43,8 +45,9 @@ public final class WLServerCom
     	 //Create connection to server
         //For testing, server will be run on local host
         //host = InetAddress.getLocalHost();
+    	Log.e("Socket","Got Here!");
         socket = new Socket(servIP, port);
-
+        Log.e("Socket",socket.getPort()+"");
         //Open an output stream
         oos = new ObjectOutputStream(
                 socket.getOutputStream());

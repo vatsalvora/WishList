@@ -8,10 +8,12 @@
 
 package com.wishlist.obj;
 
+import java.io.Serializable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class StringPair implements Parcelable
+public class StringPair implements Parcelable, Serializable
 {
     public String first;
     public String second;

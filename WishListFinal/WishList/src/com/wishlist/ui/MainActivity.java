@@ -210,7 +210,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         {
             super(fm);
             arr = new Fragment[COUNT];
-            arr[WISH] = createFragment(new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+            arr[WISH] = createFragment(new WishListDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
             arr[FRIEND] = createFragment(new FriendsListDisplayFragment(), new Bundle(), Transporter.FRIENDS, friends);
             changeView = false;
         }
@@ -236,7 +236,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             {
 	            case WISH:
 	            	if(changeView){
-	            		arr[WISH] = createFragment(new WishDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
+	            		arr[WISH] = createFragment(new WishListDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
 	            	}
 	                return arr[WISH];
 	            case FRIEND:

@@ -8,6 +8,7 @@ import java.util.*;
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
+import com.facebook.android.Facebook;
 import com.facebook.model.*;
 import com.wishlist.obj.FBUser;
 import com.wishlist.obj.WishItem;
@@ -73,9 +74,7 @@ public final class Login extends Activity
     {
         //start the main activity
     	super.onActivityResult(requestCode, resultCode, data);
-        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-        pack();
-        start();
+    	
     }
     
     protected void pack()
@@ -110,8 +109,8 @@ public final class Login extends Activity
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
                           if (user != null) {
-                            Log.i("Facebook",user.getName());
-                            Log.i("Facebook", user.getId());
+                            //Log.i("Facebook",user.getName());
+                            //Log.i("Facebook", user.getId());
                             currentAppUser = new FBUser(user.getName(),user.getId(), true);
                           }
                         }
@@ -123,8 +122,8 @@ public final class Login extends Activity
                         {
                         	friends = new ArrayList<FBUser>();
                             for(GraphUser i : users){ 
-                            	Log.i("Facebook", i.getName());
-                            	Log.i("Facebook", i.getId());
+                            	//Log.i("Facebook", i.getName());
+                            	//Log.i("Facebook", i.getId());
                             	friends.add(new FBUser(i.getId(),i.getName(),true));
                             }
                             
@@ -136,7 +135,7 @@ public final class Login extends Activity
                         	wishes.add(new WishItem("dummyID2", "A Feast of Ice and Fire", currentAppUser.getUID(), currentAppUser.getName(), "", "", "Fresh out of the series that redefined fantasy, comes the cookbook that may just redefine dinner . . . and lunch, and breakfast. ", "20", 0, new Date(3,4,2014)));
                         	
                         	currentAppUser.setList(wishes);
-                        	Log.i("IsNULL",friends.toString());
+                        	//Log.i("IsNULL",friends.toString());
                             pack();
                             start();
                         }

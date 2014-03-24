@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.wishlist.obj.FBUser;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
@@ -48,7 +47,7 @@ So the UI elements for certain actions are hidden based on user.
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	user = (FBUser) Transporter.unpackObject(this.getArguments(), Transporter.USER);
+    	user = (User) Transporter.unpackObject(this.getArguments(), Transporter.USER);
     	if(user == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);
             toast.show();			
@@ -194,7 +193,7 @@ So the UI elements for certain actions are hidden based on user.
     @SuppressWarnings("deprecation")
 	protected void test(){
 		// Dummy user
-		user = new FBUser("0", "John Doe", true);
+		user = new User("0", "John Doe", true);
     	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
     	
     	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", user.getUID(), user.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));

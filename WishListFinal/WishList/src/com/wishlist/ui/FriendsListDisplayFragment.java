@@ -21,7 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wishlist.obj.FBUser;
 import com.wishlist.obj.User;
 
 public class FriendsListDisplayFragment extends Fragment
@@ -92,12 +91,12 @@ public class FriendsListDisplayFragment extends Fragment
 	            return super.onOptionsItemSelected(item);
 	    }
 	} 
-	public ArrayList<FBUser> test(){ //makes a test friends list
-		ArrayList<FBUser> friends = new ArrayList<FBUser>(); 
-		FBUser Oberyn = new FBUser("0", "Oberyn Martell", false); 
-		FBUser Tyene = new FBUser("1", "Tyene Sand", false);
-		FBUser Olenna = new FBUser("2", "Olenna Tyrell", false);
-		FBUser Margaery = new FBUser("3", "Margaery Tyrell", false);
+	public ArrayList<User> test(){ //makes a test friends list
+		ArrayList<User> friends = new ArrayList<User>(); 
+		User Oberyn = new User("0", "Oberyn Martell", false); 
+		User Tyene = new User("1", "Tyene Sand", false);
+		User Olenna = new User("2", "Olenna Tyrell", false);
+		User Margaery = new User("3", "Margaery Tyrell", false);
 		
 		friends.add(Oberyn); friends.add(Tyene); friends.add(Olenna); friends.add(Margaery);
 		

@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@SuppressWarnings("serial")
 public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
 {
 	protected StringPair wish; //wish ID and name pair

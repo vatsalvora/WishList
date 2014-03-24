@@ -1,17 +1,14 @@
 package com.wishlist.ui;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
 
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
-import com.facebook.android.Facebook;
 import com.facebook.model.*;
-import com.wishlist.obj.FBUser;
+import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
-import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
 import android.content.Intent;
@@ -19,8 +16,8 @@ import android.content.Intent;
 public final class Login extends Activity
 {
 
-    private FBUser currentAppUser= null; //user object for the Facebook user actually using the app.
-    private ArrayList<FBUser> friends = null; //ID of friends
+    private User currentAppUser= null; //user object for the Facebook user actually using the app.
+    private ArrayList<User> friends = null; //ID of friends
     private Bundle FBData = null;
     private Session s = null; //current FB Session object
 
@@ -107,7 +104,7 @@ public final class Login extends Activity
                           if (user != null) {
                             //Log.i("Facebook",user.getName());
                             //Log.i("Facebook", user.getId());
-                            currentAppUser = new FBUser(user.getName(),user.getId(), true);
+                            currentAppUser = new User(user.getName(),user.getId(), true);
                           }
                         }
                       }).executeAsync();
@@ -117,11 +114,11 @@ public final class Login extends Activity
                         @SuppressWarnings("deprecation")
 						public void onCompleted(List<GraphUser> users, Response response)
                         {
-                        	friends = new ArrayList<FBUser>();
+                        	friends = new ArrayList<User>();
                             for(GraphUser i : users){ 
                             	//Log.i("Facebook", i.getName());
                             	//Log.i("Facebook", i.getId());
-                            	friends.add(new FBUser(i.getId(),i.getName(),false));
+                            	friends.add(new User(i.getId(),i.getName(),false));
                             }
                             
                             Collections.sort(friends);
@@ -154,10 +151,10 @@ public final class Login extends Activity
     @SuppressWarnings("deprecation")
 	protected void test()
     {// sets a dummy user for testing purposes
-    	currentAppUser = new FBUser("0", "John Doe", true);
-    	friends = new ArrayList<FBUser>();
+    	currentAppUser = new User("0", "John Doe", true);
+    	friends = new ArrayList<User>();
     	for(int i=1; i<11; i++){
-    		friends.add(new FBUser(Integer.toString(i), Integer.toString(i), false));
+    		friends.add(new User(Integer.toString(i), Integer.toString(i), false));
     	}
     	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
 

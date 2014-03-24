@@ -2,6 +2,7 @@ package com.wishlist.ui;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,13 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wishlist.obj.FBUser;
 import com.wishlist.obj.User;
 
 public class FriendsListDisplayFragment extends Fragment
@@ -58,7 +60,17 @@ public class FriendsListDisplayFragment extends Fragment
                                          container, false);
             		
         listView.setAdapter(new friendsListAdapter(getActivity(), friends)); 
-        
+        listView.setOnItemClickListener(new OnItemClickListener() {
+        	  @Override
+        	  public void onItemClick(AdapterView<?> parent, View view,
+        	    int position, long id) {
+        	    Toast.makeText(getActivity(),
+        	      "Click ListItem Number " + position, Toast.LENGTH_LONG)
+        	      .show();
+        	    ActionBar bar = getActivity().getActionBar();
+        	    bar.setSelectedNavigationItem(0);
+        	  }
+        	});
         
         return listView;
     }
@@ -79,12 +91,12 @@ public class FriendsListDisplayFragment extends Fragment
 	            return super.onOptionsItemSelected(item);
 	    }
 	} 
-	public ArrayList<FBUser> test(){ //makes a test friends list
-		ArrayList<FBUser> friends = new ArrayList<FBUser>(); 
-		FBUser Oberyn = new FBUser("0", "Oberyn Martell", false); 
-		FBUser Tyene = new FBUser("1", "Tyene Sand", false);
-		FBUser Olenna = new FBUser("2", "Olenna Tyrell", false);
-		FBUser Margaery = new FBUser("3", "Margaery Tyrell", false);
+	public ArrayList<User> test(){ //makes a test friends list
+		ArrayList<User> friends = new ArrayList<User>(); 
+		User Oberyn = new User("0", "Oberyn Martell", false); 
+		User Tyene = new User("1", "Tyene Sand", false);
+		User Olenna = new User("2", "Olenna Tyrell", false);
+		User Margaery = new User("3", "Margaery Tyrell", false);
 		
 		friends.add(Oberyn); friends.add(Tyene); friends.add(Olenna); friends.add(Margaery);
 		

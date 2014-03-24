@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private Bundle userData; //bundle from login
     private User appUser; //the app user
     private User currentUser; //current user to view the data
-    private ArrayList<FBUser> friends; //friends of the app user
+    private ArrayList<User> friends; //friends of the app user
     
      @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -90,8 +90,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	try
     	{
     		WLServerCom.init();
-    		Log.e("User",((FBUser)currentUser).toString());
-    		WLServerCom.addUser((FBUser)currentUser);
+    		Log.e("User", currentUser.toString());
+    		WLServerCom.addUser(currentUser);
     	}
     	catch (Exception e)
     	{
@@ -106,8 +106,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void initData(){
     	//retrieve data from intent
     	userData = getIntent().getExtras();
-        appUser = (FBUser) Transporter.unpackObject(userData, Transporter.USER);
-        friends = (ArrayList<FBUser>) Transporter.unpackArrayList(userData, Transporter.FRIENDS);
+        appUser = (User) Transporter.unpackObject(userData, Transporter.USER);
+        friends = (ArrayList<User>) Transporter.unpackArrayList(userData, Transporter.FRIENDS);
         
         //set current user as app user
         setCurrentUser(appUser);

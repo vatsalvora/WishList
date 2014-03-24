@@ -13,6 +13,7 @@ import java.io.Serializable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@SuppressWarnings("serial")
 public class StringPair implements Parcelable, Serializable
 {
     public String first;

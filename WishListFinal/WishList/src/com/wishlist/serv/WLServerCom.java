@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import android.util.Log;
 
-import com.wishlist.obj.FBUser;
+import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
 public final class WLServerCom 
@@ -88,7 +88,7 @@ public final class WLServerCom
         return ois.readObject();
     }
 
-    public static void addUser(FBUser u) throws IOException
+    public static void addUser(User u) throws IOException
     {
         /** Adds given user to database */ 
         sendCode(USER_ADD);

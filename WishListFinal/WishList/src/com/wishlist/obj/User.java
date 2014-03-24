@@ -12,14 +12,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
 import android.os.Parcelable;
 
-public abstract class User implements Parcelable, Comparable<User>, Serializable
+@SuppressWarnings("serial")
+public class User implements Parcelable, Comparable<User>, Serializable
 {
     protected boolean isAppUser; //flag for current app user
     protected String uid; //ID of user
     protected String name; //name of user
-    protected ArrayList<WishItem> wList; //wishlist for user
+    protected ArrayList<WishItem> wList = new ArrayList<WishItem>(); //wishlist for user
     protected Bitmap profilePicture; //profile picture of the user 
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
     
@@ -133,4 +135,44 @@ public abstract class User implements Parcelable, Comparable<User>, Serializable
     public int compareTo(User u){
     	return this.getName().compareTo(u.getName());
     }
+    
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+
+    public static final Parcelable.Creator<User> CREATOR
+    = new Parcelable.Creator<User>()
+    {
+        public User createFromParcel(Parcel in)
+        {
+            return new User(in);
+        }
+        public User[] newArray(int size)
+        {
+            throw new UnsupportedOperationException();
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel out, int flags)
+    {
+
+        if(isAppUser) out.writeInt(1);
+        else out.writeInt(0);
+        out.writeString(uid);
+        out.writeString(name);
+        out.writeTypedList(wList);
+    }
+
+    private User(Parcel in)
+    {
+        if(in.readInt() == 1) isAppUser = true;
+        else isAppUser=false;
+        setUID(in.readString());
+        setName(in.readString());
+        in.readTypedList(wList, WishItem.CREATOR);
+    }  
 }

@@ -176,7 +176,19 @@ public class DBCom
         return resultSet;
 
     }
-
+	
+	private static String tupleBuilder(String... in)
+	{
+		String tuple="(";
+		for(int i=0; i<in.length; i++)
+		{
+			tuple += i;
+			if(i < in.length-1) tuple += ", ";
+		}
+		tuple += ")";
+		return tuple;
+	}
+	
     //please use this method to build queries (Joon)
     private static String queryBuilder(String... in)
     {

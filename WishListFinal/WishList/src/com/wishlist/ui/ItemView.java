@@ -1,6 +1,8 @@
 package com.wishlist.ui;
 
 import com.wishlist.obj.WishItem;
+import com.wishlist.ui.WishUpdateDialogFragment;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +18,7 @@ import android.widget.*;
  */
 
 
-public class ItemView extends FragmentActivity implements WishUpdateFragment.WishUpdateListener
+public class ItemView extends FragmentActivity implements WishUpdateDialogFragment.WishUpdateDialogListener
 {
 	private WishItem item;
 	private int isAppUser;
@@ -138,7 +140,7 @@ public class ItemView extends FragmentActivity implements WishUpdateFragment.Wis
 	}
     
     protected void showUpdateDialog(){
-    	DialogFragment d = new WishUpdateFragment();
+    	DialogFragment d = new WishUpdateDialogFragment();
     	Bundle b = new Bundle();
     	b.putParcelable(Transporter.WISH, item);
     	d.setArguments(b);
@@ -146,13 +148,13 @@ public class ItemView extends FragmentActivity implements WishUpdateFragment.Wis
     }
     
 	@Override
-	public void onDialogPositiveClick(WishUpdateFragment dialog) {
+	public void onDialogPositiveClick(WishUpdateDialogFragment dialog) {
 		// TODO Auto-generated method stub
 		dialog.dismiss();
 	}
 
 	@Override
-	public void onDialogNegativeClick(WishUpdateFragment dialog) {
+	public void onDialogNegativeClick(WishUpdateDialogFragment dialog) {
 		// TODO Auto-generated method stub
 		dialog.dismiss();
 	}

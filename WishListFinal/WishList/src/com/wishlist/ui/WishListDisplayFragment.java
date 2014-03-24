@@ -3,12 +3,9 @@ package com.wishlist.ui;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +24,7 @@ import com.wishlist.obj.FBUser;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
-public class WishDisplayFragment extends DialogFragment
+public class WishListDisplayFragment extends Fragment
 {/*
 Used to display wish lists (of the active user and of their friends). 
 Different actions are allowed depending on the user.
@@ -193,35 +190,6 @@ So the UI elements for certain actions are hidden based on user.
     	//TODO
     	return true;
     }
-    
-    public Dialog createDialog(int hashcode)
-	{
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		
-		switch(hashcode){
-			case 0:
-				builder.setView(inflater.inflate(R.layout.dialog_create_wish, null))
-				.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) 
-					{
-						user.getList().add(new WishItem());
-					}
-				})
-				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
-					public void onClick(DialogInterface dialog, int which) 
-					{
-						WishDisplayFragment.this.getDialog().cancel();
-					}
-				});
-				return builder.create();
-			case 1:
-				builder.setView(inflater.inflate(R.layout.dialog_update_confirmed, null));
-				return builder.create();
-			default:
-				throw new RuntimeException("Not supported yet.");
-		}
-	}
     
     @SuppressWarnings("deprecation")
 	protected void test(){

@@ -122,7 +122,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void loadDBData(User u){
     	try
     	{
-    		u.setList(WLServerCom.listWishes(u.getUID()));
+    		//u.setList(WLServerCom.listWishes(u.getUID()));
     	}
     	catch (Exception e)
     	{

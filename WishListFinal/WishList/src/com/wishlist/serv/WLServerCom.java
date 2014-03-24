@@ -11,10 +11,10 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
-import android.util.Log;
-
 import com.wishlist.obj.User;
-import com.wishlist.obj.WishItem;
+
+//import com.wishlist.obj.FBUser;
+//import com.wishlist.obj.WishItem;
 
 public final class WLServerCom 
 {
@@ -45,9 +45,8 @@ public final class WLServerCom
     	 //Create connection to server
         //For testing, server will be run on local host
         //host = InetAddress.getLocalHost();
-    	Log.e("Socket","Got Here!");
         socket = new Socket(servIP, port);
-        Log.e("Socket",socket.getPort()+"");
+
         //Open an output stream
         oos = new ObjectOutputStream(
                 socket.getOutputStream());
@@ -92,61 +91,62 @@ public final class WLServerCom
     {
         /** Adds given user to database */ 
         sendCode(USER_ADD);
-        sendObject(u);
+        sendObject(u.getName());
+		sendObject(u.getUID());
     }
-    public static void addWish(WishItem w) throws IOException
-    {
-        /** Adds given wish to database */
-        sendCode(WISH_ADD);
-        sendObject(w);
-    }
-    public static void rmWish(String wid) throws IOException
-    {
-        /** Removes wish from db given the wish id */
-        sendCode(WISH_RM);
-        sendObject(wid);
-    }
-    public static void updateWish(WishItem wi) throws IOException
-    {
-        /** Updates a wish in the db */
-        rmWish(wi.getWID());
-        addWish(wi);
-    }
-    public static boolean isUser(String uid) throws IOException, ClassNotFoundException
-    {
-		//Is this supposed to be UID? -- Will
-		//yes -- Alex
-        /** Returns true if given user is in database */
-        sendCode(IS_USER);
-        sendObject(uid);
-        return dis.readBoolean();
-    }
-    @SuppressWarnings("unchecked")
-	public static ArrayList<WishItem> listWishes(String uid) throws IOException,
-           ClassNotFoundException
-    {
-        /** Returns an ArrayList of wish objects that belong to the given
-         * user 
-         */
-        sendCode(LIST_WISHES);
-        sendObject(uid);
+    //public static void addWish(WishItem w) throws IOException
+    //{
+    //    /** Adds given wish to database */
+    //    sendCode(WISH_ADD);
+    //    sendObject(w);
+    //}
+    //public static void rmWish(String wid) throws IOException
+    //{
+    //    /** Removes wish from db given the wish id */
+    //    sendCode(WISH_RM);
+    //    sendObject(wid);
+    //}
+    //public static void updateWish(WishItem wi) throws IOException
+    //{
+    //    /** Updates a wish in the db */
+    //    rmWish(wi.getWID());
+    //    addWish(wi);
+    //}
+    //public static boolean isUser(String uid) throws IOException, ClassNotFoundException
+    //{
+	//	//Is this supposed to be UID? -- Will
+	//	//yes -- Alex
+    //    /** Returns true if given user is in database */
+    //    sendCode(IS_USER);
+    //    sendObject(uid);
+    //    return dis.readBoolean();
+    //}
+    //@SuppressWarnings("unchecked")
+	//public static ArrayList<WishItem> listWishes(String uid) throws IOException,
+    //       ClassNotFoundException
+    //{
+    //    /** Returns an ArrayList of wish objects that belong to the given
+    //     * user 
+    //     */
+    //    sendCode(LIST_WISHES);
+    //    sendObject(uid);
 
-        return (ArrayList<WishItem>)getObject();
-    }
-    
-    //Primative method to store image in the database.
-    //To do : make it extract the name from the path itself -- WILL NEIL
-    public static void storeImage(String name, String path) throws IOException, ClassNotFoundException
-    {
-    	sendCode(STORE_IMAGE);
-    	sendObject(name);
-    	
-    	int i;
-		FileInputStream fis = new FileInputStream(path);
-		while ((i = fis.read()) > -1)
-			dos.write(i);
+    //    return (ArrayList<WishItem>)getObject();
+    //}
+    //
+    ////Primative method to store image in the database.
+    ////To do : make it extract the name from the path itself -- WILL NEIL
+    //public static void storeImage(String name, String path) throws IOException, ClassNotFoundException
+    //{
+    //	sendCode(STORE_IMAGE);
+    //	sendObject(name);
+    //	
+    //	int i;
+	//	FileInputStream fis = new FileInputStream(path);
+	//	while ((i = fis.read()) > -1)
+	//		dos.write(i);
 
-		fis.close();
-    }
+	//	fis.close();
+    //}
 
 }

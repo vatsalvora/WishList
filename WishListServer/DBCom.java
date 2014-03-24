@@ -201,7 +201,10 @@ public class DBCom
     public boolean addUser(String uid, String name)
     {
         /* Do we need to keep this method around ? HELL YES*/
-        command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
+//        command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
+		command = String.format("INSERT INTO users (uid, name) VALUES ('%s', '%s')",
+				uid, name);
+		System.out.println(command);
         return sendSQLnoReturn(command);
 
     }

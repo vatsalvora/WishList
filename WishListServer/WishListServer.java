@@ -175,7 +175,7 @@ public class WishListServer
                             //db.addUser(tu);
                             String name = (String)ois.readObject();
                             String uid = (String)ois.readObject();
-                            fb.addUser(uid, name);
+                            db.addUser(uid, name);
                             //System.out.println(msg);
                         }
                         /*else if (code == WISH_ADD)
@@ -260,7 +260,7 @@ public class WishListServer
         private void listenForImage(String imageName) throws Exception 
         {
         	
-    		FileOutputStream fout =USER new FileOutputStream(imageName);
+    		FileOutputStream fout = new FileOutputStream(imageName);
     		
     		int i;
     		while ( (i = dis.read()) > -1) {

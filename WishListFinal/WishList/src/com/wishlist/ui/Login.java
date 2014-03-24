@@ -104,7 +104,7 @@ public final class Login extends Activity
                           if (user != null) {
                             //Log.i("Facebook",user.getName());
                             //Log.i("Facebook", user.getId());
-                            currentAppUser = new User(user.getName(),user.getId(), true);
+                            currentAppUser = new User(user.getId(),user.getName(), true);
                           }
                         }
                       }).executeAsync();

@@ -18,9 +18,9 @@ import android.os.Parcelable;
 @SuppressWarnings("serial")
 public class User implements Parcelable, Comparable<User>, Serializable
 {
-    protected boolean isAppUser; //flag for current app user
-    protected String uid; //ID of user
-    protected String name; //name of user
+    protected boolean isAppUser=false; //flag for current app user
+    protected String uid=""; //ID of user
+    protected String name=""; //name of user
     protected ArrayList<WishItem> wList = new ArrayList<WishItem>(); //wishlist for user
     protected Bitmap profilePicture; //profile picture of the user 
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
@@ -31,10 +31,7 @@ public class User implements Parcelable, Comparable<User>, Serializable
     public static final char PRICE = 'p';
     
     public User(){
-    	isAppUser = false;
-    	uid = "";
-    	name = "";
-    	wList = new ArrayList<WishItem>();
+    	throw new RuntimeException("Invalid user creation.");
     }
     
     public User(String uid, String name, boolean isAppUser)

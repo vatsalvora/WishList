@@ -27,7 +27,8 @@ public class WLClientTest
         {
             boolean done = false;
             String msg = "";
-            WLServerCom com = new WLServerCom();
+			WLServerCom.init();
+            //WLServerWLServerCom.WLServerCom.= new WLServerWLServerCom.);
 
             while(true)
             {
@@ -42,25 +43,25 @@ public class WLClientTest
 
                     else if(msg.equals("special"))
                     {
-                        com.sendCode(STRING_PLAY);
-                        com.sendObject("play");
+                        WLServerCom.sendCode(STRING_PLAY);
+                        WLServerCom.sendObject("play");
                     }
 
                     else if(msg.equals("user_add"))
                     {
-                        com.addUser(tu);
+                        WLServerCom.addUser(tu);
                     }
 
                     else if(msg.equals("wish_add"))
                     {
-                        com.addWish(wid_empty); 
+                        WLServerCom.addWish(wid_empty); 
                     }
                     else if(msg.equals("user_send"))
                     {
-                        com.sendCode(USER_SEND);
+                        WLServerCom.sendCode(USER_SEND);
                         try
                         {
-                            FBUser fb = (FBUser)com.getObject();
+                            FBUser fb = (FBUser)WLServerCom.getObject();
                             System.out.println(fb.toString());
                         }
                         catch (ClassNotFoundException e)
@@ -70,21 +71,21 @@ public class WLClientTest
                     }
                     else if(msg.equals("wish_rm"))
                     {
-                        com.rmWish("w-000");
+                        WLServerCom.rmWish("w-000");
                     }
                     else if(msg.equals("wish_update"))
                     {
                         wi.setDescription("Delicious");
-                        com.updateWish(wi);
+                        WLServerCom.updateWish(wi);
                     } 
                     else if(msg.equals("is_user"))
                     {
-                        boolean isUser = com.isUser("0");
+                        boolean isUser = WLServerCom.isUser("0");
                         System.out.println(isUser);
                     }
                     else if(msg.equals("list_wishes"))
                     {
-                        ArrayList<WishItem> wishes = com.listWishes("13");
+                        ArrayList<WishItem> wishes = WLServerCom.listWishes("13");
                         for(int i = 0; i < wishes.size(); i++)
                         {
                             System.out.println(wishes.get(i).toString());
@@ -92,12 +93,12 @@ public class WLClientTest
                     }
                     else if(msg.equals("pawel_Image"))
                     {
-                    	com.storeImage("image.jpg", "image.jpg");
+                    	WLServerCom.storeImage("image.jpg", "image.jpg");
                     }
                     else
                     {
-                        com.sendCode(STRING);
-                        com.sendObject(msg);
+                        WLServerCom.sendCode(STRING);
+                        WLServerCom.sendObject(msg);
                     }
                 }
                 catch (IOException ioe)
@@ -113,9 +114,9 @@ public class WLClientTest
             }
 
         }
-        catch (IOException ioe)
+        catch (Exception e)
         {
-            ioe.printStackTrace();
+            e.printStackTrace();
         }
         
     }

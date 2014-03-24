@@ -2,6 +2,7 @@ package com.wishlist.ui;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -58,7 +61,17 @@ public class FriendsListDisplayFragment extends Fragment
                                          container, false);
             		
         listView.setAdapter(new friendsListAdapter(getActivity(), friends)); 
-        
+        listView.setOnItemClickListener(new OnItemClickListener() {
+        	  @Override
+        	  public void onItemClick(AdapterView<?> parent, View view,
+        	    int position, long id) {
+        	    Toast.makeText(getActivity(),
+        	      "Click ListItem Number " + position, Toast.LENGTH_LONG)
+        	      .show();
+        	    ActionBar bar = getActivity().getActionBar();
+        	    bar.setSelectedNavigationItem(0);
+        	  }
+        	});
         
         return listView;
     }

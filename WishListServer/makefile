@@ -1,5 +1,5 @@
 ## Make better later 
-## Not tested. Need fioles that will actually compile
+## Not tested. Need files that will actually compile
 default: WishListServer.class WLClientTest.class
 
 WishListServer.class: WishListServer.java 

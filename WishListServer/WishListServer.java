@@ -155,7 +155,7 @@ public class WishListServer
                 int code;
                 String msg;
 
-                FBUser fb = new FBUser("0", "alex", false); //Just for testing
+                //FBUser fb = new FBUser("0", "alex", false); //Just for testing
                 while (!done)
                 {
                     try
@@ -170,12 +170,15 @@ public class WishListServer
                         }
                         else if(code == USER_ADD)
                         {
-                            FBUser tu = (FBUser)ois.readObject();
-                            msg = tu.toString();
-                            db.addUser(tu);
-                            System.out.println(msg);
+                            //FBUser tu = (FBUser)ois.readObject();
+                            //msg = tu.toString();
+                            //db.addUser(tu);
+                            String name = (String)ois.readObject();
+                            String uid = (String)ois.readObject();
+                            fb.addUser(uid, name);
+                            //System.out.println(msg);
                         }
-                        else if (code == WISH_ADD)
+                        /*else if (code == WISH_ADD)
                         {
                             WishItem wi = (WishItem)ois.readObject();
                             
@@ -220,7 +223,7 @@ public class WishListServer
                         {
                         	String name = (String)ois.readObject();
                         	listenForImage(name);                       	
-                        }
+                        }*/
 
                     }
                     catch(IOException ioe)
@@ -257,7 +260,7 @@ public class WishListServer
         private void listenForImage(String imageName) throws Exception 
         {
         	
-    		FileOutputStream fout = new FileOutputStream(imageName);
+    		FileOutputStream fout =USER new FileOutputStream(imageName);
     		
     		int i;
     		while ( (i = dis.read()) > -1) {

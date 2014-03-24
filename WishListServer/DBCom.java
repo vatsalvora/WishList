@@ -200,34 +200,12 @@ public class DBCom
     
     public boolean addUser(String uid, String name)
     {
-        /* Do we need to keep this method around ? */
+        /* Do we need to keep this method around ? HELL YES*/
         command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
         return sendSQLnoReturn(command);
 
     }
-
-    public boolean addUser(User u)
-    {
-
-        /** Adds user to database */
-
-        String uName = "\'" + u.getName() + "\'";
-        String uid = "\'" + u.getUID() + "\'";
-
-        System.out.println(uName);
-        System.out.println(uid);
-
-        /*
-         * Using this query builder doesn't work. Suck it Joon
-         */
-        //command = queryBuilder(INSERT, INTO, "users", VALUES, uid, uName);
-
-        command = String.format("INSERT INTO users (uid, name) VALUES (%s, %s)",
-                uid, uName);
-        
-        return sendSQLnoReturn(command);
-    }
-
+	
     public boolean isUser(String uid)
     {
 
@@ -275,145 +253,6 @@ public class DBCom
        return sendSQLnoReturn(command);
     }
 
-    public boolean addWish(WishItem wi)
-    {
-
-        /** Adds a wish to the DB given a WishItem object */
-
-        /* WARNING:
-         *
-         * This doesn't not check to see if any of the values are NULL
-         *
-         * This method doesn't yet support the dateAdded timestamp.
-         * You can only pass strings to the database and I don't know
-         * if Date.toString() produces a string that is compatible with
-         * the postgres timestamp type
-         */
-
-        String uid = wi.getUID();
-        String wid = wi.getWID();
-        String name = wi.getName();
-        String bid = wi.getBID();
-        
-        String descr = wi.getDescription();
-        String price = wi.getPrice();
-        int status = wi.getStatus();
-
-        /* Special handling incase bid or priceStr is NULL.
-         * Since the SQL commands are all strings anyway, we can convert
-         * our ints and doubles to strings. This gives us the added
-         * benefit of specifiying a value is NULL by giving it NULL.
-         *
-         * As long as we don't wrap our strong in single quotes(' '),
-         * SQL will convert it to the proper data types
-         */
-
-        String priceStr;
-
-        if(descr == "")
-        {
-            descr = "NULL";
-        }
-
-        if (bid == null)
-        {
-            bid = "NULL";
-        }
-        
-
-        /*
-         * Not sure if all of these are necessary.
-         * The thrid one (price.equals("")) is necessary for sure
-         *
-         * Price is represented by the money type in the db.
-         * Inserting '' for a money type defaults to $0.00.
-         * Is this what we want?
-         */
-        if (price == "0.00")
-        {
-            priceStr = "\'\'";
-        }
-        if(price == null)
-        {
-            priceStr = "\'\'";
-        }
-        if(price.equals(""))
-        {
-            priceStr = "\'\'";
-        }
-
-
-        else
-        {
-            priceStr = price;
-        }
-        
-        String tuple = String.format("('%s', '%s', '%s','%s', %s, %d, '%s')",
-                                      uid, bid, name, descr, priceStr, status, wid);
-
-        command = queryBuilder(INSERT, INTO, "wishes", "(uid, bid, name, descr, price, status, wid)", "VALUES", tuple);
-        System.out.println(command);
-
-        return sendSQLnoReturn(command);
-
-
-    }
-
-
-
-
-    public ArrayList<WishItem> listWishes(String uid)
-    {
-
-        /** Returns an array of wish objects where the wishes belong
-         * to the given user
-         */
-
-        String uidStr = "\'" + uid + "\'";
-
-        ArrayList<WishItem> wishList = new ArrayList<WishItem>();
-        command = queryBuilder(SELECT, ALL, FROM, "wishes", WHERE, "uid=", uidStr);
-        ResultSet resultSet = sendSQLwithReturn(command);
-
-        String bid, wid;
-        String name, descr;
-        int status;
-        String price;
-        Date dateAdded;
-
-        try
-        {
-            while(resultSet.next())
-            {
-                //uid is in col 2, but we already have that since it was passed
-                
-                /* What happens when value in DB is NULL ? */
-                //Answer: Throw an exception. (Joon)
-                wid = resultSet.getString(1);
-                if(wid == null) throw new RuntimeException("Item not in database!");
-                bid = resultSet.getString(3);
-                name = resultSet.getString(4);
-                descr = resultSet.getString(5);
-                price = resultSet.getString(6);
-                status = resultSet.getInt(7);
-                dateAdded = resultSet.getDate(8);
-                
-
-
-                WishItem WI = new WishItem(uid, bid, name, descr, price,
-                                           status, wid, dateAdded);
-                wishList.add(WI);
-
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println("Database\t" +  e.toString());
-        }
-
-        return wishList;
-    }
-
     public boolean deleteWish(String wid)
     {
         /** Deletes a wish from the database given the wid */
@@ -425,59 +264,6 @@ public class DBCom
         
         String widStr = "\'" + wid + "\'";
         command = queryBuilder(DELETE, FROM, "wishes", WHERE, "wid=", widStr);
-        System.out.println(command);
-        return sendSQLnoReturn(command);
-    }
-
-    public boolean updateWish(WishItem wi)
-    {
-        /** Updates the database entry for the given Wish
-         * Returns true if operation was successful, false if not
-         */
-
-        /* This method assumes that an update needs to happen and thus
-         * does not check to see if values provided by WishItem object
-         * already match DB entry (Wait, why not?, says Joon)
-         * Joon: Let's be more efficient.
-         */
-
-        /*
-         * Doesn't work. Will work on later.
-         */
-        
-        command = queryBuilder(UPDATE, "wishes");
-        
-        switch(wi.getUpdate())
-        {
-                case WishItem.NONE:
-                        return false;
-                case WishItem.BUYER:
-                        queryAppend(command, "SET", "bid=", wi.getBID(), "bname", wi.getBuyerName());
-                        break;
-                case WishItem.DATE:
-                        queryAppend(command, "SET", "date=", wi.getDate().toString());
-                        break;
-                case WishItem.DESC:
-                        queryAppend(command, "SET", "descr=", wi.getDescription());
-                        break;
-                case WishItem.PICTURE:
-                        throw new UnsupportedOperationException();
-                case WishItem.PRICE:
-                        queryAppend(command, "SET", "price=", wi.getPrice());
-                        break;
-                case WishItem.USER:
-                        queryAppend(command, "SET", "uid=", wi.getUID(), "uname", wi.getUserName());
-                        break;
-                case WishItem.WISH:
-                        queryAppend(command, "SET", "name=", wi.getName());
-                        break;
-                case WishItem.STATUS:
-                        queryAppend(command, "SET", "status=", Integer.toString(wi.getStatus()));
-                        break;
-                default:
-                        throw new RuntimeException("WTF is this? This is not supported...");
-        }
-        queryAppend(command, "WHERE", "wid=", wi.getWID());
         System.out.println(command);
         return sendSQLnoReturn(command);
     }

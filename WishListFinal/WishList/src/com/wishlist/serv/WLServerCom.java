@@ -94,12 +94,16 @@ public final class WLServerCom
         sendObject(u.getName());
 		sendObject(u.getUID());
     }
-    //public static void addWish(WishItem w) throws IOException
-    //{
-    //    /** Adds given wish to database */
-    //    sendCode(WISH_ADD);
-    //    sendObject(w);
-    //}
+    public static void addWish(WishItem w) throws IOException
+    {
+		/** Adds a wish object to the database. */
+        sendCode(WISH_ADD);
+        sendObject(w.getWID());
+        sendObject(w.getUID());
+        sendObject(w.getName());
+        sendObject(w.getDescription());
+        sendObject(w.getPrice());
+    }
     //public static void rmWish(String wid) throws IOException
     //{
     //    /** Removes wish from db given the wish id */

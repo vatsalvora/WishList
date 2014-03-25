@@ -170,32 +170,20 @@ public class WishListServer
                         }
                         else if(code == USER_ADD)
                         {
-                            //FBUser tu = (FBUser)ois.readObject();
-                            //msg = tu.toString();
-                            //db.addUser(tu);
                             String name = (String)ois.readObject();
                             String uid = (String)ois.readObject();
                             db.addUser(uid, name);
-                            //System.out.println(msg);
                         }
-                        /*else if (code == WISH_ADD)
+                        else if (code == WISH_ADD)
                         {
-                            WishItem wi = (WishItem)ois.readObject();
-                            
-                            
-                            String widTemp = wi.getWID();
-                            if(widTemp.equals("") || widTemp == null)
-							{
-                            	currentWID++;
-                            	wi.setWID(Integer.toString(currentWID));
-                            }
-                            
-                            
-                            msg = wi.toString();
-                            db.addWish(wi);
-                            System.out.println(msg);
+                           String wid = (String)ois.readObject();
+                           String uid = (String)ois.readObject();
+                           String name = (String)ois.readObject();
+                           String descr = (String)ois.readObject();
+                           String price = (String)ois.readObject();
+                           db.addWish(wid, uid, name, descr, price);
                         }
-                        else if(code == USER_SEND)
+                        /*else if(code == USER_SEND)
                         {
                             oos.writeObject(fb);
                             oos.flush();                     

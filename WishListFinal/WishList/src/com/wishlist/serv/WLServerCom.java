@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.wishlist.obj.User;
 
@@ -114,6 +115,51 @@ public final class WLServerCom
     {
 		/** Removes wish from db given the wish object. */
         rmWish(w.getWID());
+    }
+    
+    public static ArrayList<WishItem> listWishes(String uid, String uname) throws IOException,
+        ClassNotFoundException
+    {
+        /** Returns an ArrayList of wish objects that belong to the given
+         * user 
+         */
+        sendCode(LIST_WISHES);
+        sendObject(uid);
+        int numOfWishes = (int)getObject();
+        
+        ArrayList<WishItem> wishes = new ArrayList<WishItem>(numOfWishes);
+        WishItem myWish;
+        
+        String wid;
+        String wName;
+        String bid;
+        String bname = ""; //FIX ME.
+        String descr;
+        String price;
+        String status;
+        Date dateAdded = new Date(); //FIX NEEDED. Set good date. Temp.
+        
+        for(int i=0; i<numOfWishes; i++)
+        {
+			
+			wid = (String)getObject();
+			wName = (String)getObject();
+			//uid got
+			//uname got
+			bid = (String)getObject();
+			//bname todo
+			descr = (String)getObject();
+			price = (String)getObject();
+			status = (int)getObject();
+			//date done
+			
+			myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
+			
+			wishes.add(myWish);
+			
+		}
+
+        return wishes;
     }
     //public static void updateWish(WishItem wi) throws IOException
     //{

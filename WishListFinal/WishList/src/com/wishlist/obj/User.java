@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 @SuppressWarnings("serial")
 public class User implements Parcelable, Comparable<User>, Serializable
@@ -121,7 +122,7 @@ public class User implements Parcelable, Comparable<User>, Serializable
     public Bitmap getProfilePicture(){
     	if(profilePicture == null){
     	
-	    	String urlConstruct = "https://www.graph.facebook.com/" + uid + "/picture?type=large";
+	    	String urlConstruct = "https://graph.facebook.com/" + uid + "/picture?width=90&height=90";
 	    	Bitmap imageFromURL = null;
 	    	try{
 	    		URL url = new URL(urlConstruct);
@@ -129,7 +130,8 @@ public class User implements Parcelable, Comparable<User>, Serializable
 	    	}
 	    	catch(Exception e)
 	    	{
-	    		e.printStackTrace();
+	    		Log.e("ImageURL",urlConstruct);
+	    		Log.e("Image",e.toString());
 	    	}
 	    	 if(imageFromURL != null){
 	    		profilePicture = imageFromURL; 

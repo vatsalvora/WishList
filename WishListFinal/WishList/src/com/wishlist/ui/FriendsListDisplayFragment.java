@@ -1,12 +1,15 @@
 package com.wishlist.ui;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -147,7 +150,17 @@ class friendsListAdapter extends BaseAdapter {
             view = convertView;
         }
 
-        Bitmap profilePicture = current.getProfilePicture(); 
+        DownloadProfilePicture pic = new DownloadProfilePicture();
+        pic.execute(current);
+        Bitmap profilePicture = null;
+        
+		try {
+			profilePicture = pic.get();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e("Thread",e.toString());
+		}
+		
         if(profilePicture != null){
             ImageView imageView = (ImageView) view.findViewById(R.id.friend_profile_picture);
         	imageView.setImageBitmap(profilePicture);
@@ -159,4 +172,20 @@ class friendsListAdapter extends BaseAdapter {
         return view; 
     }
  
-} 
+}
+class DownloadProfilePicture extends AsyncTask<User, Integer, Bitmap> {
+	@Override
+	protected Bitmap doInBackground(User... params) {
+		User current = params[0];
+        return current.getProfilePicture(); 
+	}
+
+    protected void onProgressUpdate(Integer... progress) {
+    }
+
+    protected void onPostExecute(Bitmap result) {
+        Log.d("Image",result.toString());
+    }
+
+
+}

@@ -10,8 +10,10 @@ package com.wishlist.obj;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.net.URL; 
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -117,8 +119,27 @@ public class User implements Parcelable, Comparable<User>, Serializable
     }
     
     public Bitmap getProfilePicture(){
+    	if(profilePicture == null){
+    	
+	    	String urlConstruct = "https://www.graph.facebook.com/" + uid + "/picture?type=large";
+	    	Bitmap imageFromURL = null;
+	    	try{
+	    		URL url = new URL(urlConstruct);
+	    		imageFromURL = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+	    	}
+	    	catch(Exception e)
+	    	{
+	    		e.printStackTrace();
+	    	}
+	    	 if(imageFromURL != null){
+	    		profilePicture = imageFromURL; 
+	    	//	ImageView profilePic = (ImageView) view.findViewById(R.id.friend_profile_picture);
+	    	//	profilePic.setImageBitmap(imageFromURL);
+	    	}	
+    	}
     	return profilePicture; 
     }
+    
     public boolean getIsAppUser()
     {
         return isAppUser;

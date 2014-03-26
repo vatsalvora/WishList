@@ -158,6 +158,5 @@ class friendsListAdapter extends BaseAdapter {
         
         return view; 
     }
-
  
 } 

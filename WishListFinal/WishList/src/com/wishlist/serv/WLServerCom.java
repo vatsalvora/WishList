@@ -3,19 +3,14 @@ package com.wishlist.serv;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.io.FileInputStream;
-import java.util.ArrayList;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
-
-//import com.wishlist.obj.FBUser;
-//import com.wishlist.obj.WishItem;
 
 public final class WLServerCom 
 {

@@ -12,22 +12,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class WishUpdateDialogFragment extends DialogFragment{
+public class WishEditDialogFragment extends DialogFragment{
 	
-	private WishItem item;
 	private TextView tv;
 	private EditText ev;
 	private View root;
+	String info;
 	
 	public interface WishUpdateDialogListener{
-		void onDialogPositiveClick(WishUpdateDialogFragment dialog);
-		void onDialogNegativeClick(WishUpdateDialogFragment dialog);
+		void onDialogPositiveClick(WishEditDialogFragment dialog);
+		void onDialogNegativeClick(WishEditDialogFragment dialog);
 	}
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	item = (WishItem) Transporter.unpackObject(this.getArguments(), Transporter.WISH);
     }
     
     public void onStart()
@@ -58,7 +57,7 @@ public class WishUpdateDialogFragment extends DialogFragment{
 		
 		root = inflater.inflate(R.layout.dialog_update_wish, null);
 		tv = (TextView) root.findViewById(R.id.update_wish_title);
-		tv.setText("Update "+item.getName());
+		tv.setText("Update "/*+item.getName()*/);
 		ev = (EditText) root.findViewById(R.id.editfield);
 		ev.setHint("Enter update info here");
 		
@@ -72,7 +71,7 @@ public class WishUpdateDialogFragment extends DialogFragment{
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
 			public void onClick(DialogInterface dialog, int which) 
 			{
-				
+				WishEditDialogFragment.this.getDialog().cancel();
 			}
 		});
 		

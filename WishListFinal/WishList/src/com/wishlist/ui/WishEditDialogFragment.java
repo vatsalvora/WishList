@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class WishUpdateDialogFragment extends DialogFragment{
+public class WishEditDialogFragment extends DialogFragment{
 	
 	private WishItem item;
 	private TextView tv;
@@ -20,8 +20,8 @@ public class WishUpdateDialogFragment extends DialogFragment{
 	private View root;
 	
 	public interface WishUpdateDialogListener{
-		void onDialogPositiveClick(WishUpdateDialogFragment dialog);
-		void onDialogNegativeClick(WishUpdateDialogFragment dialog);
+		void onDialogPositiveClick(WishEditDialogFragment dialog);
+		void onDialogNegativeClick(WishEditDialogFragment dialog);
 	}
 	
 	public void onCreate(Bundle savedInstanceState)

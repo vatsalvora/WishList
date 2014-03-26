@@ -15,7 +15,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/owner"
         android:layout_toRightOf="@+id/ItemImage"
-        android:text="@string/temp" />
+        android:text="buyer" />
 
     <TextView
         android:id="@+id/price"
@@ -24,7 +24,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/buyer"
         android:layout_toRightOf="@+id/ItemImage"
-        android:text="@string/temp" />
+        android:text="price" />
 
     <TextView
         android:id="@+id/owner"
@@ -33,7 +33,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/name"
         android:layout_toRightOf="@+id/ItemImage"
-        android:text="@string/temp" />
+        android:text="owner" />
     
     <TextView
         android:id= "@+id/dateAdded" 
@@ -45,9 +45,11 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/ratingBar2"
         android:layout_alignLeft="@+id/ItemImage"
-        android:layout_centerVertical="true"
-        android:text="@string/temp" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ItemImage"
+        android:text="description" />
 
     <ImageView
         android:id="@+id/ItemImage"
@@ -58,28 +60,28 @@
         android:adjustViewBounds="true"
         android:src="@drawable/ic_launcher" />
 
-    <Button
-        android:id="@+id/button1"
+    <TextView
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ratingBar2"
-        android:layout_alignParentBottom="true"
-        android:text="Comment" />
+        android:layout_alignLeft="@+id/dateAdded"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/dateAdded"
+        android:text="name" />
 
     <RatingBar
         android:id="@+id/ratingBar2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button1"
-        android:layout_alignLeft="@+id/ItemImage"
-        android:layout_marginBottom="39dp" />
+        android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:id="@+id/name"
+    <Button
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dateAdded"
-        android:layout_alignTop="@+id/dateAdded"
-        android:text="@string/temp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Comment" />
 
 </RelativeLayout>

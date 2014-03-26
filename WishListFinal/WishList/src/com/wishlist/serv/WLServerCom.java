@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import com.wishlist.obj.User;
+import com.wishlist.obj.WishItem;
 
 //import com.wishlist.obj.FBUser;
 //import com.wishlist.obj.WishItem;

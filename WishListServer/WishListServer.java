@@ -183,15 +183,15 @@ public class WishListServer
                            String price = (String)ois.readObject();
                            db.addWish(wid, uid, name, descr, price);
                         }
-                        /*else if(code == USER_SEND)
-                        {
-                            oos.writeObject(fb);
-                            oos.flush();                     
-                        }
                         else if(code == WISH_RM)
                         {
                             String wid = (String)ois.readObject();
                             db.deleteWish(wid);
+                        }
+                        /*else if(code == USER_SEND)
+                        {
+                            oos.writeObject(fb);
+                            oos.flush();                     
                         }
                         else if(code == IS_USER)
                         {
@@ -207,7 +207,7 @@ public class WishListServer
                             oos.writeObject(uWishes);
                             oos.flush();
                         }
-                        else if(code == STORE_IMAGE)
+                        /*else if(code == STORE_IMAGE)
                         {
                         	String name = (String)ois.readObject();
                         	listenForImage(name);                       	

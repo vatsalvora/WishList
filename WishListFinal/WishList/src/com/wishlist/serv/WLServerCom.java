@@ -104,12 +104,17 @@ public final class WLServerCom
         sendObject(w.getDescription());
         sendObject(w.getPrice());
     }
-    //public static void rmWish(String wid) throws IOException
-    //{
-    //    /** Removes wish from db given the wish id */
-    //    sendCode(WISH_RM);
-    //    sendObject(wid);
-    //}
+    public static void rmWish(String wid) throws IOException
+    {
+        /** Removes wish from db given the wish id. */
+        sendCode(WISH_RM);
+        sendObject(wid);
+    }
+    public static void rmWish(WishItem w) throws IOException
+    {
+		/** Removes wish from db given the wish object. */
+        rmWish(w.getWID());
+    }
     //public static void updateWish(WishItem wi) throws IOException
     //{
     //    /** Updates a wish in the db */

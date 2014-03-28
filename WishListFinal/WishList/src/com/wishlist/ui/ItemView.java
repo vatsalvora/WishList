@@ -17,7 +17,7 @@ import android.widget.*;
  */
 
 
-public class ItemView extends FragmentActivity implements WishEditDialogFragment.WishUpdateDialogListener
+public class ItemView extends FragmentActivity implements WishEditDialogFragment.WishEditDialogListener
 {
 	private WishItem item;
 	private int isAppUser;
@@ -102,7 +102,6 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 					public boolean onLongClick(View j){
 						hashCode = send;
 						showUpdateDialog(send);
-						displayItem();
 						return true;
 					}
 				});
@@ -128,9 +127,6 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
     protected void showUpdateDialog(int send){
     	DialogFragment d = new WishEditDialogFragment();
-    	Bundle b = new Bundle();
-    	Transporter.pack(b, Transporter.HASH, send);
-    	d.setArguments(b);
     	d.show(getSupportFragmentManager(), "WishUpdateFragment");
     }
     
@@ -144,14 +140,12 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
 	@Override
 	public void onDialogPositiveClick(WishEditDialogFragment dialog) {
-		// TODO Auto-generated method stub
-		dialog.dismiss();
+		displayItem();
 	}
 
 	@Override
 	public void onDialogNegativeClick(WishEditDialogFragment dialog) {
-		// TODO Auto-generated method stub
-		dialog.dismiss();
+		displayItem();
 	}
 
 }

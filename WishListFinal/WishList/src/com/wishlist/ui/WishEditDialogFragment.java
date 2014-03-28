@@ -2,6 +2,7 @@ package com.wishlist.ui;
 
 import com.wishlist.obj.WishItem;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,19 +15,21 @@ import android.widget.TextView;
 
 public class WishEditDialogFragment extends DialogFragment{
 	
+	public interface WishEditDialogListener{
+		void onDialogPositiveClick(WishEditDialogFragment dialog);
+		void onDialogNegativeClick(WishEditDialogFragment dialog);
+	}
+	
+	WishEditDialogListener l;
 	private TextView tv;
 	private EditText ev;
 	private View root;
 	String info;
 	
-	public interface WishUpdateDialogListener{
-		void onDialogPositiveClick(WishEditDialogFragment dialog);
-		void onDialogNegativeClick(WishEditDialogFragment dialog);
-	}
-	
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
+    	l = (WishEditDialogListener) getActivity();
     }
     
     public void onStart()
@@ -82,12 +85,13 @@ public class WishEditDialogFragment extends DialogFragment{
 					default:
 						break;
 				}
+				l.onDialogPositiveClick(WishEditDialogFragment.this);
 			}
 		})
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
 			public void onClick(DialogInterface dialog, int which) 
 			{
-				WishEditDialogFragment.this.getDialog().cancel();
+				l.onDialogNegativeClick(WishEditDialogFragment.this);
 			}
 		});
 		

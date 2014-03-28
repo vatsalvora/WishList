@@ -21,6 +21,7 @@ public final class WLServerCom
 
     protected static InetAddress host;
     protected static Socket socket;
+    
     protected static ObjectOutputStream oos;
     protected static ObjectInputStream ois;
     protected static DataInputStream dis;

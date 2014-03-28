@@ -21,6 +21,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 {
 	private WishItem item;
 	private int isAppUser;
+	private int hashCode;
 	
 	public static final int NAME = 0;
 	public static final int USER = 1;
@@ -54,7 +55,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		//comments = new ArrayList<String>();
 		//adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
 		//commentsV.setAdapter(adapter);
-        
+        initData();
 		displayItem();
     }
     
@@ -90,10 +91,32 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
         return true;
     }
     
-    protected void displayItem(){
+    protected void initData(){
     	item = (WishItem) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.WISH);
     	isAppUser = Transporter.unpackInteger(this.getIntent().getExtras(), Transporter.USER);
 		
+    	if(isAppUser == 1){
+			for(int i=0; i<TOTAL; i++){
+				final int send = i;
+				v[i].setOnLongClickListener(new OnLongClickListener(){
+					public boolean onLongClick(View j){
+						hashCode = send;
+						showUpdateDialog(send);
+						displayItem();
+						return true;
+					}
+				});
+				v[i].setOnClickListener(new OnClickListener(){
+					public void onClick(View j){
+						Toast.makeText(ItemView.this, "blahhhhhhhhhhhh", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		}		
+		
+	}
+    
+    protected void displayItem(){
     	v[NAME].setText(item.getName());
 		v[USER].setText("Owner: "+item.getUserName());
 		v[BUYER].setText("Buyer: "+item.getBuyerName());
@@ -101,49 +124,22 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		v[DATE].setText("Date Added: "+item.getDate().toString());
 		v[PRICE].setText("Price: "+item.getPrice());
 		//imageV.setImageDrawable(item.getDrawable());
-		
-		if(isAppUser == 1){
-			for(int i=0; i<TOTAL; i++){
-				v[i].setOnLongClickListener(new OnLongClickListener(){
-					public boolean onLongClick(View j){
-						showUpdateDialog();
-						return true;
-					}
-				});
-				switch(i){
-					case 0:
-						v[i].setOnClickListener(new OnClickListener(){
-							public void onClick(View j){
-								Toast t = new Toast(getApplicationContext());
-								t.setText("blahhhhhhhhhhhh");
-								t.show();
-							}
-						});
-						break;
-					case 1:
-						break;
-					case 2:
-						break;
-					case 3:
-						break;
-					case 4:
-						break;
-					case 5:
-						break;
-					default:
-						break;
-				}
-			}
-		}		
-		
-	}
+    }
     
-    protected void showUpdateDialog(){
+    protected void showUpdateDialog(int send){
     	DialogFragment d = new WishEditDialogFragment();
     	Bundle b = new Bundle();
-    	b.putParcelable(Transporter.WISH, item);
+    	Transporter.pack(b, Transporter.HASH, send);
     	d.setArguments(b);
     	d.show(getSupportFragmentManager(), "WishUpdateFragment");
+    }
+    
+    public WishItem getItem(){
+    	return item;
+    }
+    
+    public int getHashCode(){
+    	return hashCode;
     }
     
 	@Override

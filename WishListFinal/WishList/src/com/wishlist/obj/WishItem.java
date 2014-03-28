@@ -21,9 +21,9 @@ import android.os.Parcelable;
 @SuppressWarnings("serial")
 public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
 {
-	protected StringPair wish; //wish ID and name pair
-	protected StringPair user; //user ID and name pair
-	protected StringPair buyer; //buyer ID and name pair
+	protected IDNamePair wish; //wish ID and name pair
+	protected IDNamePair user; //user ID and name pair
+	protected IDNamePair buyer; //buyer ID and name pair
     protected String description=""; //description of item
     protected Date dateAdded; //date of the item added to user
     protected String price=""; //price of item
@@ -90,32 +90,32 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     
     public String getWID()
     {
-    	return wish.first;
+    	return wish.ID;
     }
     
     public String getName()
     {
-    	return wish.second;
+    	return wish.name;
     }
     
     public String getUID()
     {
-    	return user.first;
+    	return user.ID;
     }
     
     public String getUserName()
     {
-    	return user.second;
+    	return user.name;
     }
     
     public String getBID()
     {
-    	return buyer.first;
+    	return buyer.ID;
     }
     
     public String getBuyerName()
     {
-    	return buyer.second;
+    	return buyer.name;
     }
     
     public String getDescription()
@@ -154,38 +154,38 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     
     private final void setWish(String ID, String name)
     {
-    	if(wish == null) wish = new StringPair(ID, name);
+    	if(wish == null) wish = new IDNamePair(ID, name);
     	else{
-    		wish.first = ID;
-    		wish.second = name;
+    		wish.ID = ID;
+    		wish.name = name;
     	}
     	update(WISH);
     }
     
     public void setWishName(String name)
     {
-    	wish.second = name;
+    	wish.name = name;
     	update(WISH);
     }
     
     private final void setUser(String ID, String name)
     {
-    	if(user == null) user = new StringPair(ID, name);
+    	if(user == null) user = new IDNamePair(ID, name);
     	else
     	{
-    		user.first = ID;
-    		user.second = name;
+    		user.ID = ID;
+    		user.name = name;
     	}
     	update(USER);
     }
     
     public final void setBuyer(String ID, String name)
     {
-    	if(buyer == null) buyer = new StringPair(ID, name);
+    	if(buyer == null) buyer = new IDNamePair(ID, name);
     	else
     	{
-    		buyer.first = ID;
-    		buyer.second = name;
+    		buyer.ID = ID;
+    		buyer.name = name;
     	}
     	update(BUYER);
     }
@@ -226,7 +226,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     
     public int compareTo(WishItem arg0)
     {
-        return this.wish.second.compareTo(arg0.wish.second);
+        return this.wish.name.compareTo(arg0.wish.name);
     }
 
     private void update(int code)
@@ -262,9 +262,12 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     @Override
     public void writeToParcel(Parcel dest, int args)
     {
-        dest.writeParcelable(wish, args);
-        dest.writeParcelable(user, args);
-        dest.writeParcelable(buyer, args);
+        dest.writeString(wish.ID);
+        dest.writeString(wish.name);
+        dest.writeString(user.ID);
+        dest.writeString(user.name);
+        dest.writeString(buyer.ID);
+        dest.writeString(buyer.name);
     	dest.writeString(description);
         dest.writeString(price);
         dest.writeString(dateAdded.toString());
@@ -273,12 +276,16 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
 
 	private WishItem(Parcel in)
     {
-        StringPair p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setWish(p.first, p.second);
-        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setUser(p.first, p.second);
-        p = (StringPair) in.readParcelable(StringPair.class.getClassLoader());
-        setBuyer(p.first, p.second);
+		String ID, name;
+		ID = in.readString();
+		name = in.readString();
+        setWish(ID, name);
+        ID = in.readString();
+		name = in.readString();
+        setUser(ID, name);
+        ID = in.readString();
+		name = in.readString();
+        setBuyer(ID, name);
         setDescription(in.readString());
         setPrice(in.readString());
         setDate(in.readString());

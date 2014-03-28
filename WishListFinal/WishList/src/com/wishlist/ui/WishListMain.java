@@ -6,7 +6,6 @@ import android.util.Log;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -22,7 +21,7 @@ import com.wishlist.serv.*;
  *
  */
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener
+public class WishListMain extends FragmentActivity implements ActionBar.TabListener
 {
 
     /**
@@ -86,19 +85,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     
     protected void initDB(){
     	//set up DB communication
-    	new Thread(){ public void run(){
-    	try
-    	{
-    		WLServerCom.init();
-    		Log.e("User", currentUser.toString());
-    		WLServerCom.addUser(currentUser);
-    	}
-    	catch (Exception e)
-    	{
-    		Log.e("Backend",e.toString());
-    		Log.e("Backend", "Error, couldn't connect to server");
-    	}
-    	}
+    	new Thread(){ 
+    		public void run(){
+		    	try
+		    	{
+		    		WLServerCom.init();
+		    	}
+		    	catch (Exception e)
+		    	{
+		    		Log.e("Backend",e.toString());
+		    		Log.e("Backend", "Error, couldn't connect to server");
+		    	}
+	    	}
     	}.start();
     }
     
@@ -117,6 +115,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     
     protected void setCurrentUser(User u){
     	currentUser = u;
+    }
+    
+    public User getCurrentUser(){
+    	return currentUser;
+    }
+    
+    public ArrayList<User> getFriendList(){
+    	return friends;
     }
     
     protected void loadDBData(User u){
@@ -206,7 +212,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     final class SectionsPagerAdapter extends FragmentPagerAdapter
     {
     	private Fragment arr[];
-    	private boolean changeView;
     	
     	public static final int WISH = 0;
         public static final int FRIEND = 1;
@@ -216,24 +221,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         {
             super(fm);
             arr = new Fragment[COUNT];
-            arr[WISH] = createFragment(new WishListDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
-            arr[FRIEND] = createFragment(new FriendsListDisplayFragment(), new Bundle(), Transporter.FRIENDS, friends);
-            changeView = false;
+            arr[WISH] = new WishListDisplayFragment();
+            arr[FRIEND] = new FriendsListDisplayFragment();
         }
         
-        private Fragment createFragment(Fragment f, Bundle b, String key, ArrayList<? extends Parcelable> p){
-        	b.putParcelableArrayList(key, p);
-        	f.setArguments(b);
-        	return f;
-        }
-        
-        private Fragment createFragment(Fragment f, Bundle b, String key, Parcelable p){
-        	b.putParcelable(key, p);
-        	f.setArguments(b);
-        	return f;
-        }
-        
-         @Override
+        @Override
         public Fragment getItem(int position)
         {
             // getItem is called to instantiate the fragment for the given page.
@@ -241,10 +233,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         	switch(position)
             {
 	            case WISH:
-	            	if(changeView){
-	            		arr[WISH] = createFragment(new WishListDisplayFragment(), new Bundle(), Transporter.USER, currentUser);
-	            	}
-	                return arr[WISH];
+	            	return arr[WISH];
 	            case FRIEND:
 	                return arr[FRIEND];
 	            default:

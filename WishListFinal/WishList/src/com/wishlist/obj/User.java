@@ -22,8 +22,7 @@ import android.util.Log;
 public class User implements Parcelable, Comparable<User>, Serializable
 {
     protected boolean isAppUser=false; //flag for current app user
-    protected String uid=""; //ID of user
-    protected String name=""; //name of user
+    protected IDNamePair userInfo = new IDNamePair("", "");
     protected ArrayList<WishItem> wList = new ArrayList<WishItem>(); //wishlist for user
     protected Bitmap profilePicture; //profile picture of the user 
     public static final int MAXITEMS = 10; //maximum number of items allowed for one user to have
@@ -39,30 +38,23 @@ public class User implements Parcelable, Comparable<User>, Serializable
     
     public User(String uid, String name, boolean isAppUser)
     {
-        setName(name);
-        setUID(uid);
+    	setUserInfo(uid, name);
         setIsAppUser(isAppUser);
         setList(new ArrayList<WishItem>()); 
     }
 
+    private final void setUserInfo(String ID, String name){
+    	userInfo = new IDNamePair(ID, name);
+    }
+    
     public String getName()
     {
-        return name;
-    }
-
-    protected final void setName(String name)
-    {
-        this.name = name;
+        return userInfo.name;
     }
 
     public String getUID()
     {
-        return uid;
-    }
-
-    protected final void setUID(String uid)
-    {
-        this.uid = uid;
+        return userInfo.ID;
     }
 
     public ArrayList<WishItem> getList()
@@ -122,7 +114,7 @@ public class User implements Parcelable, Comparable<User>, Serializable
     public Bitmap getProfilePicture(){
     	if(profilePicture == null){
     	
-	    	String urlConstruct = "https://graph.facebook.com/" + uid + "/picture?width=90&height=90";
+	    	String urlConstruct = "https://graph.facebook.com/" + userInfo.ID + "/picture?width=90&height=90";
 	    	Bitmap imageFromURL = null;
 	    	try{
 	    		URL url = new URL(urlConstruct);
@@ -182,8 +174,8 @@ public class User implements Parcelable, Comparable<User>, Serializable
 
         if(isAppUser) out.writeInt(1);
         else out.writeInt(0);
-        out.writeString(uid);
-        out.writeString(name);
+        out.writeString(userInfo.ID);
+        out.writeString(userInfo.name);
         out.writeTypedList(wList);
     }
 
@@ -191,8 +183,10 @@ public class User implements Parcelable, Comparable<User>, Serializable
     {
         if(in.readInt() == 1) isAppUser = true;
         else isAppUser=false;
-        setUID(in.readString());
-        setName(in.readString());
+        String ID, name;
+        ID = in.readString();
+        name = in.readString();
+        setUserInfo(ID, name);
         in.readTypedList(wList, WishItem.CREATOR);
     }  
 }

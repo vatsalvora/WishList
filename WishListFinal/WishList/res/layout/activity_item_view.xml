@@ -36,10 +36,13 @@
         android:text="owner" />
     
     <TextView
-        android:id= "@+id/dateAdded" 
+        android:id="@+id/dateAdded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/price"
+        android:layout_toRightOf="@+id/ItemImage"
+        android:text="date" />
 
     <TextView
         android:id="@+id/description"
@@ -55,7 +58,6 @@
         android:id="@+id/ItemImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dateAdded"
         android:layout_alignTop="@+id/owner"
         android:adjustViewBounds="true"
         android:src="@drawable/ic_launcher" />
@@ -64,9 +66,9 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dateAdded"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/dateAdded"
+        android:layout_alignParentTop="true"
         android:text="name" />
 
     <RatingBar

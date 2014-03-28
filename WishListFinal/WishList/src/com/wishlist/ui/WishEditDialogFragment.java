@@ -55,9 +55,12 @@ public class WishEditDialogFragment extends DialogFragment{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
+		final WishItem w = ((ItemView) getActivity()).getItem();
+		final int hash = ((ItemView) getActivity()).getHashCode();
+		
 		root = inflater.inflate(R.layout.dialog_update_wish, null);
 		tv = (TextView) root.findViewById(R.id.update_wish_title);
-		tv.setText("Update "/*+item.getName()*/);
+		tv.setText("Update "+w.getName());
 		ev = (EditText) root.findViewById(R.id.editfield);
 		ev.setHint("Enter update info here");
 		
@@ -65,7 +68,20 @@ public class WishEditDialogFragment extends DialogFragment{
 		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) 
 			{
-				//TODO
+				String newinfo = ev.getText().toString();
+				switch(hash){
+					case ItemView.NAME:
+						w.setWishName(newinfo);
+						break;
+					case ItemView.DESC:
+						w.setDescription(newinfo);
+						break;
+					case ItemView.PRICE:
+						w.setPrice(newinfo);
+						break;
+					default:
+						break;
+				}
 			}
 		})
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){

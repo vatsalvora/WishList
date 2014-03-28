@@ -37,7 +37,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.wishlist.ui.MainActivity"
+            android:name="com.wishlist.ui.WishListMain"
             android:label="@string/title_activity_main" >
         </activity>
     </application>

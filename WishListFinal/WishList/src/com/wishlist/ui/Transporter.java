@@ -21,6 +21,7 @@ public class Transporter {
 	public static final String WISHES = "Wishes";
 	public static final String FRIENDS = "Friends";
 	public static final String DATA = "Data";
+	public static final String HASH = "Hash";
 	public static final String FBDATA = "FacebookData";
 	public static final String GDATA = "GoogleData";
 	

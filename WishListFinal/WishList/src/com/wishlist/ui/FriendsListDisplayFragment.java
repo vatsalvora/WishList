@@ -1,7 +1,7 @@
 package com.wishlist.ui;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+//import java.util.concurrent.ExecutionException;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -33,19 +33,19 @@ public class FriendsListDisplayFragment extends Fragment
      * fragment.
      */
 
-    private ArrayList<User> friends; 
+    private ArrayList<User> friends;
+    private WishListMain parent;
     public static final String ARG_SECTION_NUMBER = "section_number";
 
     public FriendsListDisplayFragment()
     {
     }
     
-	@SuppressWarnings("unchecked")
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-
-    	friends = (ArrayList<User>) Transporter.unpackArrayList(this.getArguments(), Transporter.FRIENDS);
+    	parent = (WishListMain) getActivity();
+    	friends = parent.getFriendList();
 
     	if(friends == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Friends list unavailable!", Toast.LENGTH_SHORT);

@@ -43,11 +43,13 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
 	private User user;
+	private WishListMain parent;
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	user = (User) Transporter.unpackObject(this.getArguments(), Transporter.USER);
+    	parent = (WishListMain) getActivity();
+    	user = parent.getCurrentUser();
     	if(user == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);
             toast.show();			

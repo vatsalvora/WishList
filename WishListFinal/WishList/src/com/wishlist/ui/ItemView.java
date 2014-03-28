@@ -56,7 +56,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		//adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
 		//commentsV.setAdapter(adapter);
         initData();
-		displayItem();
+		display();
     }
     
     protected void onStart(){
@@ -115,7 +115,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		
 	}
     
-    protected void displayItem(){
+    protected void display(){
     	v[NAME].setText(item.getName());
 		v[USER].setText("Owner: "+item.getUserName());
 		v[BUYER].setText("Buyer: "+item.getBuyerName());
@@ -123,6 +123,31 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		v[DATE].setText("Date Added: "+item.getDate().toString());
 		v[PRICE].setText("Price: "+item.getPrice());
 		//imageV.setImageDrawable(item.getDrawable());
+    }
+    
+    protected void display(int code){
+    	switch(code){
+    		case NAME:
+    			v[NAME].setText(item.getName());
+    			break;
+    		case USER:
+    			v[USER].setText("Owner: "+item.getUserName());
+    			break;
+    		case BUYER:
+    			v[BUYER].setText("Buyer: "+item.getBuyerName());
+    			break;
+    		case DESC:
+    			v[DESC].setText("Description: "+item.getDescription());
+    			break;
+    		case DATE:
+    			v[DATE].setText("Date Added: "+item.getDate().toString());
+    			break;
+    		case PRICE:
+    			v[PRICE].setText("Price: "+item.getPrice());
+    			break;
+    		default:
+    			break;
+    	}
     }
     
     protected void showUpdateDialog(int send){
@@ -140,12 +165,11 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
 	@Override
 	public void onDialogPositiveClick(WishEditDialogFragment dialog) {
-		displayItem();
+		display(hashCode);
 	}
 
 	@Override
 	public void onDialogNegativeClick(WishEditDialogFragment dialog) {
-		displayItem();
 	}
 
 }

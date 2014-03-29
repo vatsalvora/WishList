@@ -3,9 +3,11 @@ package com.wishlist.ui;
 import java.util.ArrayList;
 import java.util.Locale;
 import android.util.Log;
+import android.widget.Toast;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -221,8 +223,7 @@ public class WishListMain extends FragmentActivity implements ActionBar.TabListe
         {
             super(fm);
             arr = new Fragment[COUNT];
-            arr[WISH] = new WishListDisplayFragment();
-            arr[FRIEND] = new FriendsListDisplayFragment();
+            update();
         }
         
         @Override
@@ -262,18 +263,28 @@ public class WishListMain extends FragmentActivity implements ActionBar.TabListe
 	                throw new RuntimeException("Error Occured.");
             }
         }
+        
+        public void update(){
+        	arr[WISH] = new WishListDisplayFragment();
+            arr[FRIEND] = new FriendsListDisplayFragment();
+        }
     }
-
+    
+    public void showAddDialog(){
+    	DialogFragment d = new WishAddDialogFragment();
+    	d.show(getSupportFragmentManager(), "WishAddFragment");
+    }
+    
 	@Override
 	public void onDialogPositiveClick(WishAddDialogFragment dialog) {
 		// TODO Auto-generated method stub
-		
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+		Toast.makeText(this.getApplicationContext(), "Item successfully added", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void onDialogNegativeClick(WishAddDialogFragment dialog) {
 		// TODO Auto-generated method stub
-		
 	}
     
 }

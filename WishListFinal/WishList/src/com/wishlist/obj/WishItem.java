@@ -21,11 +21,11 @@ import android.os.Parcelable;
 @SuppressWarnings("serial")
 public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
 {
-	protected IDNamePair wish; //wish ID and name pair
-	protected IDNamePair user; //user ID and name pair
-	protected IDNamePair buyer; //buyer ID and name pair
+	protected IDNamePair wish = new IDNamePair("", ""); //wish ID and name pair
+	protected IDNamePair user = new IDNamePair("", ""); //user ID and name pair
+	protected IDNamePair buyer = new IDNamePair("", ""); //buyer ID and name pair
     protected String description=""; //description of item
-    protected Date dateAdded; //date of the item added to user
+    protected Date dateAdded = new Date(0); //date of the item added to user
     protected String price=""; //price of item
     protected Drawable picture; //Picture object for image of item. Implement in sprint 2
     protected int status;  //status of item. Open, registered, bought, etc
@@ -64,12 +64,13 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
      * a new wish object based off of data in database. This is why bid,
      * dateAdded, and status are included
      */
+     
     public WishItem(String uid, String bid, String name, String descr,
                     String price, int status, String wid, Date dateAdded)
     {
        setWish(wid, name);
-       setUser(uid, null);
-       setBuyer(bid, null);
+       setUser(uid, "");
+       setBuyer(bid, "");
        setDescription(descr);
        setPrice(price);
        setStatus(status);

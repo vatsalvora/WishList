@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
-public class WishListDisplayFragment extends Fragment
+public class WishListDisplayFragment extends Fragment 
 {/*
 Used to display wish lists (of the active user and of their friends). 
 Different actions are allowed depending on the user.
@@ -178,7 +178,8 @@ So the UI elements for certain actions are hidden based on user.
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
 	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
-	            return true;
+	            ((WishListMain) getActivity()).showAddDialog();
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -200,5 +201,6 @@ So the UI elements for certain actions are hidden based on user.
      	   	
     	user.setList(wishes);
 	}
+
 }
 

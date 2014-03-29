@@ -7,7 +7,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.*;
 
@@ -19,10 +18,6 @@ import android.widget.*;
 
 public class ItemView extends FragmentActivity implements WishEditDialogFragment.WishEditDialogListener
 {
-	private WishItem item;
-	private int isAppUser;
-	private int hashCode;
-	
 	public static final int NAME = 0;
 	public static final int USER = 1;
 	public static final int BUYER = 2;
@@ -31,9 +26,12 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 	public static final int PRICE = 5;
 	public static final int TOTAL = 6;
 	
+	private WishItem item;
+	private int isAppUser;
+	private int hashCode;
 	private TextView v[] = new TextView[TOTAL];
 	
-    //private ListView commentsV;
+	//private ListView commentsV;
     //private ImageView imageV;
     
     //private ArrayList<String> comments;
@@ -97,21 +95,18 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		
     	if(isAppUser == 1){
 			for(int i=0; i<TOTAL; i++){
-				final int send = i;
-				v[i].setOnLongClickListener(new OnLongClickListener(){
-					public boolean onLongClick(View j){
-						hashCode = send;
-						showUpdateDialog(send);
-						return true;
-					}
-				});
-				v[i].setOnClickListener(new OnClickListener(){
-					public void onClick(View j){
-						Toast.makeText(ItemView.this, "blahhhhhhhhhhhh", Toast.LENGTH_SHORT).show();
-					}
-				});
+				final int send = i; //ugh, so retarded...
+				if(i == NAME || i == DESC || i == PRICE){
+					v[i].setOnLongClickListener(new OnLongClickListener(){
+						public boolean onLongClick(View j){
+							hashCode = send;
+							showUpdateDialog(send);
+							return true;
+						}
+					});
+				}
 			}
-		}		
+    	}
 		
 	}
     
@@ -125,7 +120,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		//imageV.setImageDrawable(item.getDrawable());
     }
     
-    protected void display(int code){
+    protected void update(int code){
     	switch(code){
     		case NAME:
     			v[NAME].setText(item.getName());
@@ -165,7 +160,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
 	@Override
 	public void onDialogPositiveClick(WishEditDialogFragment dialog) {
-		display(hashCode);
+		update(hashCode);
 	}
 
 	@Override

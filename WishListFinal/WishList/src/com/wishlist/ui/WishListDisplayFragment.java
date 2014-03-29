@@ -43,12 +43,11 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
 	private User user;
-	private WishListMain parent;
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	parent = (WishListMain) getActivity();
+    	WishListMain parent = (WishListMain) getActivity();
     	user = parent.getCurrentUser();
     	if(user == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);
@@ -178,19 +177,13 @@ So the UI elements for certain actions are hidden based on user.
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
-	            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT);
-	            toast.show();
-	            return addWishItem();
+	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
+	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}   
     
-    protected boolean addWishItem()
-    {   
-    	//TODO
-    	return true;
-    }
     
     @SuppressWarnings("deprecation")
 	protected void test(){

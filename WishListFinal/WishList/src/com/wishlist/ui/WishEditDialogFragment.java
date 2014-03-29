@@ -19,11 +19,7 @@ public class WishEditDialogFragment extends DialogFragment{
 		void onDialogNegativeClick(WishEditDialogFragment dialog);
 	}
 	
-	WishEditDialogListener l;
-	private TextView tv;
-	private EditText ev;
-	private View root;
-	String info;
+	private WishEditDialogListener l;
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
@@ -60,10 +56,10 @@ public class WishEditDialogFragment extends DialogFragment{
 		final WishItem w = ((ItemView) getActivity()).getItem();
 		final int hash = ((ItemView) getActivity()).getHashCode();
 		
-		root = inflater.inflate(R.layout.dialog_update_wish, null);
-		tv = (TextView) root.findViewById(R.id.update_wish_title);
+		final View root = inflater.inflate(R.layout.dialog_update_wish, null);
+		final TextView tv = (TextView) root.findViewById(R.id.update_wish_title);
 		tv.setText("Update "+w.getName());
-		ev = (EditText) root.findViewById(R.id.editfield);
+		final EditText ev = (EditText) root.findViewById(R.id.edit_field);
 		ev.setHint("Enter update info here");
 		
 		builder.setView(root)

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 
 public class WishAddDialogFragment extends DialogFragment{
 	
@@ -17,13 +18,12 @@ public class WishAddDialogFragment extends DialogFragment{
 		void onDialogNegativeClick(WishAddDialogFragment dialog);
 	}
 	
-	View root;
-	WishItem item;
+	private WishAddDialogListener l;
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	item = (WishItem) Transporter.unpackObject(this.getArguments(), Transporter.WISH);
+    	l = (WishAddDialogListener) getActivity();
     }
     
     public void onStart()
@@ -52,17 +52,22 @@ public class WishAddDialogFragment extends DialogFragment{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		
+		final View root = inflater.inflate(R.layout.dialog_add_wish, null);
+		final EditText name_edit = (EditText) root.findViewById(R.id.edit_name);
+		final EditText price_edit = (EditText) root.findViewById(R.id.edit_price);
+		final EditText description_edit = (EditText) root.findViewById(R.id.edit_description);
+		
 		builder.setView(root)
 		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) 
 			{
-				//TODO
+				l.onDialogPositiveClick(WishAddDialogFragment.this);
 			}
 		})
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
 			public void onClick(DialogInterface dialog, int which) 
 			{
-				WishAddDialogFragment.this.getDialog().cancel();
+				l.onDialogNegativeClick(WishAddDialogFragment.this);
 			}
 		});
 		

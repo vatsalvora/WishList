@@ -8,15 +8,15 @@
     <TextView
         android:id="@+id/update_wish_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/placeholder" />
     
     <EditText
-        android:id="@+id/editfield"
+        android:id="@+id/edit_field"
     	android:inputType="text"
-    	android:layout_width = "wrap_content"
-        android:layout_height = "wrap_content"
+    	android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
         android:hint="@string/placeholder"
         />
     	

@@ -21,7 +21,7 @@ import com.wishlist.serv.*;
  *
  */
 
-public class WishListMain extends FragmentActivity implements ActionBar.TabListener
+public class WishListMain extends FragmentActivity implements ActionBar.TabListener, WishAddDialogFragment.WishAddDialogListener
 {
 
     /**
@@ -263,5 +263,17 @@ public class WishListMain extends FragmentActivity implements ActionBar.TabListe
             }
         }
     }
+
+	@Override
+	public void onDialogPositiveClick(WishAddDialogFragment dialog) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDialogNegativeClick(WishAddDialogFragment dialog) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

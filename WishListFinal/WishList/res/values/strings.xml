@@ -5,9 +5,12 @@
     <string name="app_id">1459203584303232</string>
     <string name="app_name">WishList</string>
     <string name="app">AppUser</string>
+    <string name="buyer">Buyer</string>
 	<string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="current">CurrentUser</string>    
+    <string name="current">CurrentUser</string>
+    <string name="date">Date</string>
+    <string name="description">Description</string>    
     <string name="email">E-mail</string>
     <string name="friendlist">Friend Wishlist</string>
     <string name="hello_world">Hello world!</string>
@@ -20,6 +23,7 @@
 	<string name="new_wish">New Wish</string>
     <string name="notes">Notes</string>
     <string name="options">Options</string>
+    <string name="owner">Owner</string>
     <string name="password">Password</string>
     <string name="people">People</string>
     <string name="placeholder">Replace at Runtime</string>

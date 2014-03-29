@@ -23,7 +23,8 @@ import com.wishlist.serv.*;
  *
  */
 
-public class WishListMain extends FragmentActivity implements ActionBar.TabListener, WishAddDialogFragment.WishAddDialogListener
+public class WishListMain extends FragmentActivity 
+	implements ActionBar.TabListener, WishAddDialogFragment.WishAddDialogListener, WishDeleteDialogFragment.WishDeleteDialogListener
 {
 
     /**
@@ -277,14 +278,25 @@ public class WishListMain extends FragmentActivity implements ActionBar.TabListe
     
 	@Override
 	public void onDialogPositiveClick(WishAddDialogFragment dialog) {
-		// TODO Auto-generated method stub
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		Toast.makeText(this.getApplicationContext(), "Item successfully added", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
-	public void onDialogNegativeClick(WishAddDialogFragment dialog) {
-		// TODO Auto-generated method stub
+	public void onDialogNegativeClick(WishAddDialogFragment dialog) {}
+	
+	public void showDeleteDialog(){
+		DialogFragment d = new WishDeleteDialogFragment();
+    	d.show(getSupportFragmentManager(), "WishDeleteFragment");
 	}
+	
+	@Override
+	public void onDialogPositiveClick(WishDeleteDialogFragment dialog) {
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+		Toast.makeText(this.getApplicationContext(), "Item removed", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onDialogNegativeClick(WishDeleteDialogFragment dialog) {}
     
 }

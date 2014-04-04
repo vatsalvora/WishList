@@ -13,9 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnLongClickListener;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -96,6 +98,8 @@ So the UI elements for certain actions are hidden based on user.
 	
 	        listView.setMultiChoiceModeListener(new MultiChoiceModeListener(){
 	        	//the listener for the contextual action bar
+	        	
+ 	
 	            @Override
 	            public void onItemCheckedStateChanged(ActionMode mode, int position,
 	                                                  long id, boolean checked) {
@@ -106,10 +110,10 @@ So the UI elements for certain actions are hidden based on user.
 	            @Override
 	            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 	                // Respond to clicks on the actions in the CAB
-	                switch (item.getItemId()) {
+	            	switch (item.getItemId()) {
 	                    case R.id.action_delete:
 	                    	//((WishListMain) getActivity()).showDeleteDialog();
-	                        ((WishListMain) getActivity()).getCurrentUser().removeItem(item.getItemId());
+	                        ((WishListMain) getActivity()).getCurrentUser().removeItem(0);
 	                    	mode.finish(); // Action picked, so close the CAB
 	                        return true;
 	                    default:
@@ -151,6 +155,14 @@ So the UI elements for certain actions are hidden based on user.
             }
         }); 
         
+       listView.setOnItemLongClickListener(new OnItemLongClickListener(){
+    	    @Override
+			public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
+    	    	((WishListMain) getActivity()).showDeleteDialog();
+				return true;
+			}
+		});
+       	
         return listView;
     }
 	

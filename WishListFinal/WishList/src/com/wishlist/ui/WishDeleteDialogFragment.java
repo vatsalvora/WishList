@@ -16,6 +16,7 @@ public class WishDeleteDialogFragment extends DialogFragment{
 	}
 	
 	private WishDeleteDialogListener l;
+	int position = 0;
 	
 	public void onCreate(Bundle savedInstanceState)
     {	

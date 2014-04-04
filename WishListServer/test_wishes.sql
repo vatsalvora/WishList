@@ -64,3 +64,7 @@ GRANT UPDATE ON wishes to wl_app;
 GRANT DELETE ON wishes to wl_app;
 GRANT SELECT ON wishes to wl_app;
 GRANT SELECT ON users to wl_app;
+
+GRANT USAGE ON wushes_wid_seq to wl_app;
+GRANT SELECT ON wishes_wid_seq to wl_app;
+GRANT UPDATE ON wishes_wid_seq to wl_app;

@@ -266,8 +266,8 @@ public class DBCom
      */
     public boolean addWish( String uid, String name, String descr, String price)
     {
-       String tuple = String.format("('%s', '%s', '%s', '%s')",uid, name, descr, price); 
-       command = queryBuilder(INSERT, INTO, "wishes", "(uid, name, descr, price)", VALUES, tuple);
+       String tuple = String.format("('%s', '%s', '%s', '%s', now())",uid, name, descr, price); 
+       command = queryBuilder(INSERT, INTO, "wishes", "(uid, name, descr, price, dateAdded)", VALUES, tuple);
        return sendSQLnoReturn(command);
     }
 

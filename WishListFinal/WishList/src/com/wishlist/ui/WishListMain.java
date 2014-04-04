@@ -285,8 +285,11 @@ public class WishListMain extends FragmentActivity
 	@Override
 	public void onDialogNegativeClick(WishAddDialogFragment dialog) {}
 	
-	public void showDeleteDialog(){
+	public void showDeleteDialog(int position){
 		DialogFragment d = new WishDeleteDialogFragment();
+		Bundle b = new Bundle();
+		b.putInt(Transporter.WISH, position);
+		d.setArguments(b);
     	d.show(getSupportFragmentManager(), "WishDeleteFragment");
 	}
 	

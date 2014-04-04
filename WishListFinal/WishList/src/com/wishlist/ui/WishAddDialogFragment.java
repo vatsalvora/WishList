@@ -4,12 +4,14 @@ import java.sql.Date;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
+import com.wishlist.serv.WLServerCom;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -75,11 +77,24 @@ public class WishAddDialogFragment extends DialogFragment{
 				String description = description_edit.getText().toString();
 				//TODO set the date
 				
-				WishItem w = new WishItem("", name, u.getUID(), u.getName());
+				final WishItem w = new WishItem("", name, u.getUID(), u.getName());
 				w.setPrice(price);
 				w.setDescription(description);
 				u.addItem(w);
 				
+				new Thread(){ 
+		    		public void run(){
+				    	try
+				    	{
+				    		WLServerCom.addWish(w);
+				    	}
+				    	catch (Exception e)
+				    	{
+				    		Log.e("Adding item to database failed",e.toString());
+				    	}
+			    	}
+		    	}.start();
+		    					
 				l.onDialogPositiveClick(WishAddDialogFragment.this);
 			}
 		})

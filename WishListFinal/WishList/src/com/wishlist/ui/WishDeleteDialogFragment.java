@@ -16,12 +16,13 @@ public class WishDeleteDialogFragment extends DialogFragment{
 	}
 	
 	private WishDeleteDialogListener l;
-	int position = 0;
+	int position;
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
     	l = (WishDeleteDialogListener) getActivity();
+    	position =this.getArguments().getInt(Transporter.WISH);
     }
     
     public void onStart()
@@ -54,6 +55,7 @@ public class WishDeleteDialogFragment extends DialogFragment{
 		.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) 
 			{
+				u.removeItem(position);
 				l.onDialogPositiveClick(WishDeleteDialogFragment.this);
 			}
 		})

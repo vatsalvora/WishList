@@ -88,20 +88,6 @@ public class WishListMain extends FragmentActivity
     
     protected void initDB(){
     	//set up DB communication
-<<<<<<< HEAD:WishListFinal/WishList/src/com/wishlist/ui/WishListMain.java
-    	new Thread(){ 
-    		public void run(){
-		    	try
-		    	{
-		    		WLServerCom.init();
-		    	}
-		    	catch (Exception e)
-		    	{
-		    		Log.e("Backend",e.toString());
-		    		Log.e("Backend", "Error, couldn't connect to server");
-		    	}
-	    	}
-=======
     	Thread t = new Thread(){ public void run(){
     	try
     	{
@@ -148,7 +134,6 @@ public class WishListMain extends FragmentActivity
     		Log.e("Backend", "Error Occured in Test Code");
     	}
     	}
->>>>>>> serv-test:WishListFinal/WishList/src/com/wishlist/ui/MainActivity.java
     	}.start();
     }
     

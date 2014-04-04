@@ -177,12 +177,11 @@ public class WishListServer
                         }
                         else if (code == WISH_ADD)
                         {
-                           String wid = (String)ois.readObject();
                            String uid = (String)ois.readObject();
                            String name = (String)ois.readObject();
                            String descr = (String)ois.readObject();
                            String price = (String)ois.readObject();
-                           db.addWish(wid, uid, name, descr, price);
+                           db.addWish(uid, name, descr, price);
                         }
                         else if(code == WISH_RM)
                         {

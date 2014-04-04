@@ -6,26 +6,6 @@
 -- REMEMBER TO GIVE wl_app A PASSWORD
 
 
-DROP TABLE wishes;
-
-CREATE TABLE wishes (
-    WID varchar(64) PRIMARY KEY,
-    UID varchar(64) NOT NULL,
-    BID varchar(64),
-    name varchar(80) NOT NULL,
-    descr varchar(255),
-    price money,
-    status int DEFAULT 0,
-    dateAdded timestamp --NOT NULL
-);
-
-INSERT INTO wishes (WID, UID, BID, name, descr, price, status)
-    VALUES ('69', '13', '78', 'a new car', 'A shiny one', 25, 1);
-
-INSERT INTO wishes (WID, UID, BID, name, descr, price, status)
-    VALUES ('70', '13', '79', 'an old new car', 'A not so shiny one', 15, 1);
-
-
 DROP TABLE users;
 
 CREATE TABLE users (
@@ -44,15 +24,38 @@ INSERT INTO users (UID, name)
 
 INSERT INTO users (UID, name)
     VALUES ('79', 'Little Bitch');
-    
+
+
+DROP TABLE wishes;
+
+CREATE TABLE wishes (
+    WID SERIAL PRIMARY KEY,
+    UID varchar(64) REFERENCES users(uid),
+    BID varchar(64) REFERENCES users(uid),
+    name varchar(80) NOT NULL,
+    descr varchar(255),
+    price money,
+    status int DEFAULT 0,
+    dateAdded timestamp --NOT NULL
+);
+
+INSERT INTO wishes (UID, BID, name, descr, price, status, dateAdded)
+    VALUES ('13', '78', 'a new car', 'A shiny one', 25, 1, now());
+
+INSERT INTO wishes (UID, BID, name, descr, price, status, dateAdded)
+    VALUES ('13', '79', 'an old new car', 'A not so shiny one', 15, 1, now());
+
+
+   
 DROP TABLE pictures;
 
 CREATE TABLE pictures (
-	PID varchar(64) PRIMARY KEY,
-	WID varchar(64) NOT NULL,
-	path varchar(80) NOT NULL
+	PID SERIAL PRIMARY KEY,
+	WID SERIAL REFERENCES wishes(wid),
+	path varchar(512) NOT NULL
 );
 
+DROP ROLE wl_app;
 CREATE ROLE wl_app;
 GRANT INSERT ON users to wl_app;
 GRANT INSERT ON wishes to wl_app;

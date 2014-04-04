@@ -101,6 +101,8 @@ public class DBCom
         //set to private after testing
         //Not sure if this is the way we want to keep this.
 
+		System.out.println("W/O return \n" + command);
+
         Statement st = null;
 
         boolean isOK = true;
@@ -147,6 +149,7 @@ public class DBCom
         //HOWEVER, If a command that inherently has no result set, such as INSERT, the method
         //WILL return null.
 
+		System.out.println("With ret \n" + command);
         Statement st = null;
         ResultSet resultSet = null;
 
@@ -261,10 +264,10 @@ public class DBCom
      * then do wish.commit() or wish.sync() or wish.sendToServer() or
      * whatever we call it instead?
      */
-    public boolean addWish(String wid, String uid, String name, String descr, String price)
+    public boolean addWish( String uid, String name, String descr, String price)
     {
-       String tuple = "("+wid+", "+uid+", "+name+", "+descr+", "+price+")";
-       command = queryBuilder(INSERT, INTO, "wishes", "(wid, uid, name, descr, price)", VALUES, tuple);
+       String tuple = "("+uid+", "+name+", "+descr+", "+price+")";
+       command = queryBuilder(INSERT, INTO, "wishes", "(uid, name, descr, price)", VALUES, tuple);
        return sendSQLnoReturn(command);
     }
 

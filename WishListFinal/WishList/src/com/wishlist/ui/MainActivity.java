@@ -86,7 +86,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     
     protected void initDB(){
     	//set up DB communication
-    	new Thread(){ public void run(){
+    	Thread t = new Thread(){ public void run(){
     	try
     	{
     		WLServerCom.init();
@@ -97,6 +97,39 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	{
     		Log.e("Backend",e.toString());
     		Log.e("Backend", "Error, couldn't connect to server");
+    	}
+    	}
+    	};
+    	
+    	t.start();
+    	try{
+    		t.join(100);
+    	}
+    	catch(Exception e){
+    		
+    	}
+    	
+    	//initPolixTest();
+    	
+    }
+    
+    protected void initPolixTest(){
+    	//set up DB communication
+    	new Thread(){ public void run(){
+    	try
+    	{
+    		ArrayList<WishItem> wishes = WLServerCom.listWishes("13","Bon Jovi");
+    		Log.w("Backend","got wishes");
+    		Log.w("Backend", (wishes.get(1)).getWID());
+    		Log.w("Backend", (wishes.get(1)).getDate().toString());
+    		
+    		
+    		
+    	}
+    	catch (Exception e)
+    	{
+    		Log.e("Backend",e.toString());
+    		Log.e("Backend", "Error Occured in Test Code");
     	}
     	}
     	}.start();

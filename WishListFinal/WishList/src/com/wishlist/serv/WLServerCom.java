@@ -10,12 +10,13 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
+
+import android.util.Log;
 
 import com.wishlist.obj.User;
 
-//import com.wishlist.obj.FBUser;
-//import com.wishlist.obj.WishItem;
+import com.wishlist.obj.WishItem;
 
 public final class WLServerCom 
 {
@@ -125,7 +126,12 @@ public final class WLServerCom
          */
         sendCode(LIST_WISHES);
         sendObject(uid);
-        int numOfWishes = (int)getObject();
+        
+        Log.w("Backend","About to read num of Wishes");
+        
+        int numOfWishes = ois.readInt();
+        
+        Log.w("Backend", "Read num of wishes. : "+numOfWishes);
         
         ArrayList<WishItem> wishes = new ArrayList<WishItem>(numOfWishes);
         WishItem myWish;
@@ -137,21 +143,21 @@ public final class WLServerCom
         String descr;
         String price;
         int status;
-        Date dateAdded = new Date(); //FIX NEEDED. Set good date. Temp.
+        //Date dateAdded = new Date(1992,12,15); //FIX NEEDED. Set good date. Temp.
+        Date dateAdded;
         
         for(int i=0; i<numOfWishes; i++)
         {
 			
 			wid = (String)getObject();
-			wName = (String)getObject();
-			//uid got
-			//uname got
+			getObject(); //Account for UID
+			//This get object can be fixed.
 			bid = (String)getObject();
-			//bname todo
+			wName = (String)getObject();
 			descr = (String)getObject();
 			price = (String)getObject();
 			status = Integer.parseInt((String)getObject());
-			//date done
+			dateAdded = (Date)getObject(); // Account for broken date
 			
 			myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
 			

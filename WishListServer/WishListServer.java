@@ -193,7 +193,9 @@ public class WishListServer
                         {	
 							String uid = (String)ois.readObject();
 							int numOfWishes = db.getNumOfWishes(uid);
-							oos.writeObject(numOfWishes);
+							oos.writeInt(numOfWishes);
+							oos.flush();
+							System.out.println("Sent numOfWishes: " + numOfWishes);
 							
 							ResultSet resultSet = db.getWishes(uid);
 							
@@ -201,10 +203,13 @@ public class WishListServer
 							{
 								while(resultSet.next())
 								{
-									for(int i=0; i<8; i++)
+									for(int i=1; i<=7; i++)
 									{
 										oos.writeObject(resultSet.getString(i));
+										oos.flush();
 									}
+									oos.writeObject(resultSet.getDate(8));
+									oos.flush();
 								}
 
 							}

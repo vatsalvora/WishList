@@ -312,7 +312,9 @@ public class DBCom
 	public int getNumOfWishes(String uid)
 	{
 		
-		command = queryBuilder(SELECT, "count(wid)", FROM, "wishes", WHERE, "uid=", "'", uid,"'", "GROUP BY", "uid");
+		//command = queryBuilder(SELECT, "count(wid)", FROM, "wishes", WHERE, "uid=", "'", uid,"'", "GROUP BY", "uid");
+		command = String.format("SELECT count(wid) FROM wishes WHERE uid = '%s' GROUP BY uid", uid);
+		System.out.println(command);
 		ResultSet resultSet = sendSQLwithReturn(command);
 		
 		try

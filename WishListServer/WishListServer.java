@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.sql.ResultSet;
 
 public class WishListServer
 {
@@ -187,6 +188,43 @@ public class WishListServer
                         {
                             String wid = (String)ois.readObject();
                             db.deleteWish(wid);
+                        }
+                        else if(code == LIST_WISHES)
+                        {	
+							String uid = (String)ois.readObject();
+							int numOfWishes = db.getNumOfWishes(uid);
+							oos.writeInt(numOfWishes);
+							oos.flush();
+							System.out.println("Sent numOfWishes: " + numOfWishes);
+							
+							ResultSet resultSet = db.getWishes(uid);
+							
+							try
+							{
+								while(resultSet.next())
+								{
+									for(int i=1; i<=7; i++)
+									{
+										oos.writeObject(resultSet.getString(i));
+										oos.flush();
+									}
+									oos.writeObject(resultSet.getDate(8));
+									oos.flush();
+								}
+
+							}
+							catch (Exception e)
+							{
+								//Error, add log here
+								System.out.println(e.toString());
+								System.out.println("You fd the list_wishes method.");
+								
+							}
+							
+                            //String uid = (String)ois.readObject();
+                            //ArrayList<WishItem> uWishes = db.listWishes(uid);
+                            //oos.writeObject(uWishes);
+                            //oos.flush();
                         }
                         /*else if(code == USER_SEND)
                         {

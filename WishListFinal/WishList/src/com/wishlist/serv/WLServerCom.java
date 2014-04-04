@@ -9,6 +9,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.sql.Date;
+
+import android.util.Log;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
@@ -111,6 +116,56 @@ public final class WLServerCom
     {
 		/** Removes wish from db given the wish object. */
         rmWish(w.getWID());
+    }
+    
+    public static ArrayList<WishItem> listWishes(String uid, String uname) throws IOException,
+        ClassNotFoundException
+    {
+        /** Returns an ArrayList of wish objects that belong to the given
+         * user 
+         */
+        sendCode(LIST_WISHES);
+        sendObject(uid);
+        
+        Log.w("Backend","About to read num of Wishes");
+        
+        int numOfWishes = ois.readInt();
+        
+        Log.w("Backend", "Read num of wishes. : "+numOfWishes);
+        
+        ArrayList<WishItem> wishes = new ArrayList<WishItem>(numOfWishes);
+        WishItem myWish;
+        
+        String wid;
+        String wName;
+        String bid;
+        String bname = ""; //FIX ME.
+        String descr;
+        String price;
+        int status;
+        //Date dateAdded = new Date(1992,12,15); //FIX NEEDED. Set good date. Temp.
+        Date dateAdded;
+        
+        for(int i=0; i<numOfWishes; i++)
+        {
+			
+			wid = (String)getObject();
+			getObject(); //Account for UID
+			//This get object can be fixed.
+			bid = (String)getObject();
+			wName = (String)getObject();
+			descr = (String)getObject();
+			price = (String)getObject();
+			status = Integer.parseInt((String)getObject());
+			dateAdded = (Date)getObject(); // Account for broken date
+			
+			myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
+			
+			wishes.add(myWish);
+			
+		}
+
+        return wishes;
     }
     //public static void updateWish(WishItem wi) throws IOException
     //{

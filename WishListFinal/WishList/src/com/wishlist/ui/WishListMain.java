@@ -88,6 +88,7 @@ public class WishListMain extends FragmentActivity
     
     protected void initDB(){
     	//set up DB communication
+<<<<<<< HEAD:WishListFinal/WishList/src/com/wishlist/ui/WishListMain.java
     	new Thread(){ 
     		public void run(){
 		    	try
@@ -100,6 +101,54 @@ public class WishListMain extends FragmentActivity
 		    		Log.e("Backend", "Error, couldn't connect to server");
 		    	}
 	    	}
+=======
+    	Thread t = new Thread(){ public void run(){
+    	try
+    	{
+    		WLServerCom.init();
+    		Log.e("User", currentUser.toString());
+    		WLServerCom.addUser(currentUser);
+    	}
+    	catch (Exception e)
+    	{
+    		Log.e("Backend",e.toString());
+    		Log.e("Backend", "Error, couldn't connect to server");
+    	}
+    	}
+    	};
+    	
+    	t.start();
+    	try{
+    		t.join(100);
+    	}
+    	catch(Exception e){
+    		
+    	}
+    	
+    	//initPolixTest();
+    	
+    }
+    
+    protected void initPolixTest(){
+    	//set up DB communication
+    	new Thread(){ public void run(){
+    	try
+    	{
+    		ArrayList<WishItem> wishes = WLServerCom.listWishes("13","Bon Jovi");
+    		Log.w("Backend","got wishes");
+    		Log.w("Backend", (wishes.get(1)).getWID());
+    		Log.w("Backend", (wishes.get(1)).getDate().toString());
+    		
+    		
+    		
+    	}
+    	catch (Exception e)
+    	{
+    		Log.e("Backend",e.toString());
+    		Log.e("Backend", "Error Occured in Test Code");
+    	}
+    	}
+>>>>>>> serv-test:WishListFinal/WishList/src/com/wishlist/ui/MainActivity.java
     	}.start();
     }
     

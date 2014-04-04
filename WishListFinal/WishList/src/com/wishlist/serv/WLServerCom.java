@@ -100,7 +100,6 @@ public final class WLServerCom
     {
 		/** Adds a wish object to the database. */
         sendCode(WISH_ADD);
-        sendObject(w.getWID());
         sendObject(w.getUID());
         sendObject(w.getName());
         sendObject(w.getDescription());

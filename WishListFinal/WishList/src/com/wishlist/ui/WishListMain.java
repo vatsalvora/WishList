@@ -120,7 +120,7 @@ public class WishListMain extends FragmentActivity
     	new Thread(){ public void run(){
     	try
     	{
-    		ArrayList<WishItem> wishes = WLServerCom.listWishes("13","Bon Jovi");
+    		ArrayList<WishItem> wishes = WLServerCom.listWishes("13","Alex The Great");
     		Log.w("Backend","got wishes");
     		Log.w("Backend", (wishes.get(1)).getWID());
     		Log.w("Backend", (wishes.get(1)).getDate().toString());

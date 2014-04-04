@@ -1,17 +1,22 @@
 package com.wishlist.ui;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
+import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 public final class Login extends Activity
 {
@@ -101,7 +106,7 @@ public final class Login extends Activity
                         // callback after Graph API response with user object
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
-                          if (user != null) {
+                          if (user != null) {Log.e("Order","2");
                             //Log.i("Facebook",user.getName());
                             //Log.i("Facebook", user.getId());
                             currentAppUser = new User(user.getId(),user.getName(), true);
@@ -109,25 +114,58 @@ public final class Login extends Activity
                         }
                       }).executeAsync();
                 	Request.newMyFriendsRequest(session, new Request.GraphUserListCallback()
-                    {
+                    {	
 
                         @SuppressWarnings("deprecation")
 						public void onCompleted(List<GraphUser> users, Response response)
-                        {
+                        {Log.e("Order","2");
                         	friends = new ArrayList<User>();
+                        	ArrayList<String> ids = new ArrayList<String>();
                             for(GraphUser i : users){ 
                             	//Log.i("Facebook", i.getName());
                             	//Log.i("Facebook", i.getId());
                             	friends.add(new User(i.getId(),i.getName(),false));
+                            	ids.add(i.getId());
                             }
-                            
+                            Collections.sort(ids);
+                            /*
+                            RegisteredUser dbList = new RegisteredUser();
+                            try {
+                            	dbList.execute(ids);
+								ArrayList<String> dbID = dbList.get();
+								ArrayList<User> regList = new ArrayList<User>();
+								int u=0;
+								int f=0;
+								while(f<friends.size() && u<dbID.size()){
+									if(friends.get(f).getUID() != dbID.get(u))
+									{
+										f++;
+									}
+									else{
+										regList.add(friends.get(f));
+										u++;
+										f++;
+									}
+								}
+								friends = regList;
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							*/
                             Collections.sort(friends);
-                            
-                        	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
-
-                        	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", currentAppUser.getUID(), currentAppUser.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));
-                        	wishes.add(new WishItem("dummyID2", "A Feast of Ice and Fire", currentAppUser.getUID(), currentAppUser.getName(), "", "", "Fresh out of the series that redefined fantasy, comes the cookbook that may just redefine dinner . . . and lunch, and breakfast. ", "20", 0, new Date(3,4,2014)));
                         	
+                            WishRetrieval wishRet = new WishRetrieval();
+                        	wishRet.execute(currentAppUser.getUID(),currentAppUser.getName());
+                        	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
+                        	/*
+                        	try{
+                        		wishes = wishRet.get();
+                        	}
+                        	catch(Exception e){
+                        		
+                        	}
+                        	*/
                         	currentAppUser.setList(wishes);
                         	//Log.i("IsNULL",friends.toString());
                             pack();
@@ -156,6 +194,7 @@ public final class Login extends Activity
     	for(int i=1; i<11; i++){
     		friends.add(new User(Integer.toString(i), Integer.toString(i), false));
     	}
+
     	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
 
     	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", currentAppUser.getUID(), currentAppUser.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));
@@ -165,5 +204,43 @@ public final class Login extends Activity
     	
     	pack();
     	start();
+    }
+}
+class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<String>> {
+	@Override
+	protected ArrayList<String> doInBackground(ArrayList<String>... params) {
+		
+        ArrayList<String> a = params[0];
+        return a;
+	}
+
+    protected void onProgressUpdate(Integer... progress) {
+    }
+
+    protected void onPostExecute(ArrayList<String> result) {
+        Log.d("Image",result.toString());
+    }
+}
+class WishRetrieval extends AsyncTask<String, Integer, ArrayList<WishItem>> {
+	@Override
+	protected ArrayList<WishItem> doInBackground(String... params) {
+		
+        String uid = params[0];
+        String uname = params[1];
+        ArrayList<WishItem> wish = new ArrayList<WishItem>();
+		try {
+			wish = WLServerCom.listWishes(uid, uname);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return wish;
+	}
+
+    protected void onProgressUpdate(Integer... progress) {
+    }
+
+    protected void onPostExecute(ArrayList<String> result) {
+        Log.d("Image",result.toString());
     }
 }

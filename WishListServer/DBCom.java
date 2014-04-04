@@ -308,6 +308,47 @@ public class DBCom
 		}
 	
 	}
+	
+	public int getNumOfWishes(String uid)
+	{
+		
+		command = queryBuilder(SELECT, "count(wid)", FROM, "wishes", WHERE, "uid=", "'", uid,"'", "GROUP BY", "uid");
+		ResultSet resultSet = sendSQLwithReturn(command);
+		
+		try
+		{
+			if(resultSet.next())
+			{
+				String result = resultSet.getString(1);
+				resultSet.close();
+				return Integer.parseInt( result );
+			}
+			else{
+				return 0;
+			}
+		}
+		catch (Exception e)
+		{
+			//Error, add log here
+			return 0;
+		}
+		
+		/*
+		SELECT count(wid)
+		FROM wishes
+		WHERE uid = '13'
+		GROUP BY uid;
+		*/
+		
+	}
+	
+	public ResultSet getWishes(String uid){
+		
+		command = "SELECT * FROM wishes WHERE uid = '" + uid + "'";
+		ResultSet resultSet = sendSQLwithReturn(command);
+		return resultSet;
+		
+	}
 
    
 }

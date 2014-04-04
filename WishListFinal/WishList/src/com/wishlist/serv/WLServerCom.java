@@ -136,7 +136,7 @@ public final class WLServerCom
         String bname = ""; //FIX ME.
         String descr;
         String price;
-        String status;
+        int status;
         Date dateAdded = new Date(); //FIX NEEDED. Set good date. Temp.
         
         for(int i=0; i<numOfWishes; i++)
@@ -150,7 +150,7 @@ public final class WLServerCom
 			//bname todo
 			descr = (String)getObject();
 			price = (String)getObject();
-			status = (int)getObject();
+			status = Integer.parseInt((String)getObject());
 			//date done
 			
 			myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);

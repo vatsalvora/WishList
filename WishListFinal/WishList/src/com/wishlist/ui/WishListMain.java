@@ -53,7 +53,7 @@ public class WishListMain extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData(); //load data from login
-        initDB(); //set up DB communication
+        //initDB(); //set up DB communication
         initGraphics(); //load graphics
     }
 

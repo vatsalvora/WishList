@@ -30,7 +30,6 @@ public final class Login extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         startFBSession();
         //test();
     }
@@ -110,6 +109,7 @@ public final class Login extends Activity
                             //Log.i("Facebook",user.getName());
                             //Log.i("Facebook", user.getId());
                             currentAppUser = new User(user.getId(),user.getName(), true);
+                            initDB();
                           }
                         }
                       }).executeAsync();
@@ -128,6 +128,7 @@ public final class Login extends Activity
                             	ids.add(i.getId());
                             }
                             Collections.sort(ids);
+                            
                             /*
                             RegisteredUser dbList = new RegisteredUser();
                             try {
@@ -156,16 +157,17 @@ public final class Login extends Activity
                             Collections.sort(friends);
                         	
                             WishRetrieval wishRet = new WishRetrieval();
-                        	wishRet.execute(currentAppUser.getUID(),currentAppUser.getName());
+                        	Log.i("Current User", currentAppUser.getName());
+                            wishRet.execute(currentAppUser.getUID(),currentAppUser.getName());
                         	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
-                        	/*
+                        	
                         	try{
                         		wishes = wishRet.get();
                         	}
                         	catch(Exception e){
                         		
                         	}
-                        	*/
+                        	
                         	currentAppUser.setList(wishes);
                         	//Log.i("IsNULL",friends.toString());
                             pack();
@@ -205,6 +207,24 @@ public final class Login extends Activity
     	pack();
     	start();
     }
+    protected void initDB(){
+    	//set up DB communication
+    	new Thread(){ public void run(){
+    	try
+    	{
+    		WLServerCom.init();
+    		Log.e("User", currentAppUser.toString());
+    		WLServerCom.addUser(currentAppUser);
+    	}
+    	catch (Exception e)
+    	{
+    		Log.e("Backend",e.toString());
+    		Log.e("Backend", "Error, couldn't connect to server");
+    	}
+    	}
+    	}.start();
+    	
+    }
 }
 class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<String>> {
 	@Override
@@ -232,7 +252,7 @@ class WishRetrieval extends AsyncTask<String, Integer, ArrayList<WishItem>> {
 			wish = WLServerCom.listWishes(uid, uname);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("Wish Ret", e.toString());
 		}
         return wish;
 	}
@@ -240,7 +260,7 @@ class WishRetrieval extends AsyncTask<String, Integer, ArrayList<WishItem>> {
     protected void onProgressUpdate(Integer... progress) {
     }
 
-    protected void onPostExecute(ArrayList<String> result) {
-        Log.d("Image",result.toString());
+    protected void onPostExecute(ArrayList<WishItem> result) {
+        Log.d("Wish",result.toString());
     }
 }

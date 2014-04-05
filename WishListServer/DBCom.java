@@ -1,6 +1,6 @@
-/*This file provides the libraries for using the WishList database. 
+/*This file provides the libraries for using the WishList database.
  * It will abstract the SQL, by creating simple java methods that will integrate with the final product.
-* 
+*
 * Change: Implemented the Singleton design pattern by Joon Kim
 * Reason: We will only have one DBCom object in the app at a time, so the design pattern here is appropriate.
 */
@@ -16,7 +16,7 @@ public class DBCom
 {
 
     private static DBCom _instance = null;
-        
+
     /* Alex's ip. Please don't DDOS */
     //private String dburl = "jdbc:postgresql://98.180.57.56:5432/wishlist";
     private String dburl = "jdbc:postgresql://localhost/wishlist";
@@ -41,10 +41,10 @@ public class DBCom
     public static final String WHERE = "WHERE";
     public static final String ALL = "*";
     public static final String SET = "SET";
-	public static final String ORDER_BY = "ORDER BY";
+    public static final String ORDER_BY = "ORDER BY";
 
     private Connection connect;
-    
+
     public DBCom()
     {
         //This is the constructor for the Database Communication Object. An instance of this object is required to
@@ -101,7 +101,7 @@ public class DBCom
         //set to private after testing
         //Not sure if this is the way we want to keep this.
 
-		System.out.println("W/O return \n" + command);
+        System.out.println("W/O return \n" + command);
 
         Statement st = null;
 
@@ -149,7 +149,7 @@ public class DBCom
         //HOWEVER, If a command that inherently has no result set, such as INSERT, the method
         //WILL return null.
 
-		System.out.println("With ret \n" + command);
+        System.out.println("With ret \n" + command);
         Statement st = null;
         ResultSet resultSet = null;
 
@@ -179,19 +179,19 @@ public class DBCom
         return resultSet;
 
     }
-	
-	private static String tupleBuilder(String... in)
-	{
-		String tuple="(";
-		for(int i=0; i<in.length; i++)
-		{
-			tuple += i;
-			if(i < in.length-1) tuple += ", ";
-		}
-		tuple += ")";
-		return tuple;
-	}
-	
+
+    private static String tupleBuilder(String... in)
+    {
+        String tuple="(";
+        for(int i=0; i<in.length; i++)
+        {
+            tuple += i;
+            if(i < in.length-1) tuple += ", ";
+        }
+        tuple += ")";
+        return tuple;
+    }
+
     //please use this method to build queries (Joon)
     private static String queryBuilder(String... in)
     {
@@ -202,33 +202,32 @@ public class DBCom
         }
         return query;
     }
-    
+
     //this too (Joon)
     private static void queryAppend(String toAppend, String... in)
     {
         for(String i : in)
         {
-                toAppend += i + " ";
+            toAppend += i + " ";
         }
         toAppend += "\n";
     }
-    
+
     public boolean addUser(String uid, String name)
     {
         /* Do we need to keep this method around ? HELL YES*/
 //        command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
-		command = String.format("INSERT INTO users (uid, name) VALUES ('%s', '%s')",
-				uid, name);
-		System.out.println(command);
+        command = String.format("INSERT INTO users (uid, name) VALUES ('%s', '%s')",
+                                uid, name);
         return sendSQLnoReturn(command);
 
     }
-	
+
     public boolean isUser(String uid)
     {
 
         /** Returns true if given uid is in database */
-        
+
         String uidStr = "\'" + uid + "\'";
         command = queryBuilder(SELECT, ALL, FROM, "users", WHERE, "uid =", uidStr);
         ResultSet resultSet = sendSQLwithReturn(command);
@@ -266,9 +265,9 @@ public class DBCom
      */
     public boolean addWish( String uid, String name, String descr, String price)
     {
-       String tuple = String.format("('%s', '%s', '%s', '%s', now())",uid, name, descr, price); 
-       command = queryBuilder(INSERT, INTO, "wishes", "(uid, name, descr, price, dateAdded)", VALUES, tuple);
-       return sendSQLnoReturn(command);
+        String tuple = String.format("('%s', '%s', '%s', '%s', now())",uid, name, descr, price);
+        command = queryBuilder(INSERT, INTO, "wishes", "(uid, name, descr, price, dateAdded)", VALUES, tuple);
+        return sendSQLnoReturn(command);
     }
 
     public boolean deleteWish(String wid)
@@ -279,81 +278,82 @@ public class DBCom
          * delete a local copy of the wish and does not remove the wish
          * from the wList object in the User class
          */
-        
+
         String widStr = "\'" + wid + "\'";
         command = queryBuilder(DELETE, FROM, "wishes", WHERE, "wid=", widStr);
-        System.out.println(command);
         return sendSQLnoReturn(command);
     }
-   
-	public int getCurrentMaxWID()
-	{
-		
-		command = queryBuilder(SELECT, "wid", FROM, "wishes", "ORDER BY", "wid", "DESC", "LIMIT 1");
-		ResultSet resultSet = sendSQLwithReturn(command);
-		
-		try
-		{
-			if(resultSet.next())
-			{
-				String result = resultSet.getString(1);
-				resultSet.close();
-				return Integer.parseInt( result );
-			}
-			else{
-				return 0;
-			}
-		}
-		catch (Exception e)
-		{
-			//Error, add log here
-			return 0;
-		}
-	
-	}
-	
-	public int getNumOfWishes(String uid)
-	{
-		
-		//command = queryBuilder(SELECT, "count(wid)", FROM, "wishes", WHERE, "uid=", "'", uid,"'", "GROUP BY", "uid");
-		command = String.format("SELECT count(wid) FROM wishes WHERE uid = '%s' GROUP BY uid", uid);
-		System.out.println(command);
-		ResultSet resultSet = sendSQLwithReturn(command);
-		
-		try
-		{
-			if(resultSet.next())
-			{
-				String result = resultSet.getString(1);
-				resultSet.close();
-				return Integer.parseInt( result );
-			}
-			else{
-				return 0;
-			}
-		}
-		catch (Exception e)
-		{
-			//Error, add log here
-			return 0;
-		}
-		
-		/*
-		SELECT count(wid)
-		FROM wishes
-		WHERE uid = '13'
-		GROUP BY uid;
-		*/
-		
-	}
-	
-	public ResultSet getWishes(String uid){
-		
-		command = "SELECT * FROM wishes WHERE uid = '" + uid + "'";
-		ResultSet resultSet = sendSQLwithReturn(command);
-		return resultSet;
-		
-	}
 
-   
+    public int getCurrentMaxWID()
+    {
+
+        command = queryBuilder(SELECT, "wid", FROM, "wishes", "ORDER BY", "wid", "DESC", "LIMIT 1");
+        ResultSet resultSet = sendSQLwithReturn(command);
+
+        try
+        {
+            if(resultSet.next())
+            {
+                String result = resultSet.getString(1);
+                resultSet.close();
+                return Integer.parseInt( result );
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            //Error, add log here
+            return 0;
+        }
+
+    }
+
+    public int getNumOfWishes(String uid)
+    {
+
+        //command = queryBuilder(SELECT, "count(wid)", FROM, "wishes", WHERE, "uid=", "'", uid,"'", "GROUP BY", "uid");
+        command = String.format("SELECT count(wid) FROM wishes WHERE uid = '%s' GROUP BY uid", uid);
+        ResultSet resultSet = sendSQLwithReturn(command);
+
+        try
+        {
+            if(resultSet.next())
+            {
+                String result = resultSet.getString(1);
+                resultSet.close();
+                return Integer.parseInt( result );
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            //Error, add log here
+            return 0;
+        }
+
+        /*
+        SELECT count(wid)
+        FROM wishes
+        WHERE uid = '13'
+        GROUP BY uid;
+        */
+
+    }
+
+    public ResultSet getWishes(String uid)
+    {
+
+        command = "SELECT * FROM wishes WHERE uid = '" + uid + "'";
+        ResultSet resultSet = sendSQLwithReturn(command);
+        return resultSet;
+
+    }
+
+
 }

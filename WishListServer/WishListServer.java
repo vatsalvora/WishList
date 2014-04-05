@@ -1,5 +1,4 @@
 /*
- * Testing git commit - Linux Command Line
  * Shamelessly stolen from the internet and edited by Alex Bryan
  */
 import java.io.BufferedInputStream;
@@ -31,23 +30,22 @@ public class WishListServer
     private ServerSocket server;
     private final int port = 5600;
     private Socket socket;
-	private int currentWID;
-    
+    private int currentWID;
+
 
     private boolean serverOn = true;
 
-	private void updateCurrentWID()
-	{        	
-		DBCom dbtemp = new DBCom();
-		currentWID = dbtemp.getCurrentMaxWID();	
-	}
-	
+    private void updateCurrentWID()
+    {
+        DBCom dbtemp = new DBCom();
+        currentWID = dbtemp.getCurrentMaxWID();
+    }
+
     public WishListServer()
     {
         try
         {
             server = new ServerSocket(port);
-            updateCurrentWID(); 
         }
         catch (IOException e)
         {
@@ -68,7 +66,7 @@ public class WishListServer
                 Socket clientSocket = server.accept();
 
                 ClientServiceThread csThread = new ClientServiceThread(
-                        clientSocket);
+                    clientSocket);
                 csThread.start();
             }
             catch(IOException ioe)
@@ -133,7 +131,7 @@ public class WishListServer
             {
                 /* Init objects to transport data across network */
 
-                /* 
+                /*
                  * Object IO streams are to transport objects
                  * Data IO streams are to transport simple data types (boolean)
                  */
@@ -145,11 +143,11 @@ public class WishListServer
 
                 dos = new DataOutputStream(
                     clientSocket.getOutputStream());
-                
+
                 dis = new DataInputStream(
-                	clientSocket.getInputStream());
-                    
-                
+                    clientSocket.getInputStream());
+
+
 
 
                 boolean done = false;
@@ -177,11 +175,11 @@ public class WishListServer
                         }
                         else if (code == WISH_ADD)
                         {
-                           String uid = (String)ois.readObject();
-                           String name = (String)ois.readObject();
-                           String descr = (String)ois.readObject();
-                           String price = (String)ois.readObject();
-                           db.addWish(uid, name, descr, price);
+                            String uid = (String)ois.readObject();
+                            String name = (String)ois.readObject();
+                            String descr = (String)ois.readObject();
+                            String price = (String)ois.readObject();
+                            db.addWish(uid, name, descr, price);
                         }
                         else if(code == WISH_RM)
                         {
@@ -189,46 +187,42 @@ public class WishListServer
                             db.deleteWish(wid);
                         }
                         else if(code == LIST_WISHES)
-                        {	
-							String uid = (String)ois.readObject();
-							int numOfWishes = db.getNumOfWishes(uid);
-							oos.writeInt(numOfWishes);
-							oos.flush();
-							System.out.println("Sent numOfWishes: " + numOfWishes);
-							
-							ResultSet resultSet = db.getWishes(uid);
-							
-							try
-							{
-								while(resultSet.next())
-								{
-									for(int i=1; i<=7; i++)
-									{
-										oos.writeObject(resultSet.getString(i));
-										oos.flush();
-									}
-									oos.writeObject(resultSet.getDate(8));
-									oos.flush();
-								}
+                        {
+                            String uid = (String)ois.readObject();
+                            int numOfWishes = db.getNumOfWishes(uid);
+                            oos.writeInt(numOfWishes);
+                            oos.flush();
+                            System.out.println("Sent numOfWishes: " + numOfWishes);
 
-							}
-							catch (Exception e)
-							{
-								//Error, add log here
-								System.out.println(e.toString());
-								System.out.println("You fd the list_wishes method.");
-								
-							}
-							
-                            //String uid = (String)ois.readObject();
-                            //ArrayList<WishItem> uWishes = db.listWishes(uid);
-                            //oos.writeObject(uWishes);
-                            //oos.flush();
+                            ResultSet resultSet = db.getWishes(uid);
+
+                            try
+                            {
+                                while(resultSet.next())
+                                {
+                                    for(int i=1; i<=7; i++)
+                                    {
+                                        oos.writeObject(resultSet.getString(i));
+                                        oos.flush();
+                                    }
+                                    oos.writeObject(resultSet.getDate(8));
+                                    oos.flush();
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+                                //Error, add log here
+                                System.out.println(e.toString());
+                                System.out.println("You fd the list_wishes method.");
+
+                            }
+                            
                         }
                         /*else if(code == USER_SEND)
                         {
                             oos.writeObject(fb);
-                            oos.flush();                     
+                            oos.flush();
                         }
                         else if(code == IS_USER)
                         {
@@ -236,7 +230,7 @@ public class WishListServer
                             boolean isUser = db.isUser(uid);
                             dos.writeBoolean(isUser);
                             dos.flush();
-                        }                    
+                        }
                         else if(code == LIST_WISHES)
                         {
                             String uid = (String)ois.readObject();
@@ -246,8 +240,8 @@ public class WishListServer
                         }
                         /*else if(code == STORE_IMAGE)
                         {
-                        	String name = (String)ois.readObject();
-                        	listenForImage(name);                       	
+                                String name = (String)ois.readObject();
+                                listenForImage(name);
                         }*/
 
                     }
@@ -258,11 +252,13 @@ public class WishListServer
                     }
                     catch (ClassNotFoundException e)
                     {
+                        System.out.println(e.toString());
                         e.printStackTrace();
                         done = true;
                     }
                     catch (Exception e)
                     {
+                        System.out.println(e.toString());
                         e.printStackTrace();
                         done = true;
                     }
@@ -273,32 +269,34 @@ public class WishListServer
                 oos.close();
                 clientSocket.close();
             }
-        
-               
+
+
             catch(IOException ioe)
             {
                 System.out.println(ioe);
             }
 
         }
-        
-        private void listenForImage(String imageName) throws Exception 
+
+        private void listenForImage(String imageName) throws Exception
         {
-        	
-    		FileOutputStream fout = new FileOutputStream(imageName);
-    		
-    		int i;
-    		while ( (i = dis.read()) > -1) {
-    			fout.write(i);
-    		}
-    		
-    		fout.flush();
-    		fout.close();
-    		
-    	}
-        
-        
+
+            /* Doesn't work yet, image gets corrupted */
+            FileOutputStream fout = new FileOutputStream(imageName);
+
+            int i;
+            while ( (i = dis.read()) > -1)
+            {
+                fout.write(i);
+            }
+
+            fout.flush();
+            fout.close();
+
+        }
+
+
     }
-    
+
 }
 

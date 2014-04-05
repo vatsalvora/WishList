@@ -1,5 +1,4 @@
 /*
- * Testing git commit - Linux Command Line
  * Shamelessly stolen from the internet and edited by Alex Bryan
  */
 import java.io.BufferedInputStream;
@@ -47,7 +46,6 @@ public class WishListServer
         try
         {
             server = new ServerSocket(port);
-            updateCurrentWID();
         }
         catch (IOException e)
         {
@@ -219,11 +217,7 @@ public class WishListServer
                                 System.out.println("You fd the list_wishes method.");
 
                             }
-
-                            //String uid = (String)ois.readObject();
-                            //ArrayList<WishItem> uWishes = db.listWishes(uid);
-                            //oos.writeObject(uWishes);
-                            //oos.flush();
+                            
                         }
                         /*else if(code == USER_SEND)
                         {
@@ -258,11 +252,13 @@ public class WishListServer
                     }
                     catch (ClassNotFoundException e)
                     {
+                        System.out.println(e.toString());
                         e.printStackTrace();
                         done = true;
                     }
                     catch (Exception e)
                     {
+                        System.out.println(e.toString());
                         e.printStackTrace();
                         done = true;
                     }
@@ -285,6 +281,7 @@ public class WishListServer
         private void listenForImage(String imageName) throws Exception
         {
 
+            /* Doesn't work yet, image gets corrupted */
             FileOutputStream fout = new FileOutputStream(imageName);
 
             int i;

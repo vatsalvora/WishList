@@ -62,34 +62,7 @@ public class DBCom
 
     }
 
-    String test() throws Exception
-    {
-
-        Statement st;
-        ResultSet resultSet;
-
-        connect = DriverManager.getConnection(dburl,username,password);
-        st = connect.createStatement();
-        resultSet = st.executeQuery("SELECT * FROM users");
-
-
-        while (resultSet.next())
-        {
-            for(int i = 1; i<3; i++)
-            {
-                output += (resultSet.getString(i) + " ");
-            }
-            output += "\n";
-        }
-
-        resultSet.close();
-        st.close();
-        connect.close();
-
-        return output;
-
-    }
-
+    
     public boolean sendSQLnoReturn(String command)
     {
         /** This method is simply sends a SQL Command to the database
@@ -195,6 +168,7 @@ public class DBCom
     //please use this method to build queries (Joon)
     private static String queryBuilder(String... in)
     {
+        /* Fucking Joon */
         String query = "";
         for(String i : in)
         {
@@ -216,7 +190,6 @@ public class DBCom
     public boolean addUser(String uid, String name)
     {
         /* Do we need to keep this method around ? HELL YES*/
-//        command = queryBuilder(INSERT, INTO, "users", VALUES, uid, name);
         command = String.format("INSERT INTO users (uid, name) VALUES ('%s', '%s')",
                                 uid, name);
         return sendSQLnoReturn(command);
@@ -262,6 +235,8 @@ public class DBCom
     /* Instead of this method, couldn't we just create a wish object and
      * then do wish.commit() or wish.sync() or wish.sendToServer() or
      * whatever we call it instead?
+     *
+     * No, that was stupid
      */
     public boolean addWish( String uid, String name, String descr, String price)
     {
@@ -287,6 +262,7 @@ public class DBCom
     public int getCurrentMaxWID()
     {
 
+        /* Not  used anymore but Pawel worked so hard */
         command = queryBuilder(SELECT, "wid", FROM, "wishes", "ORDER BY", "wid", "DESC", "LIMIT 1");
         ResultSet resultSet = sendSQLwithReturn(command);
 
@@ -314,7 +290,6 @@ public class DBCom
     public int getNumOfWishes(String uid)
     {
 
-        //command = queryBuilder(SELECT, "count(wid)", FROM, "wishes", WHERE, "uid=", "'", uid,"'", "GROUP BY", "uid");
         command = String.format("SELECT count(wid) FROM wishes WHERE uid = '%s' GROUP BY uid", uid);
         ResultSet resultSet = sendSQLwithReturn(command);
 
@@ -337,12 +312,6 @@ public class DBCom
             return 0;
         }
 
-        /*
-        SELECT count(wid)
-        FROM wishes
-        WHERE uid = '13'
-        GROUP BY uid;
-        */
 
     }
 

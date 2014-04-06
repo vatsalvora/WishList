@@ -26,6 +26,7 @@ public class WishListServer
     public static final int IS_USER = 7;  //Check is user is in DB
     public static final int LIST_WISHES = 8; //Return wishes in DB owned by user
     public static final int STORE_IMAGE = 9;
+    public static final int USERS_CHECK = 10;
 
     private ServerSocket server;
     private final int port = 5600;
@@ -218,6 +219,16 @@ public class WishListServer
 
                             }
                             
+                        }
+                        else if(code == USERS_CHECK)
+                        {
+                            ArrayList<String> fbUsers =
+                                (ArrayList<String>) ois.readObject();
+
+                            ArrayList<String> WLUsers;
+                            WLUsers = db.inDB(fbUsers);
+                            oos.writeObject(WLUsers);
+                            oos.flush();
                         }
                         /*else if(code == USER_SEND)
                         {

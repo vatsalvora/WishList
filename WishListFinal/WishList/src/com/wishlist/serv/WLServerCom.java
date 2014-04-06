@@ -17,7 +17,7 @@ import android.util.Log;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 
-public final class WLServerCom 
+public final class WLServerCom
 {
     private static int port = 5600;
 
@@ -26,7 +26,7 @@ public final class WLServerCom
 
     protected static InetAddress host;
     protected static Socket socket;
-    
+
     protected static ObjectOutputStream oos;
     protected static ObjectInputStream ois;
     protected static DataInputStream dis;
@@ -42,48 +42,50 @@ public final class WLServerCom
     public static final int IS_USER = 7;
     public static final int LIST_WISHES = 8;
     public static final int STORE_IMAGE = 9;
+    public static final int USERS_CHECK = 10;
 
-    public static void init() throws UnknownHostException, IOException{
-    	 //Create connection to server
+    public static void init() throws UnknownHostException, IOException
+    {
+        //Create connection to server
         //For testing, server will be run on local host
         //host = InetAddress.getLocalHost();
         socket = new Socket(servIP, port);
 
         //Open an output stream
         oos = new ObjectOutputStream(
-                socket.getOutputStream());
+            socket.getOutputStream());
 
         //Open an input stream
         ois = new ObjectInputStream(
-                socket.getInputStream());
+            socket.getInputStream());
 
         dis = new DataInputStream(
-                socket.getInputStream());
-        
+            socket.getInputStream());
+
         dos = new DataOutputStream(
-        		socket.getOutputStream());
-    }
-    
-    private WLServerCom() throws UnknownHostException, IOException
-    {
-        init();    
+            socket.getOutputStream());
     }
 
-	//Should be private, but public for testing reasons
+    private WLServerCom() throws UnknownHostException, IOException
+    {
+        init();
+    }
+
+    //Should be private, but public for testing reasons
     public static void sendObject(Object obj) throws IOException
     {
         oos.writeObject(obj);
         oos.flush();
     }
 
-	//Should be private, but public for testing reasons
+    //Should be private, but public for testing reasons
     public static void sendCode(int code) throws IOException
     {
         oos.writeInt(code);
         oos.flush();
     }
 
-	//Should be private, but public for testing reasons
+    //Should be private, but public for testing reasons
     public static Object getObject() throws IOException, ClassNotFoundException
     {
         return ois.readObject();
@@ -91,14 +93,14 @@ public final class WLServerCom
 
     public static void addUser(User u) throws IOException
     {
-        /** Adds given user to database */ 
+        /** Adds given user to database */
         sendCode(USER_ADD);
         sendObject(u.getName());
-		sendObject(u.getUID());
+        sendObject(u.getUID());
     }
     public static void addWish(WishItem w) throws IOException
     {
-		/** Adds a wish object to the database. */
+        /** Adds a wish object to the database. */
         sendCode(WISH_ADD);
         sendObject(w.getUID());
         sendObject(w.getName());
@@ -113,28 +115,28 @@ public final class WLServerCom
     }
     public static void rmWish(WishItem w) throws IOException
     {
-		/** Removes wish from db given the wish object. */
+        /** Removes wish from db given the wish object. */
         rmWish(w.getWID());
     }
-    
+
     public static ArrayList<WishItem> listWishes(String uid, String uname) throws IOException,
         ClassNotFoundException
     {
         /** Returns an ArrayList of wish objects that belong to the given
-         * user 
+         * user
          */
         sendCode(LIST_WISHES);
         sendObject(uid);
-        
+
         Log.w("Backend","About to read num of Wishes");
-        
+
         int numOfWishes = ois.readInt();
-        
+
         Log.w("Backend", "Read num of wishes. : "+numOfWishes);
-        
+
         ArrayList<WishItem> wishes = new ArrayList<WishItem>(numOfWishes);
         WishItem myWish;
-        
+
         String wid;
         String wName;
         String bid;
@@ -144,28 +146,36 @@ public final class WLServerCom
         int status;
         //Date dateAdded = new Date(1992,12,15); //FIX NEEDED. Set good date. Temp.
         Date dateAdded;
-        
+
         for(int i=0; i<numOfWishes; i++)
         {
-			
-			wid = (String)getObject();
-			getObject(); //Account for UID
-			//This get object can be fixed.
-			bid = (String)getObject();
-			wName = (String)getObject();
-			descr = (String)getObject();
-			price = (String)getObject();
-			status = Integer.parseInt((String)getObject());
-			dateAdded = (Date)getObject(); // Account for broken date
-			
-			myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
-			
-			wishes.add(myWish);
-			
-		}
+
+            wid = (String)getObject();
+            getObject(); //Account for UID
+            //This get object can be fixed.
+            bid = (String)getObject();
+            wName = (String)getObject();
+            descr = (String)getObject();
+            price = (String)getObject();
+            status = Integer.parseInt((String)getObject());
+            dateAdded = (Date)getObject(); // Account for broken date
+
+            myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
+
+            wishes.add(myWish);
+
+        }
 
         return wishes;
     }
+    
+    ArrayList<String> getWLUsers(ArrayList<String> fbUsers) throws IOException, ClassNotFoundException
+    {
+        sendCode(USERS_CHECK);
+        sendObject(fbUsers);
+        return (ArrayList<String>)getObject();
+    }
+    
     //public static void updateWish(WishItem wi) throws IOException
     //{
     //    /** Updates a wish in the db */
@@ -174,19 +184,19 @@ public final class WLServerCom
     //}
     //public static boolean isUser(String uid) throws IOException, ClassNotFoundException
     //{
-	//	//Is this supposed to be UID? -- Will
-	//	//yes -- Alex
+    //      //Is this supposed to be UID? -- Will
+    //      //yes -- Alex
     //    /** Returns true if given user is in database */
     //    sendCode(IS_USER);
     //    sendObject(uid);
     //    return dis.readBoolean();
     //}
     //@SuppressWarnings("unchecked")
-	//public static ArrayList<WishItem> listWishes(String uid) throws IOException,
+    //public static ArrayList<WishItem> listWishes(String uid) throws IOException,
     //       ClassNotFoundException
     //{
     //    /** Returns an ArrayList of wish objects that belong to the given
-    //     * user 
+    //     * user
     //     */
     //    sendCode(LIST_WISHES);
     //    sendObject(uid);
@@ -198,15 +208,15 @@ public final class WLServerCom
     ////To do : make it extract the name from the path itself -- WILL NEIL
     //public static void storeImage(String name, String path) throws IOException, ClassNotFoundException
     //{
-    //	sendCode(STORE_IMAGE);
-    //	sendObject(name);
-    //	
-    //	int i;
-	//	FileInputStream fis = new FileInputStream(path);
-	//	while ((i = fis.read()) > -1)
-	//		dos.write(i);
+    //  sendCode(STORE_IMAGE);
+    //  sendObject(name);
+    //
+    //  int i;
+    //      FileInputStream fis = new FileInputStream(path);
+    //      while ((i = fis.read()) > -1)
+    //              dos.write(i);
 
-	//	fis.close();
+    //      fis.close();
     //}
 
 }

@@ -323,6 +323,22 @@ public class DBCom
         return resultSet;
 
     }
+    ArrayList<String> inDB(ArrayList<String> possUsers)
+    {
+        /** Returns an AL of uids that are in out DB and were passed into
+         * this function
+         */
+
+        ArrayList<String> WLUsers = new ArrayList<String>();
+        for(int i = 0; i < possUsers.size(); i++)
+        {
+            if(isUser(possUsers.get(i)))
+            {
+                WLUsers.add(possUsers.get(i));
+            }
+        }
+        return WLUsers;
+    }
 
 
 }

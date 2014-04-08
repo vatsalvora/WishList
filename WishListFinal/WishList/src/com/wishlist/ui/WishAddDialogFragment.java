@@ -14,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 public class WishAddDialogFragment extends DialogFragment{
@@ -50,6 +51,10 @@ public class WishAddDialogFragment extends DialogFragment{
     {
     	super.onDestroy();
     }
+    
+    /*public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    	return inflater.inflate(R.layout.dialog_add_wish, container, false);
+    }*/
     
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)

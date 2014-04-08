@@ -30,7 +30,6 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     protected Drawable picture; //Picture object for image of item. Implement in sprint 2
     protected int status;  //status of item. Open, registered, bought, etc
     // What are the status codes? Assuming 0 = Open, 1 = registered, 2 = bought. 
-    protected TreeMap<String, String> comments; //Map ID with comment.  Implement in sprint 2
     protected int update = NONE; //update changes    
     
     //update codes
@@ -143,11 +142,6 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     	return picture;
     }
     
-    public String getComment(String ID)
-    {
-        return comments.get(ID);
-    }
-    
     public int getUpdate()
     {
         return update;
@@ -220,11 +214,6 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     	update(DATE);
     }
 
-    public void setComment(String ID, String comment)
-    {
-        comments.put(ID, comment);
-    }
-    
     public int compareTo(WishItem arg0)
     {
         return this.wish.name.compareTo(arg0.wish.name);
@@ -271,7 +260,8 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
         dest.writeString(buyer.name);
     	dest.writeString(description);
         dest.writeString(price);
-        dest.writeString(dateAdded.toString());
+        if(dateAdded == null) dest.writeString(new Date(0).toString());
+        else dest.writeString(dateAdded.toString());
         dest.writeInt(update);
     }
 

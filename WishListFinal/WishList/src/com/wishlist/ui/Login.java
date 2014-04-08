@@ -81,7 +81,7 @@ public final class Login extends Activity
     	Transporter.pack(FBData, Transporter.FRIENDS, friends);
     }
     
-    protected void start()
+    protected void startMain()
     {
     	 Intent intent = new Intent(this, WishListMain.class);
          intent.putExtras(FBData);
@@ -171,7 +171,7 @@ public final class Login extends Activity
                         	currentAppUser.setList(wishes);
                         	//Log.i("IsNULL",friends.toString());
                             pack();
-                            start();
+                            startMain();
                            
                         }
                     }).executeAsync();
@@ -205,7 +205,7 @@ public final class Login extends Activity
     	currentAppUser.setList(wishes);
     	
     	pack();
-    	start();
+    	startMain();
     }
     protected void initDB(){
     	//set up DB communication
@@ -226,6 +226,7 @@ public final class Login extends Activity
     	
     }
 }
+
 class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<String>> {
 	@Override
 	protected ArrayList<String> doInBackground(ArrayList<String>... params) {
@@ -241,6 +242,7 @@ class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<Str
         Log.d("Image",result.toString());
     }
 }
+
 class WishRetrieval extends AsyncTask<String, Integer, ArrayList<WishItem>> {
 	@Override
 	protected ArrayList<WishItem> doInBackground(String... params) {

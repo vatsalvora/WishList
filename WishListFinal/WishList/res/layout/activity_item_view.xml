@@ -57,8 +57,8 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ratingBar2"
         android:layout_alignLeft="@+id/ItemImage"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/ItemImage"
         android:text="@string/description" />
@@ -71,19 +71,5 @@
         android:adjustViewBounds="true"
         android:src="@drawable/ic_launcher" />
 
-    <RatingBar
-        android:id="@+id/ratingBar2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_comment"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/button_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Comment" />
 
 </RelativeLayout>

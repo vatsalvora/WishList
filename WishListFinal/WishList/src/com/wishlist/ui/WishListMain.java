@@ -306,8 +306,16 @@ public class WishListMain extends FragmentActivity
     }
     
     public void showAddDialog(){
+    	FragmentManager fragmentManager = getSupportFragmentManager();
     	DialogFragment d = new WishAddDialogFragment();
-    	d.show(getSupportFragmentManager(), "WishAddFragment");
+    	d.show(fragmentManager, "WishAddDialog");
+        /*
+    	android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content, d)
+                   .addToBackStack(null).commit();
+        */
     }
     
 	@Override

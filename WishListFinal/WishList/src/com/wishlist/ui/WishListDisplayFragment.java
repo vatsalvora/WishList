@@ -1,6 +1,6 @@
 package com.wishlist.ui;
 
-import java.sql.Date;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Intent;
@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnLongClickListener;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
+import com.wishlist.serv.WLServerCom;
 
 public class WishListDisplayFragment extends Fragment 
 {/*
@@ -46,8 +46,10 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
 	private User user;
+	//these adapters get switched out depending on conditions to show the correct wishlist
 	private ArrayAdapter<String> appUserAdapter; //adapter for the app owner's wishlist
 	private ArrayAdapter<String> currentUserAdapter; //adapter for the currently-selected friend's wishlist (user if user != appuser)
+
 	
 	private ListView listView; 
 	
@@ -95,7 +97,7 @@ So the UI elements for certain actions are hidden based on user.
         for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
         
         appUserAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
-    //    this.adapter = adapter; 
+     //   currentUserAdapter = appUserAdapter; 
         listView.setAdapter(appUserAdapter);
         
         if(user.getIsAppUser()){
@@ -105,12 +107,18 @@ So the UI elements for certain actions are hidden based on user.
 	        listView.setMultiChoiceModeListener(new MultiChoiceModeListener(){
 	        	//the listener for the contextual action bar
 	        	
- 	
+	        	ArrayList<WishItem> selectedWishes = new ArrayList<WishItem>(); 
 	            @Override
+	            
 	            public void onItemCheckedStateChanged(ActionMode mode, int position,
 	                                                  long id, boolean checked) {
 	                // Here you can do something when items are selected/de-selected,
 	                // such as update the title in the CAB
+	            	
+	            	//add selected wishes to selectedwishes
+	            	
+	            	selectedWishes.add(user.getItem(position));           	
+	            	
 	            }
 	
 	            @Override
@@ -118,12 +126,23 @@ So the UI elements for certain actions are hidden based on user.
 	                // Respond to clicks on the actions in the CAB
 	            	switch (item.getItemId()) {
 	                    case R.id.action_delete: // DELETING ITEMS HERE 
-	                    
+	                    	//for each selected wish, delete it from the server and the user's list
 	                    	
-	                    	//((WishListMain) getActivity()).showDeleteDialog();
-	                        ((WishListMain) getActivity()).getCurrentUser().removeItem(0);
-	                        
-	                        
+	                    	for(WishItem wish : selectedWishes){
+	                    		try{
+	                    			WLServerCom.rmWish(wish);
+	                    			appUserAdapter.remove(wish.getName()); 
+	                    			user.removeItem(wish); 
+	                    		}
+	                    		catch(IOException e){
+	                    			Log.e("WishListDisplay server delete item ", ""+ e.toString()); 
+	                    		}	                    		
+	                    		
+	                    	}
+	                    	
+	                        //notify the adapter that the data has changed
+	        	            appUserAdapter.notifyDataSetChanged(); 
+	                    	
 	                    	mode.finish(); // Action picked, so close the CAB
 	                        return true;
 	                    default:
@@ -164,7 +183,7 @@ So the UI elements for certain actions are hidden based on user.
         		startActivity(i);
             }
         }); 
-        
+   /*     
        listView.setOnItemLongClickListener(new OnItemLongClickListener(){
     	    @Override
 			public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
@@ -172,9 +191,10 @@ So the UI elements for certain actions are hidden based on user.
 				return true;
 			}
 		});
-       	
+       	*/
+    //   Toast.makeText(getActivity().getApplicationContext(), user.getName(), Toast.LENGTH_SHORT).show();
         return listView;
-    }
+    } 
 	
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
 	{
@@ -184,8 +204,6 @@ So the UI elements for certain actions are hidden based on user.
 		
 		if(user.getIsAppUser()) inflater.inflate(R.menu.wish_list_view, menu);
 		else inflater.inflate(R.menu.nonowner_wish_list_view, menu);
-		
-		//TODO: display a different action bar (without the ability to add items) if the user doesn't own the list
 		
 	} 
 	
@@ -197,14 +215,14 @@ So the UI elements for certain actions are hidden based on user.
 	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
 	            ((WishListMain) getActivity()).showAddDialog();
 	            appUserAdapter.notifyDataSetChanged(); 
-	            if(currentUserAdapter != null){
-	            	currentUserAdapter.notifyDataSetChanged(); 
-	            }
+	            
 	        	return true;
 	        case R.id.action_back: 
 	        	user = ((WishListMain)getActivity()).getAppUser(); 
 	        	listView.setAdapter(appUserAdapter);
+	        	currentUserAdapter = appUserAdapter; 
 	        	getActivity().invalidateOptionsMenu();
+	        	
 	        	return true; 
 	        default:
 	            return super.onOptionsItemSelected(item);

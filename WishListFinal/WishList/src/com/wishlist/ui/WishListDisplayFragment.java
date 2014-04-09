@@ -117,9 +117,13 @@ So the UI elements for certain actions are hidden based on user.
 	            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 	                // Respond to clicks on the actions in the CAB
 	            	switch (item.getItemId()) {
-	                    case R.id.action_delete:
+	                    case R.id.action_delete: // DELETING ITEMS HERE 
+	                    
+	                    	
 	                    	//((WishListMain) getActivity()).showDeleteDialog();
 	                        ((WishListMain) getActivity()).getCurrentUser().removeItem(0);
+	                        
+	                        
 	                    	mode.finish(); // Action picked, so close the CAB
 	                        return true;
 	                    default:
@@ -192,6 +196,10 @@ So the UI elements for certain actions are hidden based on user.
 	        case R.id.action_add:
 	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
 	            ((WishListMain) getActivity()).showAddDialog();
+	            appUserAdapter.notifyDataSetChanged(); 
+	            if(currentUserAdapter != null){
+	            	currentUserAdapter.notifyDataSetChanged(); 
+	            }
 	        	return true;
 	        case R.id.action_back: 
 	        	user = ((WishListMain)getActivity()).getAppUser(); 

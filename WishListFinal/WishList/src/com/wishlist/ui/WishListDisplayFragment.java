@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -116,9 +117,13 @@ So the UI elements for certain actions are hidden based on user.
 	            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 	                // Respond to clicks on the actions in the CAB
 	            	switch (item.getItemId()) {
-	                    case R.id.action_delete:
+	                    case R.id.action_delete: // DELETING ITEMS HERE 
+	                    
+	                    	
 	                    	//((WishListMain) getActivity()).showDeleteDialog();
 	                        ((WishListMain) getActivity()).getCurrentUser().removeItem(0);
+	                        
+	                        
 	                    	mode.finish(); // Action picked, so close the CAB
 	                        return true;
 	                    default:
@@ -183,6 +188,10 @@ So the UI elements for certain actions are hidden based on user.
 	        case R.id.action_add:
 	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
 	            ((WishListMain) getActivity()).showAddDialog();
+	            appUserAdapter.notifyDataSetChanged(); 
+	            if(currentUserAdapter != null){
+	            	currentUserAdapter.notifyDataSetChanged(); 
+	            }
 	        	return true;
 	        case R.id.action_back: 
 	        	user = ((WishListMain)getActivity()).getAppUser(); 
@@ -197,8 +206,23 @@ So the UI elements for certain actions are hidden based on user.
     public void setCurrentUser(User u){
     	//Toast.makeText(getActivity().getApplicationContext(), u.getName(), Toast.LENGTH_SHORT).show();
     	this.user = u; 
-    	// load the data for the user from the database
-    	
+    	// load the data for the user from the database if it hasn't been loaded already
+    	if(user.getList().size() == 0 || user.getList() == null){
+ 
+    		WishRetrieval wishRet = new WishRetrieval();
+         	Log.i("Current User", user.getName());
+            wishRet.execute(user.getUID(), user.getName());
+         	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
+         	
+         	try{
+         		wishes = wishRet.get();
+         	}
+         	catch(Exception e){
+         		
+         	}
+         	
+         	user.setList(wishes);
+    	}
     	
     	//Make a new adapter to display the current user's wishlist
         ArrayList<String> list = new ArrayList<String>();

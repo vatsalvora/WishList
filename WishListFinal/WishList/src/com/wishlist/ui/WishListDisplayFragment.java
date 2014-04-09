@@ -160,14 +160,6 @@ So the UI elements for certain actions are hidden based on user.
             }
         }); 
         
-       listView.setOnItemLongClickListener(new OnItemLongClickListener(){
-    	    @Override
-			public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
-    	    	((WishListMain) getActivity()).showDeleteDialog(position);
-				return true;
-			}
-		});
-       	
         return listView;
     }
 	

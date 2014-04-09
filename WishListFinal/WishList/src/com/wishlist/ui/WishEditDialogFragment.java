@@ -58,8 +58,22 @@ public class WishEditDialogFragment extends DialogFragment{
 		
 		final View root = inflater.inflate(R.layout.dialog_update_wish, null);
 		final TextView tv = (TextView) root.findViewById(R.id.update_wish_title);
-		tv.setText("Update "+w.getName());
 		final EditText ev = (EditText) root.findViewById(R.id.edit_field);
+		
+		switch(hash){
+			case ItemView.NAME:
+				tv.setText("Update name of "+w.getName());
+				break;
+			case ItemView.DESC:
+				tv.setText("Update description of "+w.getName());
+				break;
+			case ItemView.PRICE:
+				tv.setText("Update price of "+w.getName());
+				break;
+			default:
+				break;
+		}
+		
 		ev.setHint("Enter update info here");
 		
 		builder.setView(root)

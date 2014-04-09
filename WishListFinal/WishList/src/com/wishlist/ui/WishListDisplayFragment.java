@@ -45,6 +45,10 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
 	private User user;
+	private ArrayAdapter<String> appUserAdapter; //adapter for the app owner's wishlist
+	private ArrayAdapter<String> currentUserAdapter; //adapter for the currently-selected friend's wishlist (user if user != appuser)
+	
+	private ListView listView; 
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
@@ -84,13 +88,14 @@ So the UI elements for certain actions are hidden based on user.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
     	setHasOptionsMenu(true);
-        final ListView listView = (ListView) inflater.inflate(R.layout.fragment_wish_display, container, false);
+        listView = (ListView) inflater.inflate(R.layout.fragment_wish_display, container, false);
 
-        final ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
         
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
-        listView.setAdapter(adapter);
+        appUserAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
+    //    this.adapter = adapter; 
+        listView.setAdapter(appUserAdapter);
         
         if(user.getIsAppUser()){
 	        //Enabling the contextual action mode for deletion IF the current user owns the wishlist
@@ -173,7 +178,7 @@ So the UI elements for certain actions are hidden based on user.
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		if(user.getIsAppUser()) inflater.inflate(R.menu.wish_list_view, menu);
-		else inflater.inflate(R.menu.main, menu);
+		else inflater.inflate(R.menu.nonowner_wish_list_view, menu);
 		
 		//TODO: display a different action bar (without the ability to add items) if the user doesn't own the list
 		
@@ -187,27 +192,31 @@ So the UI elements for certain actions are hidden based on user.
 	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
 	            ((WishListMain) getActivity()).showAddDialog();
 	        	return true;
+	        case R.id.action_back: 
+	        	user = ((WishListMain)getActivity()).getAppUser(); 
+	        	listView.setAdapter(appUserAdapter);
+	        	getActivity().invalidateOptionsMenu();
+	        	return true; 
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
-	}   
-    
-    
-    @SuppressWarnings("deprecation")
-	protected void test(){
-		// Dummy user
-		user = new User("0", "John Doe", true);
-    	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
-    	
-    	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", user.getUID(), user.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID2", "A Feast of Ice and Fire", user.getUID(), user.getName(), "", "", "Fresh out of the series that redefined fantasy, comes the cookbook that may just redefine dinner . . . and lunch, and breakfast. ", "20", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID3", "Furby Boom", user.getUID(), user.getName(), "", "", "The Furby Boom experience combines real-world interactions and virtual play with a fun app. Furby Boom will respond to your kid, change personalities based on how its treated, dance to your kid's music, speak Furbish, and much more.", "10", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID4", "Lincoln Electric Century AC-120 Stick Welder", user.getUID(), user.getName(), "", "", "The smooth arc provides strong welds on up to 14 gauge steel. ", "20", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID5", "Akai Professional LPK25 25-Key MIDI Keyboard", user.getUID(), user.getName(), "", "", " 25-key USB MIDI keyboard controller gives you expressive performance with computer-based digital audio workstations, sequencers, and more", "10", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID6", "Aurora Plush 12'' Venus Unicorn", user.getUID(), user.getName(), "", "", "It's really soft and cuddly with a delightful yellow rose attached to its purple ribbon collar. The yellow material on its horn, ears and feet is a little bit sparkly.", "20", 0, new Date(3,4,2014)));
-     	   	
-    	user.setList(wishes);
 	}
+
+    public void setCurrentUser(User u){
+    	//Toast.makeText(getActivity().getApplicationContext(), u.getName(), Toast.LENGTH_SHORT).show();
+    	this.user = u; 
+    	// load the data for the user from the database
+    	
+    	
+    	//Make a new adapter to display the current user's wishlist
+        ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
+        
+        currentUserAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
+
+        listView.setAdapter(currentUserAdapter);
+    }
+
 
 }
 

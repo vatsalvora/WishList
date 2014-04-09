@@ -36,6 +36,7 @@ public class FriendsListDisplayFragment extends Fragment
     private ArrayList<User> friends;
     private WishListMain parent;
     public static final String ARG_SECTION_NUMBER = "section_number";
+    private friendsListAdapter adapter; 
 
     public FriendsListDisplayFragment()
     {
@@ -61,17 +62,22 @@ public class FriendsListDisplayFragment extends Fragment
 
         ListView listView = (ListView) inflater.inflate(R.layout.fragment_friends_list_display,
                                          container, false);
-            		
-        listView.setAdapter(new friendsListAdapter(getActivity(), friends)); 
+        
+        adapter = new friendsListAdapter(getActivity(), friends); 
+        listView.setAdapter(adapter); 
         listView.setOnItemClickListener(new OnItemClickListener() {
         	  @Override
         	  public void onItemClick(AdapterView<?> parent, View view,
         	    int position, long id) {
-        	    Toast.makeText(getActivity(),
+        	/*    Toast.makeText(getActivity(),
         	      "Click ListItem Number " + position, Toast.LENGTH_LONG)
-        	      .show();
+        	      .show(); */
         	    ActionBar bar = getActivity().getActionBar();
+        	    
+        	    ((WishListMain) getActivity()).setCurrentUser((User) adapter.getItem(position)); //switch the wish list being displayed in the wishlist tab
+        	    
         	    bar.setSelectedNavigationItem(0);
+
         	  }
         	});
         

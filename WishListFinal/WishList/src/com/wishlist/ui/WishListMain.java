@@ -152,10 +152,21 @@ public class WishListMain extends FragmentActivity
     
     protected void setCurrentUser(User u){
     	currentUser = u;
+    	//Toast.makeText(this, currentUser.getName(), Toast.LENGTH_SHORT).show();
+    	//change the current user in wishDisplayFragment and display the new wishlist appropriately
+    	if(mSectionsPagerAdapter != null){
+	    	WishListDisplayFragment wishFragment = (WishListDisplayFragment) mSectionsPagerAdapter.getItem(SectionsPagerAdapter.WISH); 
+	    	wishFragment.setCurrentUser(currentUser);
+    	}
+    	
     }
     
     public User getCurrentUser(){
     	return currentUser;
+    }
+    
+    public User getAppUser(){
+    	return appUser; 
     }
     
     public ArrayList<User> getFriendList(){

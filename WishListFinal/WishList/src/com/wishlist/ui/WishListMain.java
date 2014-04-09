@@ -24,7 +24,7 @@ import com.wishlist.serv.*;
  */
 
 public class WishListMain extends FragmentActivity 
-	implements ActionBar.TabListener, WishAddDialogFragment.WishAddDialogListener, WishDeleteDialogFragment.WishDeleteDialogListener
+	implements ActionBar.TabListener, WishAddDialogFragment.WishAddDialogListener
 {
 
     /**
@@ -338,21 +338,5 @@ public class WishListMain extends FragmentActivity
 	@Override
 	public void onDialogNegativeClick(WishAddDialogFragment dialog) {}
 	
-	public void showDeleteDialog(int position){
-		DialogFragment d = new WishDeleteDialogFragment();
-		Bundle b = new Bundle();
-		b.putInt(Transporter.WISH, position);
-		d.setArguments(b);
-    	d.show(getSupportFragmentManager(), "WishDeleteFragment");
-	}
-	
-	@Override
-	public void onDialogPositiveClick(WishDeleteDialogFragment dialog) {
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-		Toast.makeText(this.getApplicationContext(), "Item removed", Toast.LENGTH_SHORT).show();
-	}
 
-	@Override
-	public void onDialogNegativeClick(WishDeleteDialogFragment dialog) {}
-    
 }

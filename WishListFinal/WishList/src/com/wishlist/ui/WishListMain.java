@@ -47,13 +47,16 @@ public class WishListMain extends FragmentActivity
     private User currentUser; //current user to view the data
     private ArrayList<User> friends; //friends of the app user
     
-     @Override
+    public static final int ADD = 0;
+    public static final int DEL = 1;
+    public static final int EDIT = 2;
+    
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData(); //load data from login
-        //initDB(); //set up DB communication
         initGraphics(); //load graphics
     }
 
@@ -86,33 +89,33 @@ public class WishListMain extends FragmentActivity
     	super.onDestroy();
     }
     
-    protected void initDB(){
-    	//set up DB communication
-    	Thread t = new Thread(){ public void run(){
-    	try
-    	{
-    		WLServerCom.init();
-    		Log.e("User", currentUser.toString());
-    		WLServerCom.addUser(currentUser);
-    	}
-    	catch (Exception e)
-    	{
-    		Log.e("Backend",e.toString());
-    		Log.e("Backend", "Error, couldn't connect to server");
-    	}
-    	}
-    	};
-    	
-    	t.start();
-    	try{
-    		t.join(100);
-    	}
-    	catch(Exception e){
-    		
-    	}
-    	
-    	//initPolixTest();
-    	
+    public static void DBWishUpdate(int code, WishItem wish){
+    	final int c = code;
+    	final WishItem w = wish;
+    	new Thread(){
+    		public void run(){
+		    	try
+		    	{
+		    		switch(c){
+		    			case ADD:
+		    				WLServerCom.addWish(w);
+				    		break;
+		    			case DEL:
+		    				WLServerCom.rmWish(w);
+		    				break;
+		    			case EDIT: //very inefficient...
+		    				WLServerCom.rmWish(w);
+		    				WLServerCom.addWish(w);
+		    				break;
+		    		}
+		    	}
+		    	catch (Exception e)
+		    	{
+		    		Log.e("Backend",e.toString());
+		    		Log.e("Backend", "Error, couldn't connect to server");
+		    	}
+    		}
+    	}.start();
     }
     
     protected void initPolixTest(){

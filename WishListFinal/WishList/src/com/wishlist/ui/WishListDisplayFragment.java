@@ -1,6 +1,5 @@
 package com.wishlist.ui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Intent;
@@ -17,14 +16,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
-import com.wishlist.serv.WLServerCom;
 
 public class WishListDisplayFragment extends Fragment 
 {/*
@@ -129,16 +126,10 @@ So the UI elements for certain actions are hidden based on user.
 	                    	//for each selected wish, delete it from the server and the user's list
 	                    	
 	                    	for(WishItem wish : selectedWishes){
-	                    		try{
-	                    			WLServerCom.rmWish(wish);
-	                    			appUserAdapter.remove(wish.getName()); 
-	                    			user.removeItem(wish); 
-	                    		}
-	                    		catch(IOException e){
-	                    			Log.e("WishListDisplay server delete item ", ""+ e.toString()); 
-	                    		}	                    		
-	                    		
-	                    	}
+                    			WishListMain.DBWishUpdate(WishListMain.DEL, wish);
+                    			appUserAdapter.remove(wish.getName()); 
+                    			user.removeItem(wish); 
+                    		}
 	                    	
 	                        //notify the adapter that the data has changed
 	        	            appUserAdapter.notifyDataSetChanged(); 

@@ -1,9 +1,7 @@
 package com.wishlist.ui;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
 import android.content.Intent;
-import android.graphics.Bitmap;
 
 public final class Login extends Activity
 {
@@ -116,7 +113,6 @@ public final class Login extends Activity
                 	Request.newMyFriendsRequest(session, new Request.GraphUserListCallback()
                     {	
 
-                        @SuppressWarnings("deprecation")
 						public void onCompleted(List<GraphUser> users, Response response)
                         {Log.e("Order","2");
                         	friends = new ArrayList<User>();

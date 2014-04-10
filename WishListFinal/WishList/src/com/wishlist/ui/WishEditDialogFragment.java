@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -63,12 +64,15 @@ public class WishEditDialogFragment extends DialogFragment{
 		switch(hash){
 			case ItemView.NAME:
 				tv.setText("Update name of "+w.getName());
+				ev.setInputType(InputType.TYPE_CLASS_TEXT);
 				break;
 			case ItemView.DESC:
 				tv.setText("Update description of "+w.getName());
+				ev.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 				break;
 			case ItemView.PRICE:
 				tv.setText("Update price of "+w.getName());
+				ev.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				break;
 			default:
 				break;
@@ -94,6 +98,9 @@ public class WishEditDialogFragment extends DialogFragment{
 					default:
 						break;
 				}
+				
+				WishListMain.DBWishUpdate(WishListMain.EDIT, w);
+				
 				l.onDialogPositiveClick(WishEditDialogFragment.this);
 			}
 		})

@@ -1,20 +1,17 @@
 package com.wishlist.ui;
 
-import java.sql.Date;
+//import java.sql.Date;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
-import com.wishlist.serv.WLServerCom;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 public class WishAddDialogFragment extends DialogFragment{
@@ -87,18 +84,7 @@ public class WishAddDialogFragment extends DialogFragment{
 				w.setDescription(description);
 				u.addItem(w);
 				
-				new Thread(){ 
-		    		public void run(){
-				    	try
-				    	{
-				    		WLServerCom.addWish(w);
-				    	}
-				    	catch (Exception e)
-				    	{
-				    		Log.e("Adding item to database failed",e.toString());
-				    	}
-			    	}
-		    	}.start();
+				WishListMain.DBWishUpdate(WishListMain.ADD, w);
 		    					
 				l.onDialogPositiveClick(WishAddDialogFragment.this);
 			}

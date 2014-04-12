@@ -27,6 +27,7 @@ public class WishListServer
     public static final int LIST_WISHES = 8; //Return wishes in DB owned by user
     public static final int STORE_IMAGE = 9;
     public static final int USERS_CHECK = 10;
+    public static final int WISH_UPDATE = 11;
 
     private ServerSocket server;
     private final int port = 5600;
@@ -230,6 +231,18 @@ public class WishListServer
                             oos.writeObject(WLUsers);
                             oos.flush();
                         }
+                        else if(code == WISH_UPDATE)
+                        {
+							
+							String wid = (String)ois.readObject();
+							String bid = (String)ois.readObject();
+                            String name = (String)ois.readObject();
+                            String descr = (String)ois.readObject();
+                            String price = (String)ois.readObject();
+                            int status = ois.readInt();
+                            db.updateWish(wid, bid, name, descr, price, status);
+							
+						}
                         /*else if(code == USER_SEND)
                         {
                             oos.writeObject(fb);

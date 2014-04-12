@@ -43,6 +43,7 @@ public final class WLServerCom
     public static final int LIST_WISHES = 8;
     public static final int STORE_IMAGE = 9;
     public static final int USERS_CHECK = 10;
+    public static final int WISH_UPDATE = 11;
 
     public static void init() throws UnknownHostException, IOException
     {
@@ -175,6 +176,21 @@ public final class WLServerCom
         sendObject(fbUsers);
         return (ArrayList<String>)getObject();
     }
+    
+    public static void updateWish(WishItem wish)
+    {
+		
+		sendCode(WISH_UPDATE);
+		sendObject(wish.getWID());
+		sendObject(wish.getBID());
+		sendObject(wish.getName());
+		sendObject(wish.getDescription());
+		sendObject(wish.getPrice());
+		sendCode( wish.getStatus() ); 
+		//Doesnt send code. 
+		//Just using method to send int 
+		
+	}
     
     //public static void updateWish(WishItem wi) throws IOException
     //{

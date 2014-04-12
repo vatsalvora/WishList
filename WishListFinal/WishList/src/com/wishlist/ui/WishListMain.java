@@ -103,9 +103,9 @@ public class WishListMain extends FragmentActivity
 		    			case DEL:
 		    				WLServerCom.rmWish(w);
 		    				break;
-		    			case EDIT: //very inefficient...
-		    				Log.e("Wish", w.getStatus()+"");
-		    				Log.e("Wish", w.getBID());
+		    			case EDIT:
+		    				//Log.e("Wish", w.getStatus()+"");
+		    				//Log.e("Wish", w.getBID());
 		    				WLServerCom.updateWish(w);
 		    				break;
 		    			default:
@@ -326,13 +326,6 @@ public class WishListMain extends FragmentActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	DialogFragment d = new WishAddDialogFragment();
     	d.show(fragmentManager, "WishAddDialog");
-        /*
-    	android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-        
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.add(android.R.id.content, d)
-                   .addToBackStack(null).commit();
-        */
     }
     
 	@Override

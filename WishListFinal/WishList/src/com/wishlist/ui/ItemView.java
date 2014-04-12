@@ -31,7 +31,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 	
 	private WishItem item;
 	private boolean isAppUser;
-	private User currentAppUser;
+	private User appUser;
 	private int hashCode;
 	private TextView v[] = new TextView[TOTAL];
 	
@@ -50,41 +50,6 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
         v[NAME] = (TextView) findViewById(R.id.itemName);
 		v[DESC] = (TextView) findViewById(R.id.description);
 		v[BUYER] = (TextView) findViewById(R.id.itemClaimed);
-		
-		v[BUYER].setOnLongClickListener(new OnLongClickListener(){
-			public boolean onLongClick(View j){						
-				WishItem item = ItemView.this.item; 
-				int status = item.getStatus();
-				status = 1-status;
-				item.setStatus(status);
-				if(status == 0) {
-					item.setBuyer("", "dummy");
-					Log.e("UnClaim","UnClaim");
-				}
-				else{
-					item.setBuyer(currentAppUser.getUID(), currentAppUser.getName());
-					Log.e("Claim","Claim");
-				}
-				final WishItem w = item;
-				Toast.makeText(ItemView.this, (status==0)?"Item Unclaimed!":"Item Claimed!" , Toast.LENGTH_LONG).show();
-				new Thread(){
-					public void run(){
-						try {
-							Log.e("Status", w.getStatus()+"");
-							Log.e("Buyer", w.getBID());
-							WLServerCom.updateWish(w);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							Log.e("Update",e.toString());
-						} 
-					}
-				}.start();
-				ItemView.this.update(ItemView.BUYER);
-				return true;
-			}
-		});	
-		
-		
 		v[PRICE] = (TextView) findViewById(R.id.price);
 		
 		//comments = new ArrayList<String>();
@@ -128,17 +93,15 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
     protected void initData(){
     	item = (WishItem) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.WISH);
-    	currentAppUser = (User) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.APPUSER);
+    	appUser = (User) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.APPUSER);
 		isAppUser = Transporter.unpackBoolean(this.getIntent().getExtras(), Transporter.USER);
     	
     	if(isAppUser){
 			for(int i=0; i<TOTAL; i++){
-				final int send = i; //ugh, so retarded...
 				if(i == NAME || i == DESC || i == PRICE){
 					v[i].setOnLongClickListener(new OnLongClickListener(){
 						public boolean onLongClick(View j){
-							hashCode = send;
-							showUpdateDialog(send);
+							showUpdateDialog();
 							return true;
 						}
 					});
@@ -153,7 +116,37 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		v[BUYER].setText((item.getStatus()==1 ? "Item is claimed": "Item is not claimed"));
 		v[DESC].setText(item.getDescription());
 		v[PRICE].setText("$"+item.getPrice());
-		//imageV.setImageDrawable(item.getDrawable());
+		v[BUYER].setOnLongClickListener(new OnLongClickListener(){
+			public boolean onLongClick(View j){						
+				WishItem item = ItemView.this.item; 
+				int status = item.getStatus();
+				status = 1-status;
+				item.setStatus(status);
+				if(status == 0) {
+					item.setBuyer("", "dummy");
+					Log.e("UnClaim","UnClaim");
+				}
+				else{
+					item.setBuyer(appUser.getUID(), appUser.getName());
+					Log.e("Claim","Claim");
+				}
+				final WishItem w = item;
+				Toast.makeText(ItemView.this, (status==0)?"Item Unclaimed!":"Item Claimed!" , Toast.LENGTH_LONG).show();
+				new Thread(){
+					public void run(){
+						try {
+							Log.e("Status", w.getStatus()+"");
+							Log.e("Buyer", w.getBID());
+							WLServerCom.updateWish(w);
+						} catch (Exception e) {
+							Log.e("Update",e.toString());
+						} 
+					}
+				}.start();
+				ItemView.this.update(ItemView.BUYER);
+				return true;
+			}
+		});	
     }
     
     protected void update(int code){
@@ -175,7 +168,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     	}
     }
     
-    protected void showUpdateDialog(int send){
+    protected void showUpdateDialog(){
     	DialogFragment d = new WishEditDialogFragment();
     	d.show(getSupportFragmentManager(), "WishUpdateFragment");
     }

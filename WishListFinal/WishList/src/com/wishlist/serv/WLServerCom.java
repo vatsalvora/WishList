@@ -169,7 +169,8 @@ public final class WLServerCom
         return wishes;
     }
     
-    public static ArrayList<String> getWLUsers(ArrayList<String> fbUsers) throws IOException, ClassNotFoundException
+    @SuppressWarnings("unchecked")
+	public static ArrayList<String> getWLUsers(ArrayList<String> fbUsers) throws IOException, ClassNotFoundException
     {
         sendCode(USERS_CHECK);
         sendObject(fbUsers);

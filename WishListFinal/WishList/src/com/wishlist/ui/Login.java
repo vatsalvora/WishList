@@ -1,6 +1,5 @@
 package com.wishlist.ui;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
 
@@ -125,6 +124,7 @@ public final class Login extends Activity
                 	Request.newMyFriendsRequest(session, new Request.GraphUserListCallback()
                     {	
 
+						@SuppressWarnings("unchecked")
 						public void onCompleted(List<GraphUser> users, Response response)
                         {Log.e("Order","2");
                         	friends = new ArrayList<User>();

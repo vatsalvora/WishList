@@ -1,9 +1,6 @@
 package com.wishlist.ui;
 
-import java.io.IOException;
-
 import com.wishlist.obj.WishItem;
-import com.wishlist.serv.WLServerCom;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,7 +8,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -103,17 +99,8 @@ public class WishEditDialogFragment extends DialogFragment{
 					default:
 						break;
 				}
-				new Thread(){
-					public void run(){
-						try {
-							WLServerCom.updateWish(w);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							Log.e("Update",e.toString());
-						} 
-					}
-				}.start();
 				
+				WishListMain.DBWishUpdate(WishListMain.EDIT, w);
 				l.onDialogPositiveClick(WishEditDialogFragment.this);
 			}
 		})

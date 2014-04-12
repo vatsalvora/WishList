@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
@@ -42,26 +40,22 @@ BOTH WISHLISTS:
 So the UI elements for certain actions are hidden based on user. 
 */
 	
-	private User user;
+	//easy reference for users
+	private User currentUser;
 	private User appUser;
-	//these adapters get switched out depending on conditions to show the correct wishlist
-	private ArrayAdapter<String> appUserAdapter; //adapter for the app owner's wishlist
-	private ArrayAdapter<String> currentUserAdapter; //adapter for the currently-selected friend's wishlist (user if user != appuser)
-
 	
+	//have one adapter for a certain list
+	private ArrayAdapter<String> userListAdapter;
+	
+	//list view to show the items in fragment
 	private ListView listView; 
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
     	super.onCreate(savedInstanceState);
-    	WishListMain parent = (WishListMain) getActivity();
-    	user = parent.getCurrentUser();
-    	appUser = parent.getAppUser();
-    	if(user == null){
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);
-            toast.show();			
-    	}
-    	   	
+    	currentUser = ((WishListMain) getActivity()).getCurrentUser();
+    	appUser = ((WishListMain) getActivity()).getAppUser();
+    	
     	//test();
     	
     }
@@ -92,87 +86,15 @@ So the UI elements for certain actions are hidden based on user.
     	setHasOptionsMenu(true);
         listView = (ListView) inflater.inflate(R.layout.fragment_wish_display, container, false);
 
-        ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
+        resetListView(appUser);
         
-        appUserAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
-     //   currentUserAdapter = appUserAdapter; 
-        listView.setAdapter(appUserAdapter);
-        
-        if(user.getIsAppUser()){
-	        //Enabling the contextual action mode for deletion IF the current user owns the wishlist
-	        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-	
-	        listView.setMultiChoiceModeListener(new MultiChoiceModeListener(){
-	        	//the listener for the contextual action bar
-	        	
-	        	ArrayList<WishItem> selectedWishes = new ArrayList<WishItem>(); 
-	            @Override
-	            
-	            public void onItemCheckedStateChanged(ActionMode mode, int position,
-	                                                  long id, boolean checked) {
-	                // Here you can do something when items are selected/de-selected,
-	                // such as update the title in the CAB
-	            	
-	            	//add selected wishes to selectedwishes
-	            	
-	            	selectedWishes.add(user.getItem(position));           	
-	            	
-	            }
-	
-	            @Override
-	            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-	                // Respond to clicks on the actions in the CAB
-	            	switch (item.getItemId()) {
-	                    case R.id.action_delete: // DELETING ITEMS HERE 
-	                    	//for each selected wish, delete it from the server and the user's list
-	                    	
-	                    	for(WishItem wish : selectedWishes){
-                    			WishListMain.DBWishUpdate(WishListMain.DEL, wish);
-                    			appUserAdapter.remove(wish.getName()); 
-                    			user.removeItem(wish); 
-                    		}
-	                    	
-	                        //notify the adapter that the data has changed
-	        	            appUserAdapter.notifyDataSetChanged(); 
-	                    	
-	                    	mode.finish(); // Action picked, so close the CAB
-	                        return true;
-	                    default:
-	                        return false;
-	                } 
-	            }
-	            
-	            @Override
-	            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-	                // Inflate the menu for the CAB
-	                MenuInflater inflater = mode.getMenuInflater();
-	                inflater.inflate(R.menu.contextual_menu_wishdisplay, menu);
-	                return true;
-	            }
-	
-	            @Override
-	            public void onDestroyActionMode(ActionMode mode) {
-	                // Here you can make any necessary updates to the activity when
-	                // the CAB is removed. By default, selected items are deselected/unchecked.
-	            }
-	
-	            @Override
-	            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-	                // Here you can perform updates to the CAB due to
-	                // an invalidate() request
-	                return false;
-	            }
-	        });
-        }
-        
-       listView.setOnItemClickListener(new OnItemClickListener(){
+        listView.setOnItemClickListener(new OnItemClickListener(){
         	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         		Intent i = new Intent(getActivity(), ItemView.class);
         		Bundle b = new Bundle();
         		Transporter.pack(b, Transporter.APPUSER, appUser);
-        		Transporter.pack(b, Transporter.USER, user.getIsAppUser());
-        		Transporter.pack(b, Transporter.WISH, user.getItem(position));
+        		Transporter.pack(b, Transporter.USER, currentUser.getIsAppUser());
+        		Transporter.pack(b, Transporter.WISH, currentUser.getItem(position));
         		i.putExtras(b);
         		startActivity(i);
             }
@@ -187,7 +109,7 @@ So the UI elements for certain actions are hidden based on user.
 		//This displays the correct action bar for the fragment
 		super.onCreateOptionsMenu(menu, inflater);
 		
-		if(user.getIsAppUser()) inflater.inflate(R.menu.wish_list_view, menu);
+		if(currentUser.getIsAppUser()) inflater.inflate(R.menu.wish_list_view, menu);
 		else inflater.inflate(R.menu.nonowner_wish_list_view, menu);
 		
 	} 
@@ -197,18 +119,14 @@ So the UI elements for certain actions are hidden based on user.
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
-	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
 	            ((WishListMain) getActivity()).showAddDialog();
-	            appUserAdapter.notifyDataSetChanged(); 
-	            
-	        	return true;
+	            userListAdapter.notifyDataSetChanged(); 
+               	return true;
 	        case R.id.action_back: 
-	        	user = ((WishListMain)getActivity()).getAppUser(); 
-	        	listView.setAdapter(appUserAdapter);
-	        	currentUserAdapter = appUserAdapter; 
+	        	resetListView(appUser);
+	        	currentUser = appUser;
 	        	getActivity().invalidateOptionsMenu();
-	        	
-	        	return true; 
+	           	return true; 
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -216,34 +134,102 @@ So the UI elements for certain actions are hidden based on user.
 
     public void setCurrentUser(User u){
     	//Toast.makeText(getActivity().getApplicationContext(), u.getName(), Toast.LENGTH_SHORT).show();
-    	this.user = u; 
+    	currentUser = u; 
+    	
     	// load the data for the user from the database if it hasn't been loaded already
-    	if(user.getList().size() == 0 || user.getList() == null){
- 
+    	fetchWishes(currentUser);
+    	
+    	//Make a new adapter to display the current user's wishlist
+    	resetListView(currentUser);
+    }
+    
+    protected void fetchWishes(User user){
+    	if(user.getList().isEmpty() || user.getList() == null){
     		WishRetrieval wishRet = new WishRetrieval();
-         	Log.i("Current User", user.getName());
+         	//Log.i("Current User", currentUser.getName());
             wishRet.execute(user.getUID(), user.getName());
          	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
-         	
          	try{
          		wishes = wishRet.get();
          	}
          	catch(Exception e){
          		
          	}
-         	
          	user.setList(wishes);
     	}
-    	
-    	//Make a new adapter to display the current user's wishlist
-        ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
-        
-        currentUserAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
-
-        listView.setAdapter(currentUserAdapter);
     }
+    
+    protected void resetListView(User u){
+    	ArrayList<String> list = new ArrayList<String>();
+    	for(WishItem i : u.getList()) list.add(i.getName());
+    	resetListView(list);
+    	if(u.getIsAppUser()) setAppUserPermissions();
+    }
+    
+    protected void resetListView(ArrayList<String> list){
+    	userListAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
+    	listView.setAdapter(userListAdapter);
+    }
+    
+    protected void setAppUserPermissions(){
+    	listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+    	listView.setMultiChoiceModeListener(new MultiChoiceModeListener(){
+        	//the listener for the contextual action bar
+        	ArrayList<WishItem> selectedWishes = new ArrayList<WishItem>(); 
+            
+        	@Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                // Here you can do something when items are selected/de-selected,
+                // such as update the title in the CAB
+            	
+            	//add selected wishes to selectedwishes
+            	
+            	selectedWishes.add(currentUser.getItem(position));           	
+            }
 
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                // Respond to clicks on the actions in the CAB
+            	switch (item.getItemId()) {
+                    case R.id.action_delete: // DELETING ITEMS HERE 
+                    	//for each selected wish, delete it from the server and the user's list
+                    	for(WishItem wish : selectedWishes){
+                    		WishListMain.DBWishUpdate(WishListMain.DEL, wish);
+                    		userListAdapter.remove(wish.getName()); 
+                    		currentUser.removeItem(wish); 
+                    	}
+                    	
+                    	//notify the adapter that the data has changed
+        	            userListAdapter.notifyDataSetChanged(); 
+                    	mode.finish(); // Action picked, so close the CAB
+                        return true;
+                    default:
+                        return false;
+                } 
+            }
+            
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                // Inflate the menu for the CAB
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.contextual_menu_wishdisplay, menu);
+                return true;
+            }
 
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // Here you can make any necessary updates to the activity when
+                // the CAB is removed. By default, selected items are deselected/unchecked.
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // Here you can perform updates to the CAB due to
+                // an invalidate() request
+                return false;
+            }
+        });
+    }
+    
 }
 

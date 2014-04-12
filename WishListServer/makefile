@@ -7,3 +7,7 @@ WishListServer.class: WishListServer.java DBCom.java
 
 clean:
 	rm *.class
+run:
+	java -cp postgresql-9.1-903.jdbc4.jar:.  WishListServer
+	
+

@@ -32,10 +32,11 @@ public final class Login extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         TextView v = (TextView) findViewById(R.id.blank);
-        v.setText("Click me to go to the main menu.");
+        v.setText("Click me to go back to the main menu.");
         v.setOnClickListener(new OnClickListener(){
         	public void onClick(View i){
-				startMain();
+        		Intent intent = new Intent(Login.this, WishListMain.class);
+        		startActivity(intent);
 			}
         });
         

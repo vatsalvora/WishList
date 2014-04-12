@@ -1,9 +1,7 @@
 package com.wishlist.ui;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
 import android.content.Intent;
-import android.graphics.Bitmap;
 
 public final class Login extends Activity
 {
@@ -81,7 +78,7 @@ public final class Login extends Activity
     	Transporter.pack(FBData, Transporter.FRIENDS, friends);
     }
     
-    protected void start()
+    protected void startMain()
     {
     	 Intent intent = new Intent(this, WishListMain.class);
          intent.putExtras(FBData);
@@ -116,7 +113,6 @@ public final class Login extends Activity
                 	Request.newMyFriendsRequest(session, new Request.GraphUserListCallback()
                     {	
 
-                        @SuppressWarnings("deprecation")
 						public void onCompleted(List<GraphUser> users, Response response)
                         {Log.e("Order","2");
                         	friends = new ArrayList<User>();
@@ -171,7 +167,7 @@ public final class Login extends Activity
                         	currentAppUser.setList(wishes);
                         	//Log.i("IsNULL",friends.toString());
                             pack();
-                            start();
+                            startMain();
                            
                         }
                     }).executeAsync();
@@ -205,7 +201,7 @@ public final class Login extends Activity
     	currentAppUser.setList(wishes);
     	
     	pack();
-    	start();
+    	startMain();
     }
     protected void initDB(){
     	//set up DB communication
@@ -226,6 +222,7 @@ public final class Login extends Activity
     	
     }
 }
+
 class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<String>> {
 	@Override
 	protected ArrayList<String> doInBackground(ArrayList<String>... params) {
@@ -241,6 +238,7 @@ class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<Str
         Log.d("Image",result.toString());
     }
 }
+
 class WishRetrieval extends AsyncTask<String, Integer, ArrayList<WishItem>> {
 	@Override
 	protected ArrayList<WishItem> doInBackground(String... params) {

@@ -1,11 +1,11 @@
 package com.wishlist.ui;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,11 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnLongClickListener;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -45,6 +43,12 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
 	private User user;
+	//these adapters get switched out depending on conditions to show the correct wishlist
+	private ArrayAdapter<String> appUserAdapter; //adapter for the app owner's wishlist
+	private ArrayAdapter<String> currentUserAdapter; //adapter for the currently-selected friend's wishlist (user if user != appuser)
+
+	
+	private ListView listView; 
 	
 	public void onCreate(Bundle savedInstanceState)
     {	
@@ -84,13 +88,14 @@ So the UI elements for certain actions are hidden based on user.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
     	setHasOptionsMenu(true);
-        final ListView listView = (ListView) inflater.inflate(R.layout.fragment_wish_display, container, false);
+        listView = (ListView) inflater.inflate(R.layout.fragment_wish_display, container, false);
 
-        final ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
         
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
-        listView.setAdapter(adapter);
+        appUserAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
+     //   currentUserAdapter = appUserAdapter; 
+        listView.setAdapter(appUserAdapter);
         
         if(user.getIsAppUser()){
 	        //Enabling the contextual action mode for deletion IF the current user owns the wishlist
@@ -99,21 +104,36 @@ So the UI elements for certain actions are hidden based on user.
 	        listView.setMultiChoiceModeListener(new MultiChoiceModeListener(){
 	        	//the listener for the contextual action bar
 	        	
- 	
+	        	ArrayList<WishItem> selectedWishes = new ArrayList<WishItem>(); 
 	            @Override
+	            
 	            public void onItemCheckedStateChanged(ActionMode mode, int position,
 	                                                  long id, boolean checked) {
 	                // Here you can do something when items are selected/de-selected,
 	                // such as update the title in the CAB
+	            	
+	            	//add selected wishes to selectedwishes
+	            	
+	            	selectedWishes.add(user.getItem(position));           	
+	            	
 	            }
 	
 	            @Override
 	            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 	                // Respond to clicks on the actions in the CAB
 	            	switch (item.getItemId()) {
-	                    case R.id.action_delete:
-	                    	//((WishListMain) getActivity()).showDeleteDialog();
-	                        ((WishListMain) getActivity()).getCurrentUser().removeItem(0);
+	                    case R.id.action_delete: // DELETING ITEMS HERE 
+	                    	//for each selected wish, delete it from the server and the user's list
+	                    	
+	                    	for(WishItem wish : selectedWishes){
+                    			WishListMain.DBWishUpdate(WishListMain.DEL, wish);
+                    			appUserAdapter.remove(wish.getName()); 
+                    			user.removeItem(wish); 
+                    		}
+	                    	
+	                        //notify the adapter that the data has changed
+	        	            appUserAdapter.notifyDataSetChanged(); 
+	                    	
 	                    	mode.finish(); // Action picked, so close the CAB
 	                        return true;
 	                    default:
@@ -154,17 +174,9 @@ So the UI elements for certain actions are hidden based on user.
         		startActivity(i);
             }
         }); 
-        
-       listView.setOnItemLongClickListener(new OnItemLongClickListener(){
-    	    @Override
-			public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
-    	    	((WishListMain) getActivity()).showDeleteDialog(position);
-				return true;
-			}
-		});
-       	
+
         return listView;
-    }
+    } 
 	
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) 
 	{
@@ -173,9 +185,7 @@ So the UI elements for certain actions are hidden based on user.
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		if(user.getIsAppUser()) inflater.inflate(R.menu.wish_list_view, menu);
-		else inflater.inflate(R.menu.main, menu);
-		
-		//TODO: display a different action bar (without the ability to add items) if the user doesn't own the list
+		else inflater.inflate(R.menu.nonowner_wish_list_view, menu);
 		
 	} 
 	
@@ -186,28 +196,51 @@ So the UI elements for certain actions are hidden based on user.
 	        case R.id.action_add:
 	        	Toast.makeText(getActivity().getApplicationContext(), "New Wish", Toast.LENGTH_SHORT).show();
 	            ((WishListMain) getActivity()).showAddDialog();
+	            appUserAdapter.notifyDataSetChanged(); 
+	            
 	        	return true;
+	        case R.id.action_back: 
+	        	user = ((WishListMain)getActivity()).getAppUser(); 
+	        	listView.setAdapter(appUserAdapter);
+	        	currentUserAdapter = appUserAdapter; 
+	        	getActivity().invalidateOptionsMenu();
+	        	
+	        	return true; 
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
-	}   
-    
-    
-    @SuppressWarnings("deprecation")
-	protected void test(){
-		// Dummy user
-		user = new User("0", "John Doe", true);
-    	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
-    	
-    	wishes.add(new WishItem("dummyID1", "Red Ryder BB Gun", user.getUID(), user.getName(), "", "", "The Red Ryder BB Gun is a lever-action, spring piston air gun with a smooth bore barrel, adjustable iron sights, and a gravity feed magazine with a 650 BB capacity", "10", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID2", "A Feast of Ice and Fire", user.getUID(), user.getName(), "", "", "Fresh out of the series that redefined fantasy, comes the cookbook that may just redefine dinner . . . and lunch, and breakfast. ", "20", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID3", "Furby Boom", user.getUID(), user.getName(), "", "", "The Furby Boom experience combines real-world interactions and virtual play with a fun app. Furby Boom will respond to your kid, change personalities based on how its treated, dance to your kid's music, speak Furbish, and much more.", "10", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID4", "Lincoln Electric Century AC-120 Stick Welder", user.getUID(), user.getName(), "", "", "The smooth arc provides strong welds on up to 14 gauge steel. ", "20", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID5", "Akai Professional LPK25 25-Key MIDI Keyboard", user.getUID(), user.getName(), "", "", " 25-key USB MIDI keyboard controller gives you expressive performance with computer-based digital audio workstations, sequencers, and more", "10", 0, new Date(3,4,2014)));
-    	wishes.add(new WishItem("dummyID6", "Aurora Plush 12'' Venus Unicorn", user.getUID(), user.getName(), "", "", "It's really soft and cuddly with a delightful yellow rose attached to its purple ribbon collar. The yellow material on its horn, ears and feet is a little bit sparkly.", "20", 0, new Date(3,4,2014)));
-     	   	
-    	user.setList(wishes);
 	}
+
+    public void setCurrentUser(User u){
+    	//Toast.makeText(getActivity().getApplicationContext(), u.getName(), Toast.LENGTH_SHORT).show();
+    	this.user = u; 
+    	// load the data for the user from the database if it hasn't been loaded already
+    	if(user.getList().size() == 0 || user.getList() == null){
+ 
+    		WishRetrieval wishRet = new WishRetrieval();
+         	Log.i("Current User", user.getName());
+            wishRet.execute(user.getUID(), user.getName());
+         	ArrayList<WishItem> wishes = new ArrayList<WishItem>();
+         	
+         	try{
+         		wishes = wishRet.get();
+         	}
+         	catch(Exception e){
+         		
+         	}
+         	
+         	user.setList(wishes);
+    	}
+    	
+    	//Make a new adapter to display the current user's wishlist
+        ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < user.getList().size(); ++i) list.add(user.getList().get(i).getName());
+        
+        currentUserAdapter = new ArrayAdapter<String>(getActivity(), R.layout.rowlayout, R.id.label, list);
+
+        listView.setAdapter(currentUserAdapter);
+    }
+
 
 }
 

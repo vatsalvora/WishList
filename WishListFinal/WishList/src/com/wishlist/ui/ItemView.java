@@ -43,12 +43,10 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
         
-        v[NAME] = (TextView) findViewById(R.id.name);
+        v[NAME] = (TextView) findViewById(R.id.itemName);
 		v[DESC] = (TextView) findViewById(R.id.description);
-		v[USER] = (TextView) findViewById(R.id.owner);
-		v[BUYER] = (TextView) findViewById(R.id.buyer);
+		v[BUYER] = (TextView) findViewById(R.id.itemClaimed);
 		v[PRICE] = (TextView) findViewById(R.id.price);
-		v[DATE] = (TextView) findViewById(R.id.dateAdded);
 		
 		//comments = new ArrayList<String>();
 		//adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
@@ -112,11 +110,9 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
     protected void display(){
     	v[NAME].setText(item.getName());
-		v[USER].setText("Owner: "+item.getUserName());
-		v[BUYER].setText("Buyer: "+item.getBuyerName());
-		v[DESC].setText("Description: "+item.getDescription());
-		v[DATE].setText("Date Added: "+item.getDate().toString());
-		v[PRICE].setText("Price: "+item.getPrice());
+		v[BUYER].setText((item.getStatus()==1 ? "Item is claimed": "Item is not claimed"));
+		v[DESC].setText(item.getDescription());
+		v[PRICE].setText("$"+item.getPrice());
 		//imageV.setImageDrawable(item.getDrawable());
     }
     
@@ -125,20 +121,14 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     		case NAME:
     			v[NAME].setText(item.getName());
     			break;
-    		case USER:
-    			v[USER].setText("Owner: "+item.getUserName());
-    			break;
     		case BUYER:
-    			v[BUYER].setText("Buyer: "+item.getBuyerName());
+    			v[BUYER].setText((item.getStatus()==1 ? "Item is claimed": "Item is not claimed"));
     			break;
     		case DESC:
-    			v[DESC].setText("Description: "+item.getDescription());
-    			break;
-    		case DATE:
-    			v[DATE].setText("Date Added: "+item.getDate().toString());
+    			v[DESC].setText(item.getDescription());
     			break;
     		case PRICE:
-    			v[PRICE].setText("Price: "+item.getPrice());
+    			v[PRICE].setText("$"+item.getPrice());
     			break;
     		default:
     			break;

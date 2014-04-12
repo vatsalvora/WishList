@@ -129,7 +129,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     			v[USER].setText("Owner: "+item.getUserName());
     			break;
     		case BUYER:
-    			v[BUYER].setText("Buyer: "+item.getBuyerName());
+    			v[BUYER].setText("Has Been Claimed: "+(item.getStatus()==1 ? "Yes": "No"));
     			break;
     		case DESC:
     			v[DESC].setText("Description: "+item.getDescription());

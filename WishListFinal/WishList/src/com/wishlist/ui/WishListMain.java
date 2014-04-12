@@ -107,6 +107,8 @@ public class WishListMain extends FragmentActivity
 		    				WLServerCom.rmWish(w);
 		    				WLServerCom.addWish(w);
 		    				break;
+		    			default:
+		    				break;
 		    		}
 		    	}
 		    	catch (Exception e)

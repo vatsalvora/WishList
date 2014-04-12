@@ -324,7 +324,7 @@ public class DBCom
 
     }
     
-    ArrayList<String> inDB(ArrayList<String> possUsers)
+    public ArrayList<String> inDB(ArrayList<String> possUsers)
     {
         /** Returns an AL of uids that are in out DB and were passed into
          * this function

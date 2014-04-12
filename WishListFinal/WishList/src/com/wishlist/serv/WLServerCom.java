@@ -169,14 +169,14 @@ public final class WLServerCom
         return wishes;
     }
     
-    ArrayList<String> getWLUsers(ArrayList<String> fbUsers) throws IOException, ClassNotFoundException
+    public static ArrayList<String> getWLUsers(ArrayList<String> fbUsers) throws IOException, ClassNotFoundException
     {
         sendCode(USERS_CHECK);
         sendObject(fbUsers);
         return (ArrayList<String>)getObject();
     }
     
-    public static void updateWish(WishItem wish)
+    public static void updateWish(WishItem wish) throws IOException, ClassNotFoundException
     {
 		
 		sendCode(WISH_UPDATE);

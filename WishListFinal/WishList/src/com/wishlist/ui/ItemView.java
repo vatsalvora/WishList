@@ -27,7 +27,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 	public static final int TOTAL = 6;
 	
 	private WishItem item;
-	private int isAppUser;
+	private boolean isAppUser;
 	private int hashCode;
 	private TextView v[] = new TextView[TOTAL];
 	
@@ -46,6 +46,21 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
         v[NAME] = (TextView) findViewById(R.id.itemName);
 		v[DESC] = (TextView) findViewById(R.id.description);
 		v[BUYER] = (TextView) findViewById(R.id.itemClaimed);
+		
+		v[BUYER].setOnLongClickListener(new OnLongClickListener(){
+			public boolean onLongClick(View j){						
+				WishItem item = ItemView.this.item; 
+				int status = item.getStatus(); 
+				status = (status==0)?1:0;
+				item.setStatus(status);		
+				Toast.makeText(ItemView.this, (status==0)?"Item Unclaimed!":"Item Claimed!" , Toast.LENGTH_LONG).show();
+				WishListMain.DBWishUpdate(WishListMain.EDIT, item);
+				ItemView.this.update(ItemView.BUYER);
+				return true;
+			}
+		});	
+		
+		
 		v[PRICE] = (TextView) findViewById(R.id.price);
 		
 		//comments = new ArrayList<String>();
@@ -89,9 +104,9 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
     protected void initData(){
     	item = (WishItem) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.WISH);
-    	isAppUser = Transporter.unpackInteger(this.getIntent().getExtras(), Transporter.USER);
+    	isAppUser = Transporter.unpackBoolean(this.getIntent().getExtras(), Transporter.USER);
 		
-    	if(isAppUser == 1){
+    	if(isAppUser){
 			for(int i=0; i<TOTAL; i++){
 				final int send = i; //ugh, so retarded...
 				if(i == NAME || i == DESC || i == PRICE){

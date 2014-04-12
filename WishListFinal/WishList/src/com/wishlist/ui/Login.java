@@ -13,6 +13,9 @@ import com.wishlist.obj.WishItem;
 import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
 import android.content.Intent;
 
 public final class Login extends Activity
@@ -27,8 +30,17 @@ public final class Login extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        TextView v = (TextView) findViewById(R.id.blank);
+        v.setText("Click me to go back to the main menu.");
+        v.setOnClickListener(new OnClickListener(){
+        	public void onClick(View i){
+        		Intent intent = new Intent(Login.this, WishListMain.class);
+        		startActivity(intent);
+			}
+        });
+        
         startFBSession();
-        //test();
     }
 
     protected void onResume()

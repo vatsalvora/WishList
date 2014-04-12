@@ -344,7 +344,7 @@ public class DBCom
     public boolean updateWish(String wid, String bid, String name, String descr, String price, int status)
     {
 		
-		return sendSQLnoReturn( String.format("UPDATE wishes SET (bid, name, descr, price, status) = (%s, '%s', '%s', '%s', %d) WHERE wid = %s",
+		return sendSQLnoReturn( String.format("UPDATE wishes SET (bid, name, descr, price, status) = ('%s', '%s', '%s', '%s', %d) WHERE wid = %s",
 		 bid, name, descr, price, status, wid) );
 		
 	}

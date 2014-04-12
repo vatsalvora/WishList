@@ -5,7 +5,7 @@
     <string name="app_id">1459203584303232</string>
     <string name="app_name">WishList</string>
     <string name="app">AppUser</string>
-    <string name="buyer">Buyer</string>
+    <string name="buyer">Item Claimed?</string>
 	<string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="current">CurrentUser</string>

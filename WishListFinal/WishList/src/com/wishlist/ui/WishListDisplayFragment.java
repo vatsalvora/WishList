@@ -43,6 +43,7 @@ So the UI elements for certain actions are hidden based on user.
 */
 	
 	private User user;
+	private User appUser;
 	//these adapters get switched out depending on conditions to show the correct wishlist
 	private ArrayAdapter<String> appUserAdapter; //adapter for the app owner's wishlist
 	private ArrayAdapter<String> currentUserAdapter; //adapter for the currently-selected friend's wishlist (user if user != appuser)
@@ -55,6 +56,7 @@ So the UI elements for certain actions are hidden based on user.
     	super.onCreate(savedInstanceState);
     	WishListMain parent = (WishListMain) getActivity();
     	user = parent.getCurrentUser();
+    	appUser = parent.getAppUser();
     	if(user == null){
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Who is the user? I don't know", Toast.LENGTH_SHORT);
             toast.show();			
@@ -168,6 +170,7 @@ So the UI elements for certain actions are hidden based on user.
         	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         		Intent i = new Intent(getActivity(), ItemView.class);
         		Bundle b = new Bundle();
+        		Transporter.pack(b, Transporter.APPUSER, appUser);
         		Transporter.pack(b, Transporter.USER, user.getIsAppUser());
         		Transporter.pack(b, Transporter.WISH, user.getItem(position));
         		i.putExtras(b);

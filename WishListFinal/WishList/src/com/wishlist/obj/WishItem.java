@@ -186,7 +186,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     public final void setStatus(int status)
     {
         this.status = status;
-        update(STATUS);
+        //update(STATUS);
     }
 
     public void setDescription(String description)

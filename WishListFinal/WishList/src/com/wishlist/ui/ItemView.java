@@ -1,10 +1,13 @@
 package com.wishlist.ui;
 
+import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
+import com.wishlist.serv.WLServerCom;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -28,6 +31,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 	
 	private WishItem item;
 	private boolean isAppUser;
+	private User currentAppUser;
 	private int hashCode;
 	private TextView v[] = new TextView[TOTAL];
 	
@@ -50,11 +54,31 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 		v[BUYER].setOnLongClickListener(new OnLongClickListener(){
 			public boolean onLongClick(View j){						
 				WishItem item = ItemView.this.item; 
-				int status = item.getStatus(); 
-				status = (status==0)?1:0;
-				item.setStatus(status);		
+				int status = item.getStatus();
+				status = 1-status;
+				item.setStatus(status);
+				if(status == 0) {
+					item.setBuyer("", "dummy");
+					Log.e("UnClaim","UnClaim");
+				}
+				else{
+					item.setBuyer(currentAppUser.getUID(), currentAppUser.getName());
+					Log.e("Claim","Claim");
+				}
+				final WishItem w = item;
 				Toast.makeText(ItemView.this, (status==0)?"Item Unclaimed!":"Item Claimed!" , Toast.LENGTH_LONG).show();
-				WishListMain.DBWishUpdate(WishListMain.EDIT, item);
+				new Thread(){
+					public void run(){
+						try {
+							Log.e("Status", w.getStatus()+"");
+							Log.e("Buyer", w.getBID());
+							WLServerCom.updateWish(w);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							Log.e("Update",e.toString());
+						} 
+					}
+				}.start();
 				ItemView.this.update(ItemView.BUYER);
 				return true;
 			}
@@ -104,8 +128,9 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
     protected void initData(){
     	item = (WishItem) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.WISH);
-    	isAppUser = Transporter.unpackBoolean(this.getIntent().getExtras(), Transporter.USER);
-		
+    	currentAppUser = (User) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.APPUSER);
+		isAppUser = Transporter.unpackBoolean(this.getIntent().getExtras(), Transporter.USER);
+    	
     	if(isAppUser){
 			for(int i=0; i<TOTAL; i++){
 				final int send = i; //ugh, so retarded...

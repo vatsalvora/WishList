@@ -180,6 +180,34 @@ public final class Login extends Activity
                         	catch(Exception e){
                         		
                         	}
+                        	wishes.get(0).setStatus(0);
+                        	wishes.get(0).setDescription("Set Staus 0");
+                        	wishes.get(0).setBuyer("", "dummy");
+                        	final WishItem w = wishes.get(0);
+                        	try{
+                        		new Thread(){
+                					public void run(){
+                						try {
+                                    		
+                							Log.e("Status", w.getStatus()+"");
+                							Log.e("Description", w.getDescription());
+                							WLServerCom.updateWish(w);
+                							//w.setStatus(1);
+                            				//w.setDescription("Set Status 1");
+                            				//Log.e("Status", w.getStatus()+"");
+                							//Log.e("Description", w.getDescription());
+                            				//WLServerCom.updateWish(w);
+                						} catch (Exception e) {
+                							// TODO Auto-generated catch block
+                							Log.e("Update",e.toString());
+                						} 
+                					}
+                				}.start();
+                				
+                        	}
+                        	catch(Exception e){
+                        		Log.e("Error",e.toString());
+                        	}
                         	
                         	currentAppUser.setList(wishes);
                         	//Log.i("IsNULL",friends.toString());

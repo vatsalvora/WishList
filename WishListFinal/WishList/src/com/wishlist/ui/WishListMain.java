@@ -104,8 +104,7 @@ public class WishListMain extends FragmentActivity
 		    				WLServerCom.rmWish(w);
 		    				break;
 		    			case EDIT: //very inefficient...
-		    				WLServerCom.rmWish(w);
-		    				WLServerCom.addWish(w);
+		    				WLServerCom.updateWish(w);
 		    				break;
 		    			default:
 		    				break;

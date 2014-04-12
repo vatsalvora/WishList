@@ -1,5 +1,6 @@
 package com.wishlist.ui;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
 
@@ -13,9 +14,6 @@ import com.wishlist.obj.WishItem;
 import com.wishlist.serv.WLServerCom;
 
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.TextView;
 import android.content.Intent;
 
 public final class Login extends Activity
@@ -30,17 +28,8 @@ public final class Login extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        TextView v = (TextView) findViewById(R.id.blank);
-        v.setText("Click me to go back to the main menu.");
-        v.setOnClickListener(new OnClickListener(){
-        	public void onClick(View i){
-        		Intent intent = new Intent(Login.this, WishListMain.class);
-        		startActivity(intent);
-			}
-        });
-        
         startFBSession();
+        //test();
     }
 
     protected void onResume()
@@ -136,33 +125,38 @@ public final class Login extends Activity
                             	ids.add(i.getId());
                             }
                             Collections.sort(ids);
+                            Collections.sort(friends, new CompareUsers());
                             
-                            /*
                             RegisteredUser dbList = new RegisteredUser();
                             try {
                             	dbList.execute(ids);
 								ArrayList<String> dbID = dbList.get();
+								Collections.sort(dbID);
+								for(String s : dbID) Log.e("Registered User", s);
 								ArrayList<User> regList = new ArrayList<User>();
 								int u=0;
 								int f=0;
 								while(f<friends.size() && u<dbID.size()){
-									if(friends.get(f).getUID() != dbID.get(u))
+									if((friends.get(f).getUID().equals(dbID.get(u))))
 									{
-										f++;
-									}
-									else{
 										regList.add(friends.get(f));
+										Log.e("New List", friends.get(f).getName());
 										u++;
 										f++;
 									}
+									else{
+										f++;
+									}
 								}
+								Log.e("Check", regList.size() + "");
+								
 								friends = regList;
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							*/
-                            Collections.sort(friends);
+							Collections.sort(friends);
+
                         	
                             WishRetrieval wishRet = new WishRetrieval();
                         	Log.i("Current User", currentAppUser.getName());
@@ -240,7 +234,15 @@ class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<Str
 	protected ArrayList<String> doInBackground(ArrayList<String>... params) {
 		
         ArrayList<String> a = params[0];
-        return a;
+        ArrayList<String> ret = new ArrayList<String>();
+        try {
+			ret = WLServerCom.getWLUsers(a);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e("Registered Users", e.toString());
+		} 
+        Log.e("Registered Users", ret.size()+"");
+        return ret;
 	}
 
     protected void onProgressUpdate(Integer... progress) {
@@ -274,3 +276,11 @@ class WishRetrieval extends AsyncTask<String, Integer, ArrayList<WishItem>> {
         Log.d("Wish",result.toString());
     }
 }
+class CompareUsers implements Comparator<User>
+{
+	public int compare(User first, User second)
+	{
+		return (first.getUID().compareTo(second.getUID()));
+	}
+}
+

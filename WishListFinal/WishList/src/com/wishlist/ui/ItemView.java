@@ -46,6 +46,21 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
         v[NAME] = (TextView) findViewById(R.id.itemName);
 		v[DESC] = (TextView) findViewById(R.id.description);
 		v[BUYER] = (TextView) findViewById(R.id.itemClaimed);
+		
+		v[BUYER].setOnLongClickListener(new OnLongClickListener(){
+			public boolean onLongClick(View j){						
+				WishItem item = ItemView.this.item; 
+				int status = item.getStatus(); 
+				status = (status==0)?1:0;
+				item.setStatus(status);		
+				Toast.makeText(ItemView.this, (status==0)?"Item Unclaimed!":"Item Claimed!" , Toast.LENGTH_LONG).show();
+				WishListMain.DBWishUpdate(WishListMain.EDIT, item);
+				ItemView.this.update(ItemView.BUYER);
+				return true;
+			}
+		});	
+		
+		
 		v[PRICE] = (TextView) findViewById(R.id.price);
 		
 		//comments = new ArrayList<String>();

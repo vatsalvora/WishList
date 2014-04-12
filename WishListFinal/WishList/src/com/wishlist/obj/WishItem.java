@@ -26,9 +26,8 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     protected String description=""; //description of item
     protected Date dateAdded = new Date(0); //date of the item added to user
     protected String price=""; //price of item
-    protected Drawable picture; //Picture object for image of item. Implement in sprint 2
-    protected int status;  //status of item. Open, registered, bought, etc
-    // What are the status codes? Assuming 0 = Open, 1 = registered, 2 = bought. 
+    protected Drawable picture; //Picture object for image of item. Implement in sprint 20
+    protected int status;  //status of item. 0 = unclaimed, 1 = claimed. 
     protected int update = NONE; //update changes    
     
     //update codes

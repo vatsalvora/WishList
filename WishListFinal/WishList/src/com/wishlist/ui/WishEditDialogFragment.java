@@ -50,9 +50,10 @@ public class WishEditDialogFragment extends DialogFragment{
     
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
-	{
+	{	
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
+		
 		
 		final WishItem w = ((ItemView) getActivity()).getItem();
 		final int hash = ((ItemView) getActivity()).getHashCode();
@@ -73,7 +74,7 @@ public class WishEditDialogFragment extends DialogFragment{
 			case ItemView.PRICE:
 				tv.setText("Update price of "+w.getName());
 				ev.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-				break;
+				break;				
 			default:
 				break;
 		}

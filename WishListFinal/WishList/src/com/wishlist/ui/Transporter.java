@@ -16,6 +16,7 @@ public class Transporter {
 	//hashcodes for transporting data around
 	
 	public static final String USER = "User";
+	public static final String APPUSER = "AppUser";
 	public static final String CURRENT = "CurrentUser";
 	public static final String WISH = "Wish";
 	public static final String WISHES = "Wishes";

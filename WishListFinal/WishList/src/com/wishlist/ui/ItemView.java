@@ -27,7 +27,7 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
 	public static final int TOTAL = 6;
 	
 	private WishItem item;
-	private int isAppUser;
+	private boolean isAppUser;
 	private int hashCode;
 	private TextView v[] = new TextView[TOTAL];
 	
@@ -91,9 +91,9 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
     protected void initData(){
     	item = (WishItem) Transporter.unpackObject(this.getIntent().getExtras(), Transporter.WISH);
-    	isAppUser = Transporter.unpackInteger(this.getIntent().getExtras(), Transporter.USER);
+    	isAppUser = Transporter.unpackBoolean(this.getIntent().getExtras(), Transporter.USER);
 		
-    	if(isAppUser == 1){
+    	if(isAppUser){
 			for(int i=0; i<TOTAL; i++){
 				final int send = i; //ugh, so retarded...
 				if(i == NAME || i == DESC || i == PRICE){

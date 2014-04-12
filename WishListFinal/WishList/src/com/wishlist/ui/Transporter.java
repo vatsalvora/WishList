@@ -51,6 +51,10 @@ public class Transporter {
 		b.putInt(key, num);
 	}
 	
+	public static final void pack(Bundle b, String key, boolean val){
+		b.putBoolean(key, val);
+	}
+	
 	public static final Parcelable unpackObject(Bundle b, String key){
 		return b.getParcelable(key);
 	}
@@ -61,6 +65,11 @@ public class Transporter {
 	
 	public static final int unpackInteger(Bundle b, String key){
 		return b.getInt(key);
+	}
+	
+	
+	public static final boolean unpackBoolean(Bundle b, String key){
+		return b.getBoolean(key);
 	}
 	
 	protected static final void nullError(){

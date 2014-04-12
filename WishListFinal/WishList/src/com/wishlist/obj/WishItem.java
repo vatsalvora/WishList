@@ -261,7 +261,7 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
         dest.writeString(price);
         if(dateAdded == null) dest.writeString(new Date(0).toString());
         else dest.writeString(dateAdded.toString());
-        dest.writeInt(update);
+        dest.writeInt(status);
     }
 
 	private WishItem(Parcel in)
@@ -279,6 +279,6 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
         setDescription(in.readString());
         setPrice(in.readString());
         setDate(in.readString());
-        update = in.readInt();
+        status = in.readInt();
     }
 }

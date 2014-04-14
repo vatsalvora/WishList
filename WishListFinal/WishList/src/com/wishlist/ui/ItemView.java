@@ -100,8 +100,10 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     	if(isAppUser){
 			for(int i=0; i<TOTAL; i++){
 				if(i == NAME || i == DESC || i == PRICE){
+					final int send = i;
 					v[i].setOnLongClickListener(new OnLongClickListener(){
 						public boolean onLongClick(View j){
+							hashCode = send;
 							showUpdateDialog();
 							return true;
 						}

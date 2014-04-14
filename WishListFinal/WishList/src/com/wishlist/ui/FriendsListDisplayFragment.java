@@ -156,21 +156,9 @@ class friendsListAdapter extends BaseAdapter {
             view = convertView;
         }
 
-        DownloadProfilePicture pic = new DownloadProfilePicture();
+        DownloadProfilePicture pic = new DownloadProfilePicture(view);
         pic.execute(current);
-        Bitmap profilePicture = null;
-        
-		try {
-			profilePicture = pic.get();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Log.e("Thread",e.toString());
-		}
-		
-        if(profilePicture != null){
-            ImageView imageView = (ImageView) view.findViewById(R.id.friend_profile_picture);
-        	imageView.setImageBitmap(profilePicture);
-        }        
+            
         
         TextView textView = (TextView)view.findViewById(R.id.friend_name);
         textView.setText(current.getName());
@@ -180,6 +168,11 @@ class friendsListAdapter extends BaseAdapter {
  
 }
 class DownloadProfilePicture extends AsyncTask<User, Integer, Bitmap> {
+	
+	private View view;
+	protected DownloadProfilePicture(View view){
+		this.view = view;
+	}
 	@Override
 	protected Bitmap doInBackground(User... params) {
 		User current = params[0];
@@ -191,6 +184,8 @@ class DownloadProfilePicture extends AsyncTask<User, Integer, Bitmap> {
 
     protected void onPostExecute(Bitmap result) {
         Log.d("Image",result.toString());
+        ImageView imageView = (ImageView) view.findViewById(R.id.friend_profile_picture);
+    	imageView.setImageBitmap(result);
     }
 
 

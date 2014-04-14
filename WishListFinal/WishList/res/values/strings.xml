@@ -33,7 +33,7 @@
     <string name="title_activity__wishlist_view">_wishlist_view</string>
     <string name="title_activity_item_view">ItemView</string>
     <string name="title_activity_login">Login</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">WishList</string>
     <string name="title_activity_people_list">PeopleList</string>
     <string name="title_section1">Wish List</string>
     <string name="title_section2">Friends List</string>

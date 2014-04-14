@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -127,6 +128,7 @@ So the UI elements for certain actions are hidden based on user.
 	        case R.id.action_back: 
 	        	resetListView(appUser);
 	        	currentUser = appUser;
+	        	Log.e("check", appUser.getIsAppUser()+"");
 	        	getActivity().invalidateOptionsMenu();
 	           	return true; 
 	        default:
@@ -165,7 +167,10 @@ So the UI elements for certain actions are hidden based on user.
     	ArrayList<String> list = new ArrayList<String>();
     	for(WishItem i : u.getList()) list.add(i.getName());
     	resetListView(list);
-    	if(u.getIsAppUser()) setAppUserPermissions();
+    	if(u.getIsAppUser()) {
+    		Log.e("AppUser","Back Worked!");
+    		setAppUserPermissions();
+    	}
     }
     
     protected void resetListView(ArrayList<String> list){
@@ -192,6 +197,8 @@ So the UI elements for certain actions are hidden based on user.
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 // Respond to clicks on the actions in the CAB
+            	if(currentUser.getIsAppUser())
+            	{
             	switch (item.getItemId()) {
                     case R.id.action_delete: // DELETING ITEMS HERE 
                     	//for each selected wish, delete it from the server and the user's list
@@ -207,15 +214,23 @@ So the UI elements for certain actions are hidden based on user.
                         return true;
                     default:
                         return false;
-                } 
+                }
+            	}
+            	return false;
             }
             
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 // Inflate the menu for the CAB
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.contextual_menu_wishdisplay, menu);
-                return true;
+            	if(currentUser.getIsAppUser())
+            	{
+	                MenuInflater inflater = mode.getMenuInflater();
+	                inflater.inflate(R.menu.contextual_menu_wishdisplay, menu);
+	                return true;
+            	}
+            	else{
+            		return false;
+            	}
             }
 
             @Override

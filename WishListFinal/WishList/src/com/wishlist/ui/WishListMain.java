@@ -1,6 +1,8 @@
 package com.wishlist.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,8 +16,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
 import com.wishlist.obj.*;
+import com.wishlist.obj.util.IDComparison;
 import com.wishlist.serv.*;
+import com.wishlist.ui.util.RegisteredUser;
+import com.wishlist.ui.util.Transporter;
+import com.wishlist.ui.util.WishRetrieval;
 
 
 /*
@@ -89,6 +100,24 @@ public class WishListMain extends FragmentActivity
     	super.onDestroy();
     }
     
+    protected static void initDB(){
+    	//set up DB communication
+    	new Thread(){ 
+    		public void run(){
+	    		try{
+		    		WLServerCom.init();
+		    		//Log.e("User", currentAppUser.toString());
+		    		//WLServerCom.addUser(currentAppUser);
+		    	}
+		    	catch (Exception e){
+		    		Log.e("Backend",e.toString());
+		    		Log.e("Backend", "Error, couldn't connect to server");
+		    	}
+	    	}
+    	}.start();
+    	
+    }
+    
     public static void DBWishUpdate(int code, WishItem wish){
     	final int c = code;
     	final WishItem w = wish;
@@ -104,8 +133,6 @@ public class WishListMain extends FragmentActivity
 		    				WLServerCom.rmWish(w);
 		    				break;
 		    			case EDIT:
-		    				//Log.e("Wish", w.getStatus()+"");
-		    				//Log.e("Wish", w.getBID());
 		    				WLServerCom.updateWish(w);
 		    				break;
 		    			default:
@@ -179,18 +206,6 @@ public class WishListMain extends FragmentActivity
     	return friends;
     }
     
-    protected void loadDBData(User u){
-    	try
-    	{
-    		//u.setList(WLServerCom.listWishes(u.getUID()));
-    	}
-    	catch (Exception e)
-    	{
-    		Log.e("Backend", "Could not loadWishes");
-    	}
-    		
-    }
-    
     protected void initGraphics()
     {
     	// Set up the action bar. (It contains the tabs)
@@ -259,6 +274,21 @@ public class WishListMain extends FragmentActivity
     	onTabSelected(tab, fragmentTransaction);
     }
     
+    public void showAddDialog(){
+    	FragmentManager fragmentManager = getSupportFragmentManager();
+    	DialogFragment d = new WishAddDialogFragment();
+    	d.show(fragmentManager, "WishAddDialog");
+    }
+    
+	@Override
+	public void onDialogPositiveClick(WishAddDialogFragment dialog) {
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+		Toast.makeText(this.getApplicationContext(), "Item successfully added", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onDialogNegativeClick(WishAddDialogFragment dialog) {}
+    
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -322,20 +352,98 @@ public class WishListMain extends FragmentActivity
         }
     }
     
-    public void showAddDialog(){
-    	FragmentManager fragmentManager = getSupportFragmentManager();
-    	DialogFragment d = new WishAddDialogFragment();
-    	d.show(fragmentManager, "WishAddDialog");
+    protected void startFBSession()
+    {
+    	 // start Facebook Login
+        Session.openActiveSession(this, true, new Session.StatusCallback()
+        {
+
+            // callback when session changes state
+            @Override
+            public void call(Session session, SessionState state, Exception exception)
+            {
+                if (session.isOpened())
+                {
+                	FBUserRequest(session).executeAsync();
+                	FBFriendListRequest(session).executeAsync();
+                	FBFriendFilter();
+                	DBListFetch(appUser);
+                }
+            }
+        });
     }
     
-	@Override
-	public void onDialogPositiveClick(WishAddDialogFragment dialog) {
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-		Toast.makeText(this.getApplicationContext(), "Item successfully added", Toast.LENGTH_SHORT).show();
+	protected Request FBUserRequest(Session session){
+		return Request.newMeRequest(session, new Request.GraphUserCallback(){
+			public void onCompleted(GraphUser graphuser, Response response) {
+				if (graphuser != null) {
+					//Log.e("Order","2");
+					//Log.i("Facebook",user.getName());
+					//Log.i("Facebook", user.getId());
+					appUser = new User(graphuser.getId(), graphuser.getName(), true);
+					initDB();
+				}
+			}
+		});
 	}
-
-	@Override
-	public void onDialogNegativeClick(WishAddDialogFragment dialog) {}
 	
-
+	protected Request FBFriendListRequest(Session session){
+		return Request.newMyFriendsRequest(session, new Request.GraphUserListCallback(){	
+			public void onCompleted(List<GraphUser> users, Response response)
+			{
+				friends = new ArrayList<User>();
+				for(GraphUser i : users){ 
+					//Log.i("Facebook", i.getName());
+					//Log.i("Facebook", i.getId());
+					friends.add(new User(i.getId(),i.getName(),false));
+				}
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void FBFriendFilter(){
+		Collections.sort(friends, new IDComparison());
+        
+		ArrayList<String> ids = new ArrayList<String>();
+		for(User i:friends) ids.add(i.getUID());
+		
+        RegisteredUser dbList = new RegisteredUser();
+        try {
+        	dbList.execute(ids);
+			ids = dbList.get();
+			Collections.sort(ids);
+			ArrayList<User> regList = new ArrayList<User>();
+			int u=0;
+			int f=0;
+			while(f<friends.size() && u<ids.size()){
+				if((friends.get(f).getUID().equals(ids.get(u))))
+				{
+					regList.add(friends.get(f));
+					//Log.e("New List", friends.get(f).getName());
+					u++;
+				}
+				f++;
+			}
+			//Log.e("Check", regList.size() + "");
+			friends = regList;
+		} 
+        catch (Exception e) {
+			e.printStackTrace();
+		}
+        Collections.sort(friends);
+	}
+	
+	public static void DBListFetch(User u){
+		WishRetrieval wishRet = new WishRetrieval();
+		wishRet.execute(u.getUID(), u.getName());
+		ArrayList<WishItem> wishes = new ArrayList<WishItem>();
+		try{
+			wishes = wishRet.get();
+		}
+		catch(Exception e){
+			Log.i("Database", "Failed to receive data");
+		}
+		u.setList(wishes);
+	}
 }

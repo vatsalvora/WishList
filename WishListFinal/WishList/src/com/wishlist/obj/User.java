@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.net.URL; 
 
+import com.wishlist.obj.util.DateComparison;
+import com.wishlist.obj.util.IDNamePair;
+import com.wishlist.obj.util.PriceComparison;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Parcel;

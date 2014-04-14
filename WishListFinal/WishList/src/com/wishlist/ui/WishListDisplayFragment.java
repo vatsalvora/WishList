@@ -20,6 +20,8 @@ import android.widget.ListView;
 
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
+import com.wishlist.ui.util.Transporter;
+import com.wishlist.ui.util.WishRetrieval;
 
 public class WishListDisplayFragment extends Fragment 
 {/*

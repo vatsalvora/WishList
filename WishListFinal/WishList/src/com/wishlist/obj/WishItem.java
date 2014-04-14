@@ -12,6 +12,9 @@ package com.wishlist.obj;
 
 import java.io.Serializable;
 import java.sql.Date;
+
+import com.wishlist.obj.util.IDNamePair;
+
 import android.graphics.drawable.Drawable;
 //import android.graphics.drawable.Drawable;
 import android.os.Parcel;
@@ -281,3 +284,5 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
         status = in.readInt();
     }
 }
+
+

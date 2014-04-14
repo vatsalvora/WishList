@@ -127,6 +127,7 @@ So the UI elements for certain actions are hidden based on user.
 	        case R.id.action_back: 
 	        	resetListView(appUser);
 	        	currentUser = appUser;
+	        	
 	        	getActivity().invalidateOptionsMenu();
 	           	return true; 
 	        default:
@@ -217,9 +218,15 @@ So the UI elements for certain actions are hidden based on user.
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 // Inflate the menu for the CAB
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.contextual_menu_wishdisplay, menu);
-                return true;
+            	if(currentUser.getIsAppUser())
+            	{
+	                MenuInflater inflater = mode.getMenuInflater();
+	                inflater.inflate(R.menu.contextual_menu_wishdisplay, menu);
+	                return true;
+            	}
+            	else{
+            		return false;
+            	}
             }
 
             @Override

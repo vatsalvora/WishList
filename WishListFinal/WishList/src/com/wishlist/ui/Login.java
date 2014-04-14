@@ -145,7 +145,7 @@ public final class Login extends Activity
                             	dbList.execute(ids);
 								ArrayList<String> dbID = dbList.get();
 								Collections.sort(dbID);
-								for(String s : dbID) Log.e("Registered User", s);
+								//for(String s : dbID) Log.e("Registered User", s);
 								ArrayList<User> regList = new ArrayList<User>();
 								int u=0;
 								int f=0;
@@ -153,7 +153,7 @@ public final class Login extends Activity
 									if((friends.get(f).getUID().equals(dbID.get(u))))
 									{
 										regList.add(friends.get(f));
-										Log.e("New List", friends.get(f).getName());
+										//Log.e("New List", friends.get(f).getName());
 										u++;
 										f++;
 									}

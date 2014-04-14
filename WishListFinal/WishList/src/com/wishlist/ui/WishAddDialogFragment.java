@@ -58,8 +58,8 @@ public class WishAddDialogFragment extends DialogFragment{
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		
-		final User u = ((WishListMain) getActivity()).getCurrentUser();		
+		//Only App User can add wishes
+		final User u = ((WishListMain) getActivity()).getAppUser();	
 		final View root = inflater.inflate(R.layout.dialog_add_wish, null);
 		final EditText name_edit = (EditText) root.findViewById(R.id.edit_name);
 		name_edit.setHint("Enter name of item here");

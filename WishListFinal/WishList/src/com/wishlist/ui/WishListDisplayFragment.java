@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -127,7 +128,7 @@ So the UI elements for certain actions are hidden based on user.
 	        case R.id.action_back: 
 	        	resetListView(appUser);
 	        	currentUser = appUser;
-	        	
+	        	Log.e("check", appUser.getIsAppUser()+"");
 	        	getActivity().invalidateOptionsMenu();
 	           	return true; 
 	        default:
@@ -166,7 +167,10 @@ So the UI elements for certain actions are hidden based on user.
     	ArrayList<String> list = new ArrayList<String>();
     	for(WishItem i : u.getList()) list.add(i.getName());
     	resetListView(list);
-    	if(u.getIsAppUser()) setAppUserPermissions();
+    	if(u.getIsAppUser()) {
+    		Log.e("AppUser","Back Worked!");
+    		setAppUserPermissions();
+    	}
     }
     
     protected void resetListView(ArrayList<String> list){

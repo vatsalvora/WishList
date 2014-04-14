@@ -128,7 +128,7 @@ public final class Login extends Activity
 
 						@SuppressWarnings("unchecked")
 						public void onCompleted(List<GraphUser> users, Response response)
-                        {Log.e("Order","2");
+                        {
                         	friends = new ArrayList<User>();
                         	ArrayList<String> ids = new ArrayList<String>();
                             for(GraphUser i : users){ 
@@ -137,6 +137,7 @@ public final class Login extends Activity
                             	friends.add(new User(i.getId(),i.getName(),false));
                             	ids.add(i.getId());
                             }
+                            
                             Collections.sort(ids);
                             Collections.sort(friends, new IDComparison());
                             

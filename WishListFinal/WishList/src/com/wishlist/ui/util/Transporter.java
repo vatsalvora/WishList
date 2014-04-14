@@ -4,14 +4,14 @@
  * 
  */
 
-package com.wishlist.ui;
+package com.wishlist.ui.util;
 
 import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.os.Parcelable;
 
-public class Transporter {
+public final class Transporter {
 	
 	//hashcodes for transporting data around
 	
@@ -33,47 +33,47 @@ public class Transporter {
 	
 	//for all pack_into_bundle methods, put the bundle, the key, and the parcelable object in the methods
 	//I'm using method overloading in order to standardize the transport process. (Joon)
-	public static final void pack(Bundle b, String key, Parcelable p)
+	public static void pack(Bundle b, String key, Parcelable p)
 	{
 		b.putParcelable(key, p);
 	}
 	
-	public static final void pack(Bundle b, String key, ArrayList<? extends Parcelable> p)
+	public static void pack(Bundle b, String key, ArrayList<? extends Parcelable> p)
 	{
 		b.putParcelableArrayList(key, p);
 	}
 	
-	public static final void pack(Bundle b, String key, String p)
+	public static void pack(Bundle b, String key, String p)
 	{
 		b.putString(key, p);
 	}
 	
-	public static final void pack(Bundle b, String key, int num){
+	public static void pack(Bundle b, String key, int num){
 		b.putInt(key, num);
 	}
 	
-	public static final void pack(Bundle b, String key, boolean val){
+	public static void pack(Bundle b, String key, boolean val){
 		b.putBoolean(key, val);
 	}
 	
-	public static final Parcelable unpackObject(Bundle b, String key){
+	public static Parcelable unpackObject(Bundle b, String key){
 		return b.getParcelable(key);
 	}
 	
-	public static final ArrayList<? extends Parcelable> unpackArrayList(Bundle b, String key){
+	public static ArrayList<? extends Parcelable> unpackArrayList(Bundle b, String key){
 		return b.getParcelableArrayList(key);
 	}
 	
-	public static final int unpackInteger(Bundle b, String key){
+	public static int unpackInteger(Bundle b, String key){
 		return b.getInt(key);
 	}
 	
 	
-	public static final boolean unpackBoolean(Bundle b, String key){
+	public static boolean unpackBoolean(Bundle b, String key){
 		return b.getBoolean(key);
 	}
 	
-	protected static final void nullError(){
+	protected static void nullError(){
 		throw new RuntimeException("The object is null");
 	}
 	

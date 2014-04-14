@@ -7,7 +7,7 @@
  * EDIT3: renamed to IDNamePair... sigh...
  */
 
-package com.wishlist.obj;
+package com.wishlist.obj.util;
 
 public final class IDNamePair{
 	public String ID;

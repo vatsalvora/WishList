@@ -3,14 +3,15 @@ package com.wishlist.ui;
 import java.sql.Date;
 import java.util.*;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import com.facebook.*;
 import com.facebook.model.*;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
+import com.wishlist.obj.util.IDComparison;
 import com.wishlist.serv.WLServerCom;
+import com.wishlist.ui.util.*;
 
 import android.util.Log;
 import android.view.View;
@@ -32,7 +33,7 @@ public final class Login extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         TextView v = (TextView) findViewById(R.id.blank);
-        v.setText("Click me to go back to the main menu.");
+        v.setText("Please wait while the data is being fetched from the database");
         v.setOnClickListener(new OnClickListener(){
         	public void onClick(View i){
         		startMain();
@@ -113,7 +114,8 @@ public final class Login extends Activity
                         // callback after Graph API response with user object
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
-                          if (user != null) {Log.e("Order","2");
+                          if (user != null) {
+                        	//Log.e("Order","2");
                             //Log.i("Facebook",user.getName());
                             //Log.i("Facebook", user.getId());
                             currentAppUser = new User(user.getId(),user.getName(), true);
@@ -136,7 +138,7 @@ public final class Login extends Activity
                             	ids.add(i.getId());
                             }
                             Collections.sort(ids);
-                            Collections.sort(friends, new CompareUsers());
+                            Collections.sort(friends, new IDComparison());
                             
                             RegisteredUser dbList = new RegisteredUser();
                             try {
@@ -162,7 +164,8 @@ public final class Login extends Activity
 								Log.e("Check", regList.size() + "");
 								
 								friends = regList;
-							} catch (Exception e) {
+							} 
+                            catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
@@ -223,76 +226,20 @@ public final class Login extends Activity
     }
     protected void initDB(){
     	//set up DB communication
-    	new Thread(){ public void run(){
-    	try
-    	{
-    		WLServerCom.init();
-    		Log.e("User", currentAppUser.toString());
-    		WLServerCom.addUser(currentAppUser);
-    	}
-    	catch (Exception e)
-    	{
-    		Log.e("Backend",e.toString());
-    		Log.e("Backend", "Error, couldn't connect to server");
-    	}
-    	}
+    	new Thread(){ 
+    		public void run(){
+	    		try{
+		    		WLServerCom.init();
+		    		//Log.e("User", currentAppUser.toString());
+		    		//WLServerCom.addUser(currentAppUser);
+		    	}
+		    	catch (Exception e){
+		    		Log.e("Backend",e.toString());
+		    		Log.e("Backend", "Error, couldn't connect to server");
+		    	}
+	    	}
     	}.start();
     	
     }
-}
-
-class RegisteredUser extends AsyncTask<ArrayList<String>, Integer, ArrayList<String>> {
-	@Override
-	protected ArrayList<String> doInBackground(ArrayList<String>... params) {
-		
-        ArrayList<String> a = params[0];
-        ArrayList<String> ret = new ArrayList<String>();
-        try {
-			ret = WLServerCom.getWLUsers(a);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Log.e("Registered Users", e.toString());
-		} 
-        Log.e("Registered Users", ret.size()+"");
-        return ret;
-	}
-
-    protected void onProgressUpdate(Integer... progress) {
-    }
-
-    protected void onPostExecute(ArrayList<String> result) {
-        Log.d("Image",result.toString());
-    }
-}
-
-class WishRetrieval extends AsyncTask<String, Integer, ArrayList<WishItem>> {
-	@Override
-	protected ArrayList<WishItem> doInBackground(String... params) {
-		
-        String uid = params[0];
-        String uname = params[1];
-        ArrayList<WishItem> wish = new ArrayList<WishItem>();
-		try {
-			wish = WLServerCom.listWishes(uid, uname);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Log.e("Wish Ret", e.toString());
-		}
-        return wish;
-	}
-
-    protected void onProgressUpdate(Integer... progress) {
-    }
-
-    protected void onPostExecute(ArrayList<WishItem> result) {
-        Log.d("Wish",result.toString());
-    }
-}
-class CompareUsers implements Comparator<User>
-{
-	public int compare(User first, User second)
-	{
-		return (first.getUID().compareTo(second.getUID()));
-	}
 }
 

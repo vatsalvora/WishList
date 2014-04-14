@@ -3,6 +3,7 @@ package com.wishlist.ui;
 import com.wishlist.obj.User;
 import com.wishlist.obj.WishItem;
 import com.wishlist.serv.WLServerCom;
+import com.wishlist.ui.util.Transporter;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;

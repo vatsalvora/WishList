@@ -67,6 +67,8 @@ public class WishListMain extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //startFBSession();
+        //setCurrentUser(appUser);
         initData(); //load data from login
         initGraphics(); //load graphics
     }
@@ -366,8 +368,9 @@ public class WishListMain extends FragmentActivity
                 {
                 	FBUserRequest(session).executeAsync();
                 	FBFriendListRequest(session).executeAsync();
-                	FBFriendFilter();
-                	DBListFetch(appUser);
+                }
+                else if(session.isClosed()){
+                	Log.i("Facebook", session.getState().toString());
                 }
             }
         });
@@ -397,6 +400,8 @@ public class WishListMain extends FragmentActivity
 					//Log.i("Facebook", i.getId());
 					friends.add(new User(i.getId(),i.getName(),false));
 				}
+				FBFriendFilter();
+            	DBListFetch(appUser);
 			}
 		});
 	}

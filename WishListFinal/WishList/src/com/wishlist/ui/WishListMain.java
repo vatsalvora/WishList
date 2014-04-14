@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -68,7 +69,6 @@ public class WishListMain extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //startFBSession();
-        //setCurrentUser(appUser);
         initData(); //load data from login
         initGraphics(); //load graphics
     }
@@ -100,6 +100,16 @@ public class WishListMain extends FragmentActivity
     protected void onDestroy()
     {
     	super.onDestroy();
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        //start the main activity
+    	super.onActivityResult(requestCode, resultCode, data);
+
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+
     }
     
     protected static void initDB(){
@@ -366,8 +376,8 @@ public class WishListMain extends FragmentActivity
             {
                 if (session.isOpened())
                 {
-                	FBUserRequest(session).executeAsync();
-                	FBFriendListRequest(session).executeAsync();
+                	FBUserRequest(session);
+                	FBFriendListRequest(session);
                 }
                 else if(session.isClosed()){
                 	Log.i("Facebook", session.getState().toString());
@@ -376,8 +386,8 @@ public class WishListMain extends FragmentActivity
         });
     }
     
-	protected Request FBUserRequest(Session session){
-		return Request.newMeRequest(session, new Request.GraphUserCallback(){
+	private void FBUserRequest(Session session){
+		Request.newMeRequest(session, new Request.GraphUserCallback(){
 			public void onCompleted(GraphUser graphuser, Response response) {
 				if (graphuser != null) {
 					//Log.e("Order","2");
@@ -387,11 +397,11 @@ public class WishListMain extends FragmentActivity
 					initDB();
 				}
 			}
-		});
+		}).executeAsync();
 	}
 	
-	protected Request FBFriendListRequest(Session session){
-		return Request.newMyFriendsRequest(session, new Request.GraphUserListCallback(){	
+	private void FBFriendListRequest(Session session){
+		Request.newMyFriendsRequest(session, new Request.GraphUserListCallback(){	
 			public void onCompleted(List<GraphUser> users, Response response)
 			{
 				friends = new ArrayList<User>();
@@ -402,12 +412,14 @@ public class WishListMain extends FragmentActivity
 				}
 				FBFriendFilter();
             	DBListFetch(appUser);
+            	setCurrentUser(appUser);
+            	initGraphics();
 			}
-		});
+		}).executeAsync();
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void FBFriendFilter(){
+	private void FBFriendFilter(){
 		Collections.sort(friends, new IDComparison());
         
 		ArrayList<String> ids = new ArrayList<String>();

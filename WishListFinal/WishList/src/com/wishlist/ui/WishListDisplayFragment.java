@@ -190,6 +190,8 @@ So the UI elements for certain actions are hidden based on user.
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 // Respond to clicks on the actions in the CAB
+            	if(currentUser.getIsAppUser())
+            	{
             	switch (item.getItemId()) {
                     case R.id.action_delete: // DELETING ITEMS HERE 
                     	//for each selected wish, delete it from the server and the user's list
@@ -205,7 +207,9 @@ So the UI elements for certain actions are hidden based on user.
                         return true;
                     default:
                         return false;
-                } 
+                }
+            	}
+            	return false;
             }
             
             @Override

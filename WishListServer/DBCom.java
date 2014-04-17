@@ -86,13 +86,13 @@ public class DBCom
             connect = DriverManager.getConnection(dburl,username,password);
             st = connect.createStatement();
 
-            st.executeQuery(command); //Throws no return exception
+            st.executeUpdate(command);
 
         }
         catch(Exception e)
         {
             System.out.println("Database\t" + e.toString());
-            //This will throw an exception every time.
+			isOK = false;
         }
 
         try

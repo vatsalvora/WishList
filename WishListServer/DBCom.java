@@ -91,7 +91,8 @@ public class DBCom
         }
         catch(Exception e)
         {
-            System.out.println("Database\t" + e.toString());
+			System.out.println("Error running query:\n" + command);
+            System.out.println("Did query builder fuck up again?");
 			isOK = false;
         }
 
@@ -121,6 +122,8 @@ public class DBCom
         //the result set will be valid, just empty.
         //HOWEVER, If a command that inherently has no result set, such as INSERT, the method
         //WILL return null.
+		//
+		//Commands that inherently have no result set should use sendSQLnoReturn
 
         System.out.println("With ret \n" + command);
         Statement st = null;
@@ -137,7 +140,8 @@ public class DBCom
         }
         catch (Exception e)
         {
-            System.out.println("Database\t" + e.toString());
+			System.out.println("Error running query:\n" + command);
+            System.out.println("Did query builder fuck up again?");
         }
 
         try
@@ -216,7 +220,8 @@ public class DBCom
         }
         catch (SQLException e)
         {
-            System.out.println("Database\t" +  e.toString());
+            System.out.println("DB error executing query:\n" + command);
+			e.printStackTrace();
         }
 
         try
@@ -226,7 +231,9 @@ public class DBCom
         }
         catch (SQLException e)
         {
-            System.out.println("Database\t" +  e.toString());
+            System.out.print("Error: I have no idea how we got here.");
+			System.out.print("Something special must have fucked up\n");
+			e.printStackTrace();
         }
 
         return isU;
@@ -308,7 +315,9 @@ public class DBCom
         }
         catch (Exception e)
         {
-            //Error, add log here
+            System.out.print("No idea what would cause this error. ");
+			System.out.print("No idea how to fix it\n");
+			e.printStackTrace();
             return 0;
         }
 

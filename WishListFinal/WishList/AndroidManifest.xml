@@ -19,10 +19,12 @@
             android:name="com.wishlist.ui.Login"
             android:label="@string/app_name" 
             android:screenOrientation="portrait">
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
         <activity
             android:name="com.wishlist.ui.ItemView"
@@ -43,7 +45,10 @@
             android:name="com.wishlist.ui.WishListMain"
             android:label="@string/title_activity_main" 
              android:screenOrientation="portrait">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -68,9 +68,9 @@ public class WishListMain extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //startFBSession();
-        initData(); //load data from login
-        initGraphics(); //load graphics
+        startFBSession();
+        //initData(); //load data from login
+        //initGraphics(); //load graphics
     }
 
     protected void onStart(){
@@ -451,7 +451,7 @@ public class WishListMain extends FragmentActivity
         Collections.sort(friends);
 	}
 	
-	public static void DBListFetch(User u){
+	public static final void DBListFetch(User u){
 		WishRetrieval wishRet = new WishRetrieval();
 		wishRet.execute(u.getUID(), u.getName());
 		ArrayList<WishItem> wishes = new ArrayList<WishItem>();

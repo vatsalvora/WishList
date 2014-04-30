@@ -43,6 +43,7 @@ public final class WLServerCom
     public static final int STORE_IMAGE = 9;
     public static final int USERS_CHECK = 10;
     public static final int WISH_UPDATE = 11;
+    public static final int BNAME_GET = 12;
 
     public static void init() throws UnknownHostException, IOException
     {
@@ -119,7 +120,7 @@ public final class WLServerCom
         rmWish(w.getWID());
     }
 
-    public static ArrayList<WishItem> listWishes(String uid, String uname) throws IOException,
+    public static ArrayList<WishItem> listWishes(String uid, String uname) throws Exception,
         ClassNotFoundException
     {
         /** Returns an ArrayList of wish objects that belong to the given
@@ -159,6 +160,9 @@ public final class WLServerCom
             price = (String)getObject();
             status = Integer.parseInt((String)getObject());
             dateAdded = (Date)getObject(); // Account for broken date
+            
+            //Bname requeries for Bname out of a different table.
+            bname = getBname(wid);
 
             myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
 
@@ -191,6 +195,13 @@ public final class WLServerCom
 		//Doesnt send code. 
 		//Just using method to send int 
 		
+	}
+	
+	public static String getBname(String wid) throws Exception
+	{
+		sendCode(BNAME_GET);
+		sendObject(wid);
+		return (String)getObject();
 	}
     
     //public static void updateWish(WishItem wi) throws IOException

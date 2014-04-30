@@ -112,14 +112,14 @@ public class WishListMain extends FragmentActivity
 
     }
     
-    protected static void initDB(){
+    protected void initDB(){
     	//set up DB communication
     	new Thread(){ 
     		public void run(){
 	    		try{
 		    		WLServerCom.init();
 		    		//Log.e("User", currentAppUser.toString());
-		    		//WLServerCom.addUser(currentAppUser);
+		    		WLServerCom.addUser(appUser);
 		    	}
 		    	catch (Exception e){
 		    		Log.e("Backend",e.toString());

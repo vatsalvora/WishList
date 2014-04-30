@@ -66,14 +66,20 @@ public class WishEditDialogFragment extends DialogFragment{
 			case ItemView.NAME:
 				tv.setText("Update name of "+w.getName());
 				ev.setInputType(InputType.TYPE_CLASS_TEXT);
+				ev.setText(w.getName());
+				ev.setSelection(ev.getText().length());
 				break;
 			case ItemView.DESC:
 				tv.setText("Update description of "+w.getName());
 				ev.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+				ev.setText(w.getDescription());
+				ev.setSelection(ev.getText().length());
 				break;
 			case ItemView.PRICE:
 				tv.setText("Update price of "+w.getName());
 				ev.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				ev.setText(w.getPrice());
+				ev.setSelection(ev.getText().length());
 				break;				
 			default:
 				break;

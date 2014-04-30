@@ -159,6 +159,9 @@ public final class WLServerCom
             price = (String)getObject();
             status = Integer.parseInt((String)getObject());
             dateAdded = (Date)getObject(); // Account for broken date
+            
+            //Bname requeries for Bname out of a different table.
+            bname = getBname(wid);
 
             myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
 
@@ -191,6 +194,13 @@ public final class WLServerCom
 		//Doesnt send code. 
 		//Just using method to send int 
 		
+	}
+	
+	public static String getBname(String wid)
+	{
+		sendCode(BNAME_GET);
+		sendObject(wid);
+		return (String)getObject();
 	}
     
     //public static void updateWish(WishItem wi) throws IOException

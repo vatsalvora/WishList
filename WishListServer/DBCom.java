@@ -348,6 +348,44 @@ public class DBCom
 		 bid, name, descr, price, status, wid) );
 		
 	}
+	
+	public boolean isClaimed(String wid)
+	{
+		try{
+			ResultSet resultSet = sendSQLwithReturn( String.format("SELECT status FROM wishes WHERE wid = %s", wid) );
+			return resultSet.getBoolean(1);
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	
+	}
+	
+	public String getBname(String wid)
+	{
+		
+		try
+		{
+		
+			if(isClaimed(wid))
+			{
+				ResultSet resultSet = sendSQLwithReturn( String.format("SELECT bid FROM wishes WHERE wid = %s", wid) );
+				String bid = resultSet.getString(1);
+				resultSet = sendSQLwithReturn( String.format("SELECT name FROM users WHERE uid = '%s'", bid) );
+				return resultSet.getString(1);
+			}
+			else
+			{
+				return "";
+			}
+		
+		}
+		catch(Exception e)
+		{
+			return "";
+		}
+	}
     
     
 

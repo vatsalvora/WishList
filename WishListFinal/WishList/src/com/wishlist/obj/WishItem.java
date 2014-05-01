@@ -185,6 +185,12 @@ public class WishItem implements Comparable<WishItem>, Parcelable, Serializable
     	}
     	update(BUYER);
     }
+
+	public final void setBname(String s)
+	{
+		buyer.name = s;
+		update(BUYER);
+	}
     
     public final void setStatus(int status)
     {

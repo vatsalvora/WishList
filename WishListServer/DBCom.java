@@ -348,6 +348,77 @@ public class DBCom
 		 bid, name, descr, price, status, wid) );
 		
 	}
+	
+	public boolean isClaimed(String wid)
+	{
+		try{
+			ResultSet resultSet = sendSQLwithReturn( String.format("SELECT status FROM wishes WHERE wid = %s", wid) );
+			if(resultSet.next())
+			{
+				boolean b = resultSet.getBoolean(1);
+				System.out.println("Successfull isClaimed: " + b);
+				return b;
+			}
+			else
+			{
+				System.out.println("no rs.next()");
+				return false;
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Tried isClaimed");
+			System.out.println(e.toString());
+			return false;
+		}
+	
+	}
+	
+	public String getBname(String wid)
+	{
+		String bid;	
+		try
+		{
+			boolean isClaimed = isClaimed(wid);		
+			System.out.println("Claimed? " + isClaimed);
+			if(isClaimed)
+			{
+				ResultSet resultSet = sendSQLwithReturn( String.format("SELECT bid FROM wishes WHERE wid = %s", wid) );
+				if(resultSet.next())
+				{
+					bid = resultSet.getString(1);
+				}
+				else
+				{
+					System.out.println("bid failed");
+					return "";
+				}
+				resultSet = sendSQLwithReturn( String.format("SELECT name FROM users WHERE uid = '%s'", bid) );
+				if(resultSet.next())
+				{
+					String bname = resultSet.getString(1);
+					System.out.println("bname should be " + bname);
+					return bname;
+				}
+				else
+				{
+					System.out.println("name failed");
+					return "";
+				}
+			}
+			else
+			{
+				return "";
+			}
+		
+		}
+		catch(Exception e)
+		{
+			System.out.println("Tried getBname");
+			System.out.println(e.toString());
+			return "";
+		}
+	}
     
     
 

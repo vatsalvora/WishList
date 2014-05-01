@@ -25,6 +25,7 @@ public final class Transporter {
 	public static final String HASH = "Hash";
 	public static final String FBDATA = "FacebookData";
 	public static final String GDATA = "GoogleData";
+	public static final String INDEX = "Index";
 	
 	private Transporter()
 	{

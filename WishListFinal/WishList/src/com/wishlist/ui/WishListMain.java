@@ -1,12 +1,14 @@
 package com.wishlist.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import android.util.Log;
 import android.widget.Toast;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,12 +55,11 @@ public class WishListMain extends FragmentActivity
      */
     private ViewPager mViewPager;
     private ActionBar actionBar;
-    
     private Bundle userData; //bundle from login
     private User appUser; //the app user
     private User currentUser; //current user to view the data
     private ArrayList<User> friends; //friends of the app user
-    
+    private Session.NewPermissionsRequest newPermissionsRequest;
     public static final int ADD = 0;
     public static final int DEL = 1;
     public static final int EDIT = 2;
@@ -68,7 +69,11 @@ public class WishListMain extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+    	
         startFBSession();
+        
+        
         //initData(); //load data from login
         //initGraphics(); //load graphics
     }
@@ -367,23 +372,28 @@ public class WishListMain extends FragmentActivity
     protected void startFBSession()
     {
     	 // start Facebook Login
-        Session.openActiveSession(this, true, new Session.StatusCallback()
-        {
-
-            // callback when session changes state
-            @Override
-            public void call(Session session, SessionState state, Exception exception)
-            {
-                if (session.isOpened())
-                {
-                	FBUserRequest(session);
-                	FBFriendListRequest(session);
-                }
-                else if(session.isClosed()){
-                	Log.i("Facebook", session.getState().toString());
-                }
-            }
-        });
+    	   	
+    	
+    	Session FBSession = Session.getActiveSession();
+    	if(FBSession == null) FBSession = new Session(this);
+    	if (!FBSession.isOpened() && !FBSession.isClosed()) 
+    	{
+    		Session.StatusCallback statusCallback = new SessionStatusCallback();
+    		Session.OpenRequest request = new Session.OpenRequest(this);
+        	request.setPermissions(Arrays.asList("user_friends"));
+        	request.setCallback(statusCallback);
+        	Log.e("Facebook","Came to callback from here");
+        	Log.e("Facebook State",FBSession.getState()+"");
+        	Session.setActiveSession(FBSession);
+    	    FBSession.openForRead(request);
+    	}
+    	else
+    	{
+    		Session.StatusCallback statusCallback = new SessionStatusCallback();
+    		Log.e("Facebook","Came to callback from here!!");
+    		Session.openActiveSession(this, true, statusCallback);
+    	}
+    	
     }
     
 	private void FBUserRequest(Session session){
@@ -450,7 +460,9 @@ public class WishListMain extends FragmentActivity
 		}
         Collections.sort(friends);
 	}
-	
+	public Activity getActivity(){
+		return this;
+	}
 	public static final void DBListFetch(User u){
 		WishRetrieval wishRet = new WishRetrieval();
 		wishRet.execute(u.getUID(), u.getName());
@@ -462,5 +474,30 @@ public class WishListMain extends FragmentActivity
 			Log.i("Database", "Failed to receive data");
 		}
 		u.setList(wishes);
+	}
+	private class SessionStatusCallback implements Session.StatusCallback {
+	    @Override
+	    public void call(Session session, SessionState state, Exception exception) {
+	            // Respond to session state changes, ex: updating the view
+	    	Session.openActiveSession(getActivity(), true, new Session.StatusCallback()
+	        {
+
+	            // callback when session changes state
+	            @Override
+	            public void call(Session session, SessionState state, Exception exception)
+	            {
+	                if (session.isOpened())
+	                {
+	                	FBUserRequest(session);
+	                	FBFriendListRequest(session);
+	                }
+	                else if(session.isClosed()){
+	                	Log.i("Facebook", session.getState().toString());
+	                }
+	            }
+	        });
+	    	
+	        
+	    }
 	}
 }

@@ -178,8 +178,8 @@ public final class WLServerCom
     }
     
     public static void updateWish(WishItem wish) throws IOException, ClassNotFoundException
-    {
-		Log.e("DB",wish.getBID());
+    {	
+		//Log.e("DB",wish.getBID());
 		Log.e("DB",wish.getDescription());
 		sendCode(WISH_UPDATE);
 		sendObject(wish.getWID());

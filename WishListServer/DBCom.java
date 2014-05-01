@@ -379,8 +379,9 @@ public class DBCom
 		String bid;	
 		try
 		{
-		
-			if(isClaimed(wid))
+			boolean isClaimed = isClaimed(wid);		
+			System.out.println("Claimed? " + isClaimed);
+			if(isClaimed)
 			{
 				ResultSet resultSet = sendSQLwithReturn( String.format("SELECT bid FROM wishes WHERE wid = %s", wid) );
 				if(resultSet.next())
@@ -395,7 +396,9 @@ public class DBCom
 				resultSet = sendSQLwithReturn( String.format("SELECT name FROM users WHERE uid = '%s'", bid) );
 				if(resultSet.next())
 				{
-					return resultSet.getString(1);
+					String bname = resultSet.getString(1);
+					System.out.println("bname should be " + bname);
+					return bname;
 				}
 				else
 				{

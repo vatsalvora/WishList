@@ -71,6 +71,7 @@ So the UI elements for certain actions are hidden based on user.
     public void onResume()
     {
     	super.onResume();
+    	resetListView(appUser);
     }
     
     public void onStop()
@@ -126,9 +127,9 @@ So the UI elements for certain actions are hidden based on user.
 	            userListAdapter.notifyDataSetChanged(); 
                	return true;
 	        case R.id.action_back: 
-	        	resetListView(appUser);
+	        	userListAdapter.notifyDataSetChanged(); 
 	        	currentUser = appUser;
-	        	Log.e("check", appUser.getIsAppUser()+"");
+	        	resetListView(currentUser);
 	        	getActivity().invalidateOptionsMenu();
 	           	return true; 
 	        default:
@@ -162,15 +163,30 @@ So the UI elements for certain actions are hidden based on user.
          	user.setList(wishes);
     	}
     }
-    
+    public static final void DBListFetch(User u){
+		WishRetrieval wishRet = new WishRetrieval();
+		wishRet.execute(u.getUID(), u.getName());
+		ArrayList<WishItem> wishes = new ArrayList<WishItem>();
+		try{
+			wishes = wishRet.get();
+		}
+		catch(Exception e){
+			Log.i("Database", "Failed to receive data");
+		}
+		u.setList(wishes);
+	}
     protected void resetListView(User u){
     	ArrayList<String> list = new ArrayList<String>();
+    	DBListFetch(u);
     	for(WishItem i : u.getList()) list.add(i.getName());
     	resetListView(list);
     	if(u.getIsAppUser()) {
     		Log.e("AppUser","Back Worked!");
     		setAppUserPermissions();
     	}
+    	
+        
+       
     }
     
     protected void resetListView(ArrayList<String> list){

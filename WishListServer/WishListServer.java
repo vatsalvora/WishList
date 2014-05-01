@@ -28,6 +28,7 @@ public class WishListServer
     public static final int STORE_IMAGE = 9;
     public static final int USERS_CHECK = 10;
     public static final int WISH_UPDATE = 11;
+    public static final int BNAME_GET = 12;
 
     private ServerSocket server;
     private final int port = 5600;
@@ -210,6 +211,7 @@ public class WishListServer
                                     oos.writeObject(resultSet.getDate(8));
                                     oos.flush();
                                 }
+                                
 
                             }
                             catch (Exception e)
@@ -242,6 +244,12 @@ public class WishListServer
                             int status = ois.readInt();
                             db.updateWish(wid, bid, name, descr, price, status);
 							
+						}
+						else if(code == BNAME_GET)
+						{
+							String wid = (String)ois.readObject();
+							oos.writeObject(db.getBname(wid));
+                            oos.flush();
 						}
                         /*else if(code == USER_SEND)
                         {

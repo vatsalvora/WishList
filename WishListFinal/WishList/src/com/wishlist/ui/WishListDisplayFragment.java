@@ -101,9 +101,9 @@ So the UI elements for certain actions are hidden based on user.
         		Transporter.pack(b, Transporter.WISH, currentUser.getItem(position));
         		i.putExtras(b);
         		startActivity(i);
+        		//ItemViewFragment f = new ItemViewFragment();
             }
         }); 
-
         return listView;
     } 
 	

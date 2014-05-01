@@ -353,10 +353,22 @@ public class DBCom
 	{
 		try{
 			ResultSet resultSet = sendSQLwithReturn( String.format("SELECT status FROM wishes WHERE wid = %s", wid) );
-			return resultSet.getBoolean(1);
+			if(resultSet.next())
+			{
+				boolean b = resultSet.getBoolean(1);
+				System.out.println("Successfull isClaimed: " + b);
+				return b;
+			}
+			else
+			{
+				System.out.println("no rs.next()");
+				return false;
+			}
 		}
 		catch(Exception e)
 		{
+			System.out.println("Tried isClaimed");
+			System.out.println(e.toString());
 			return false;
 		}
 	
@@ -364,16 +376,32 @@ public class DBCom
 	
 	public String getBname(String wid)
 	{
-		
+		String bid;	
 		try
 		{
 		
 			if(isClaimed(wid))
 			{
 				ResultSet resultSet = sendSQLwithReturn( String.format("SELECT bid FROM wishes WHERE wid = %s", wid) );
-				String bid = resultSet.getString(1);
+				if(resultSet.next())
+				{
+					bid = resultSet.getString(1);
+				}
+				else
+				{
+					System.out.println("bid failed");
+					return "";
+				}
 				resultSet = sendSQLwithReturn( String.format("SELECT name FROM users WHERE uid = '%s'", bid) );
-				return resultSet.getString(1);
+				if(resultSet.next())
+				{
+					return resultSet.getString(1);
+				}
+				else
+				{
+					System.out.println("name failed");
+					return "";
+				}
 			}
 			else
 			{
@@ -383,6 +411,8 @@ public class DBCom
 		}
 		catch(Exception e)
 		{
+			System.out.println("Tried getBname");
+			System.out.println(e.toString());
 			return "";
 		}
 	}

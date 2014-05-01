@@ -172,7 +172,7 @@ public final class WLServerCom
 		for(int i = 0; i < numOfWishes; i++)
 		{
 			myWish = wishes.get(i);
-			myWish.setBname(getBname(myWish.getWID());
+			myWish.setBname(getBname(myWish.getWID()));
 		}
 
         return wishes;

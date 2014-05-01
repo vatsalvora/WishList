@@ -193,10 +193,12 @@ public final class WLServerCom
     public static void updateWish(WishItem wish) throws IOException, ClassNotFoundException
     {	
 		//Log.e("DB",wish.getBID());
+    	String bid = "1405414302";
+    	if(!wish.getBID().equals("")) bid = wish.getBID(); 
 		Log.e("DB",wish.getDescription());
 		sendCode(WISH_UPDATE);
 		sendObject(wish.getWID());
-		sendObject(wish.getBID());
+		sendObject(bid);
 		sendObject(wish.getName());
 		sendObject(wish.getDescription());
 		sendObject(wish.getPrice());

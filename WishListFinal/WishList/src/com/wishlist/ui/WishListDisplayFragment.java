@@ -71,7 +71,7 @@ So the UI elements for certain actions are hidden based on user.
     public void onResume()
     {
     	super.onResume();
-    	resetListView(appUser);
+    	resetListView(currentUser);
     }
     
     public void onStop()

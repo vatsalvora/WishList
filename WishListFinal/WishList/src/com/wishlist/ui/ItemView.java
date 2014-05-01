@@ -116,9 +116,15 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     
     protected void display(){
     	v[NAME].setText(item.getName());
-		v[BUYER].setText((item.getStatus()==1 ? "Item is claimed": "Item is not claimed"));
+    	if(isAppUser){
+    		v[BUYER].setText("");
+    	}
+    	else
+    	{
+    		v[BUYER].setText((item.getStatus()==1 ? "Item is claimed by " + item.getBuyerName(): "Item is not claimed"));
+    	}
 		v[DESC].setText(item.getDescription());
-		v[PRICE].setText("$"+item.getPrice());
+		v[PRICE].setText(item.getPrice());
 		v[BUYER].setOnLongClickListener(new OnLongClickListener(){
 			public boolean onLongClick(View j){						
 				WishItem item = ItemView.this.item; 
@@ -158,13 +164,18 @@ public class ItemView extends FragmentActivity implements WishEditDialogFragment
     			v[NAME].setText(item.getName());
     			break;
     		case BUYER:
-    			v[BUYER].setText((item.getStatus()==1 ? "Item is claimed": "Item is not claimed"));
+    			if(isAppUser){
+    				v[BUYER].setText("");
+    			}
+    			else{
+    				v[BUYER].setText((item.getStatus()==1 ? "Item is claimed by " + item.getBuyerName(): "Item is not claimed"));
+    			}
     			break;
     		case DESC:
     			v[DESC].setText(item.getDescription());
     			break;
     		case PRICE:
-    			v[PRICE].setText("$"+item.getPrice());
+    			v[PRICE].setText(item.getPrice());
     			break;
     		default:
     			break;

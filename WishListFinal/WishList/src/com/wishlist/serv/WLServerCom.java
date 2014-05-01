@@ -162,13 +162,18 @@ public final class WLServerCom
             dateAdded = (Date)getObject(); // Account for broken date
             
             //Bname requeries for Bname out of a different table.
-            bname = getBname(wid);
+            //bname = getBname(wid);
 
             myWish = new WishItem(wid, wName, uid, uname, bid, bname, descr, price, status, dateAdded);
 
             wishes.add(myWish);
 
         }
+		for(int i = 0; i < numOfWishes; i++)
+		{
+			myWish = wishes.get(i);
+			myWish.setBname(getBname(myWish.getWID());
+		}
 
         return wishes;
     }

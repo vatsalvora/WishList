@@ -18,10 +18,10 @@ import com.wishlist.obj.WishItem;
 
 public final class WLServerCom
 {
-    private static int port = 5600;
+    private static int port = PORT-NUMBER;
 
     /* Alex's IP. Do not DDOS */
-    private static String servIP = "98.180.57.56";
+    private static String servIP = SERVER-IP-ADDRESS;
 
     protected static InetAddress host;
     protected static Socket socket;
